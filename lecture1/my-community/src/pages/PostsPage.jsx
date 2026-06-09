@@ -7,9 +7,11 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import EditIcon from '@mui/icons-material/Edit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import CategoryBar from '../components/common/CategoryBar'
 import { supabase } from '../supabase'
+import { useAuth } from '../context/AuthContext'
 import { formatDistanceToNow } from '../utils/dateUtils'
 
 const STATUS_COLOR = { '모집중': 'primary', '진행중': 'warning', '마감완료': 'default' }
@@ -116,6 +118,7 @@ const PostCard = ({ post, onClick }) => {
 
 const PostsPage = () => {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [searchParams] = useSearchParams()
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -167,13 +170,26 @@ const PostsPage = () => {
           InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }}
           sx={{ flex: 1, minWidth: 120, maxWidth: { xs: '100%', sm: 260 } }}
         />
-        <FormControl size="small" sx={{ minWidth: 100, ml: { xs: 0, sm: 'auto' } }}>
-          <InputLabel>정렬</InputLabel>
-          <Select value={sort} label="정렬" onChange={(e) => setSort(e.target.value)}>
-            <MenuItem value="newest">최신순</MenuItem>
-            <MenuItem value="popular">인기순</MenuItem>
-          </Select>
-        </FormControl>
+        <Box sx={{ display: 'flex', gap: 1, ml: { xs: 0, sm: 'auto' }, alignItems: 'center' }}>
+          <FormControl size="small" sx={{ minWidth: 100 }}>
+            <InputLabel>정렬</InputLabel>
+            <Select value={sort} label="정렬" onChange={(e) => setSort(e.target.value)}>
+              <MenuItem value="newest">최신순</MenuItem>
+              <MenuItem value="popular">인기순</MenuItem>
+            </Select>
+          </FormControl>
+          {user && (
+            <Button
+              variant="contained"
+              startIcon={<EditIcon />}
+              size="small"
+              onClick={() => navigate('/write')}
+              sx={{ flexShrink: 0, fontWeight: 700 }}
+            >
+              글 작성
+            </Button>
+          )}
+        </Box>
       </Box>
 
       <CategoryBar />

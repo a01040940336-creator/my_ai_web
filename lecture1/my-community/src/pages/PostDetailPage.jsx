@@ -9,6 +9,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import SendIcon from '@mui/icons-material/Send'
+import EditIcon from '@mui/icons-material/Edit'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import { useAuth } from '../context/AuthContext'
@@ -145,7 +146,14 @@ const PostDetailPage = () => {
 
   return (
     <Container maxWidth="md" sx={{ py: { xs: 2, sm: 3 }, px: { xs: 1.5, sm: 2 } }}>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate(-1)} sx={{ mb: 2 }}>목록으로</Button>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate(-1)}>목록으로</Button>
+        {user && (
+          <Button variant="contained" startIcon={<EditIcon />} size="small" onClick={() => navigate('/write')}>
+            새 글 작성
+          </Button>
+        )}
+      </Box>
 
       <Card>
         <CardContent sx={{ p: { xs: 2, md: 4 } }}>
