@@ -27,6 +27,32 @@ const CATEGORY_META = {
   '공지사항':  { emoji: '📢', bg: '#EFF6FF' },
 }
 
+const NoticeListItem = ({ post, onClick }) => (
+  <Box
+    onClick={onClick}
+    sx={{
+      display: 'flex', alignItems: 'center', gap: 1.5,
+      px: 2, py: 1.5,
+      cursor: 'pointer',
+      borderBottom: '1px solid', borderColor: 'divider',
+      '&:last-child': { borderBottom: 'none' },
+      '&:hover': { bgcolor: 'action.hover' },
+      transition: 'background 0.15s',
+    }}
+  >
+    <Chip label="공지" size="small" color="primary" sx={{ fontSize: 11, fontWeight: 700, flexShrink: 0, height: 22 }} />
+    <Typography
+      variant="body2" fontWeight={600}
+      sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+    >
+      {post.title}
+    </Typography>
+    <Typography variant="caption" color="text.disabled" sx={{ flexShrink: 0 }}>
+      {formatDistanceToNow(post.created_at)}
+    </Typography>
+  </Box>
+)
+
 const PostCard = ({ post, onClick }) => {
   const meta = CATEGORY_META[post.category] || { emoji: '📝', bg: '#F8FAFC' }
 
@@ -201,17 +227,32 @@ const PostsPage = () => {
             <Typography color="text.secondary" mb={2}>게시물이 없습니다.</Typography>
             <Button variant="contained" onClick={() => navigate('/write')}>첫 글 작성하기</Button>
           </Box>
-        ) : (
-          <Box sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
-            gap: 2,
-          }}>
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} onClick={() => navigate(`/posts/${post.id}`)} />
-            ))}
-          </Box>
-        )}
+        ) : (() => {
+          const notices = posts.filter(p => p.category === '공지사항')
+          const regularPosts = posts.filter(p => p.category !== '공지사항')
+          return (
+            <>
+              {notices.length > 0 && (
+                <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden', mb: 3 }}>
+                  {notices.map((post) => (
+                    <NoticeListItem key={post.id} post={post} onClick={() => navigate(`/posts/${post.id}`)} />
+                  ))}
+                </Box>
+              )}
+              {regularPosts.length > 0 && (
+                <Box sx={{
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
+                  gap: 2,
+                }}>
+                  {regularPosts.map((post) => (
+                    <PostCard key={post.id} post={post} onClick={() => navigate(`/posts/${post.id}`)} />
+                  ))}
+                </Box>
+              )}
+            </>
+          )
+        })()}
       </Box>
     </Container>
   )
