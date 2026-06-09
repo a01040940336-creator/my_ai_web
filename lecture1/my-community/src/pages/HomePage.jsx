@@ -1,13 +1,124 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {
   Box, Container, Typography, Card, CardContent, CardActionArea,
-  Chip, Button, Stack, Divider, Avatar
+  Chip, Button, Stack, Divider, Avatar, IconButton
 } from '@mui/material'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import { formatDistanceToNow } from '../utils/dateUtils'
+
+const BANNERS = [
+  {
+    title: '우리 동네 이웃과 함께 🏘️',
+    desc: '1인 가구의 생활 문제를 함께 해결해요.\n식재료 나눔, 공동구매, 생활 도움까지!',
+    gradient: 'linear-gradient(135deg, #3B82F6 0%, #34D399 100%)',
+    btnLabel: '게시물 둘러보기',
+    btnAction: 'posts',
+  },
+  {
+    title: '청년 월세 지원금 신청하세요 💸',
+    desc: '만 19~34세 1인 가구 청년을 위한\n월 최대 20만원 월세 지원 혜택!',
+    gradient: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
+    btnLabel: '지원 조건 확인하기',
+    btnAction: 'https://www.lh.or.kr',
+  },
+  {
+    title: '혼자 사도 건강하게 🥗',
+    desc: '자취생을 위한 간편 건강식 레시피 모음\n5분 요리부터 일주일 밀프렙까지!',
+    gradient: 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)',
+    btnLabel: '요리 게시물 보기',
+    btnAction: 'posts-요리',
+  },
+  {
+    title: '공동구매로 배달비 아끼기 🛒',
+    desc: '이웃과 함께 주문하면 배달비도 나누고\n대용량도 부담 없이!',
+    gradient: 'linear-gradient(135deg, #10B981 0%, #06B6D4 100%)',
+    btnLabel: '공동구매 게시물 보기',
+    btnAction: 'posts-공동구매',
+  },
+  {
+    title: '냉장고 식재료 나눔 받기 🥦',
+    desc: '유통기한 임박 식재료, 버리지 말고 나눠요.\n내 동네 이웃과 함께 아끼면서 친해져요!',
+    gradient: 'linear-gradient(135deg, #0EA5E9 0%, #8B5CF6 100%)',
+    btnLabel: '냉장고 나눔 보기',
+    btnAction: 'posts-냉장고나눔',
+  },
+]
+
+const HeroBanner = ({ navigate }) => {
+  const [current, setCurrent] = useState(0)
+  const timerRef = useRef(null)
+
+  const startTimer = () => {
+    clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setCurrent(c => (c + 1) % BANNERS.length)
+    }, 5000)
+  }
+
+  useEffect(() => {
+    startTimer()
+    return () => clearInterval(timerRef.current)
+  }, [])
+
+  const go = (dir) => {
+    setCurrent(c => (c + dir + BANNERS.length) % BANNERS.length)
+    startTimer()
+  }
+
+  const handleBtn = (action) => {
+    if (action === 'posts') navigate('/posts')
+    else if (action.startsWith('posts-')) navigate(`/posts?category=${encodeURIComponent(action.replace('posts-', ''))}`)
+    else window.open(action, '_blank')
+  }
+
+  const b = BANNERS[current]
+
+  return (
+    <Box sx={{ position: 'relative', mb: 3, borderRadius: 3, overflow: 'hidden' }}>
+      <Box sx={{
+        background: b.gradient,
+        p: { xs: 2.5, sm: 3, md: 5 },
+        color: 'white',
+        transition: 'background 0.6s ease',
+        minHeight: { xs: 160, sm: 200 },
+        display: 'flex', flexDirection: 'column', justifyContent: 'center',
+      }}>
+        <Typography variant="h4" fontWeight={800} gutterBottom sx={{ fontSize: { xs: '1.3rem', sm: '2rem' }, whiteSpace: 'pre-line' }}>
+          {b.title}
+        </Typography>
+        <Typography variant="body1" sx={{ opacity: 0.9, mb: 2.5, fontSize: { xs: '0.85rem', sm: '1rem' }, whiteSpace: 'pre-line', lineHeight: 1.7 }}>
+          {b.desc}
+        </Typography>
+        <Button variant="contained" size="small" onClick={() => handleBtn(b.btnAction)}
+          sx={{ bgcolor: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(4px)', color: 'white', border: '1px solid rgba(255,255,255,0.5)', alignSelf: 'flex-start', '&:hover': { bgcolor: 'rgba(255,255,255,0.35)' } }}>
+          {b.btnLabel}
+        </Button>
+      </Box>
+
+      {/* 이전/다음 버튼 */}
+      <IconButton onClick={() => go(-1)} size="small" sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(0,0,0,0.3)', color: 'white', '&:hover': { bgcolor: 'rgba(0,0,0,0.5)' } }}>
+        <ChevronLeftIcon />
+      </IconButton>
+      <IconButton onClick={() => go(1)} size="small" sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(0,0,0,0.3)', color: 'white', '&:hover': { bgcolor: 'rgba(0,0,0,0.5)' } }}>
+        <ChevronRightIcon />
+      </IconButton>
+
+      {/* 인디케이터 점 */}
+      <Box sx={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 0.8 }}>
+        {BANNERS.map((_, i) => (
+          <Box key={i} onClick={() => { setCurrent(i); startTimer() }}
+            sx={{ width: i === current ? 20 : 8, height: 8, borderRadius: 4, bgcolor: i === current ? 'white' : 'rgba(255,255,255,0.5)', cursor: 'pointer', transition: 'all 0.3s ease' }}
+          />
+        ))}
+      </Box>
+    </Box>
+  )
+}
 
 const SHORTCUTS = [
   { label: '자취꿀팁', gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)', emoji: '💡' },
@@ -106,22 +217,8 @@ const HomePage = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2 } }}>
-      {/* 헤로 배너 */}
-      <Box sx={{
-        background: 'linear-gradient(135deg, #3B82F6 0%, #34D399 100%)',
-        borderRadius: 3, p: { xs: 2.5, sm: 3, md: 5 }, mb: 3, color: 'white'
-      }}>
-        <Typography variant="h4" fontWeight={800} gutterBottom sx={{ fontSize: { xs: '1.4rem', sm: '2.125rem' } }}>
-          우리 동네 이웃과 함께 🏘️
-        </Typography>
-        <Typography variant="body1" sx={{ opacity: 0.9, mb: 2, fontSize: { xs: '0.875rem', sm: '1rem' } }}>
-          1인 가구의 생활 문제를 함께 해결해요.<br />
-          식재료 나눔, 공동구매, 생활 도움까지!
-        </Typography>
-        <Button variant="contained" onClick={() => navigate('/posts')} sx={{ bgcolor: 'white', color: 'primary.main', '&:hover': { bgcolor: '#f0f0f0' } }}>
-          게시물 둘러보기
-        </Button>
-      </Box>
+      {/* 슬라이딩 배너 */}
+      <HeroBanner navigate={navigate} />
 
       {/* 카테고리 바로가기 */}
       <Typography variant="h6" fontWeight={700} gutterBottom>카테고리 바로가기</Typography>
