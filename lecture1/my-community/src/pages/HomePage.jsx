@@ -126,10 +126,9 @@ const HomePage = () => {
       {/* 카테고리 바로가기 */}
       <Typography variant="h6" fontWeight={700} gutterBottom>카테고리 바로가기</Typography>
       <Box sx={{
-        display: 'flex', flexWrap: { xs: 'nowrap', md: 'wrap' },
+        display: 'flex', flexWrap: { xs: 'nowrap', md: 'nowrap' },
         gap: 1.5, mb: 4, pb: 1,
         overflowX: { xs: 'auto', md: 'visible' },
-        justifyContent: { xs: 'flex-start', md: 'center' },
         '&::-webkit-scrollbar': { display: 'none' },
       }}>
         {SHORTCUTS.map(({ label, gradient, emoji }) => (
@@ -137,13 +136,14 @@ const HomePage = () => {
             key={label}
             onClick={() => navigate(`/posts?category=${encodeURIComponent(label)}`)}
             sx={{
-              cursor: 'pointer', flexShrink: 0,
-              width: { xs: 100, md: 'auto' }, minWidth: { md: 110 },
+              cursor: 'pointer',
+              flexShrink: 0,
+              flex: { xs: '0 0 100px', md: '1 1 0' },
               textAlign: 'center', background: gradient, color: 'white',
               '&:hover': { transform: 'translateY(-3px)', transition: 'transform 0.2s', boxShadow: 4 },
             }}
           >
-            <CardContent sx={{ py: 2, px: 2 }}>
+            <CardContent sx={{ py: 2, px: 1 }}>
               <Typography fontSize={30}>{emoji}</Typography>
               <Typography variant="caption" fontWeight={700} color="white" sx={{ display: 'block', mt: 0.5 }}>{label}</Typography>
             </CardContent>
@@ -160,7 +160,7 @@ const HomePage = () => {
           </Box>
           <Grid container spacing={2} sx={{ mb: 4 }} alignItems="stretch">
             {hotPosts.map((post) => (
-              <Grid item xs={12} sm={4} key={post.id} sx={{ display: 'flex' }}>
+              <Grid item xs={12} sm={6} md={4} key={post.id} sx={{ display: 'flex' }}>
                 <PostCard post={post} onClick={() => navigate(`/posts/${post.id}`)} />
               </Grid>
             ))}
