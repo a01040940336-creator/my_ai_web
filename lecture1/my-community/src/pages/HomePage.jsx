@@ -82,34 +82,40 @@ const HeroBanner = ({ navigate }) => {
     <Box sx={{ position: 'relative', mb: 3, borderRadius: 3, overflow: 'hidden' }}>
       <Box sx={{
         background: b.gradient,
-        p: { xs: 2.5, sm: 3, md: 5 },
+        /* 화살표 버튼(48px) 너비 확보 */
+        px: { xs: 7, sm: 8, md: 10 },
+        py: { xs: 3, sm: 4, md: 5 },
         color: 'white',
         transition: 'background 0.6s ease',
-        minHeight: { xs: 160, sm: 200 },
+        minHeight: { xs: 170, sm: 210 },
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
       }}>
-        <Typography variant="h4" fontWeight={800} gutterBottom sx={{ fontSize: { xs: '1.3rem', sm: '2rem' }, whiteSpace: 'pre-line' }}>
+        <Typography variant="h4" fontWeight={800} gutterBottom
+          sx={{ fontSize: { xs: '1.15rem', sm: '1.8rem', md: '2rem' }, whiteSpace: 'pre-line', lineHeight: 1.3 }}>
           {b.title}
         </Typography>
-        <Typography variant="body1" sx={{ opacity: 0.9, mb: 2.5, fontSize: { xs: '0.85rem', sm: '1rem' }, whiteSpace: 'pre-line', lineHeight: 1.7 }}>
+        <Typography variant="body1"
+          sx={{ opacity: 0.92, mb: 2.5, fontSize: { xs: '0.8rem', sm: '0.95rem', md: '1rem' }, whiteSpace: 'pre-line', lineHeight: 1.7 }}>
           {b.desc}
         </Typography>
         <Button variant="contained" size="small" onClick={() => handleBtn(b.btnAction)}
-          sx={{ bgcolor: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(4px)', color: 'white', border: '1px solid rgba(255,255,255,0.5)', alignSelf: 'flex-start', '&:hover': { bgcolor: 'rgba(255,255,255,0.35)' } }}>
+          sx={{ bgcolor: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(4px)', color: 'white', border: '1px solid rgba(255,255,255,0.45)', alignSelf: 'flex-start', fontWeight: 600, '&:hover': { bgcolor: 'rgba(255,255,255,0.35)' } }}>
           {b.btnLabel}
         </Button>
       </Box>
 
-      {/* 이전/다음 버튼 */}
-      <IconButton onClick={() => go(-1)} size="small" sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(0,0,0,0.3)', color: 'white', '&:hover': { bgcolor: 'rgba(0,0,0,0.5)' } }}>
-        <ChevronLeftIcon />
+      {/* 이전/다음 화살표 */}
+      <IconButton onClick={() => go(-1)} size="small"
+        sx={{ position: 'absolute', left: 6, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(0,0,0,0.28)', color: 'white', '&:hover': { bgcolor: 'rgba(0,0,0,0.48)' }, zIndex: 1 }}>
+        <ChevronLeftIcon fontSize="small" />
       </IconButton>
-      <IconButton onClick={() => go(1)} size="small" sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(0,0,0,0.3)', color: 'white', '&:hover': { bgcolor: 'rgba(0,0,0,0.5)' } }}>
-        <ChevronRightIcon />
+      <IconButton onClick={() => go(1)} size="small"
+        sx={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', bgcolor: 'rgba(0,0,0,0.28)', color: 'white', '&:hover': { bgcolor: 'rgba(0,0,0,0.48)' }, zIndex: 1 }}>
+        <ChevronRightIcon fontSize="small" />
       </IconButton>
 
-      {/* 인디케이터 점 */}
-      <Box sx={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 0.8 }}>
+      {/* 인디케이터 */}
+      <Box sx={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 0.8, zIndex: 1 }}>
         {BANNERS.map((_, i) => (
           <Box key={i} onClick={() => { setCurrent(i); startTimer() }}
             sx={{ width: i === current ? 20 : 8, height: 8, borderRadius: 4, bgcolor: i === current ? 'white' : 'rgba(255,255,255,0.5)', cursor: 'pointer', transition: 'all 0.3s ease' }}
