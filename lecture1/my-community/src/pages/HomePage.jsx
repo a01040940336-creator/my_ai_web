@@ -134,30 +134,26 @@ const SHORTCUTS = [
   { label: '동네정보', emoji: '📍' },
 ]
 
-const CATEGORY_GRADIENT = {
-  '자취꿀팁':  'linear-gradient(135deg,#3B82F6,#60A5FA)',
-  '요리':      'linear-gradient(135deg,#0369A1,#38BDF8)',
-  '공동구매':  'linear-gradient(135deg,#0F766E,#34D399)',
-  '냉장고나눔':'linear-gradient(135deg,#1D4ED8,#34D399)',
-  '동네정보':  'linear-gradient(135deg,#1E293B,#3B82F6)',
-  '동네모임':  'linear-gradient(135deg,#0284C7,#34D399)',
-  '질문게시판':'linear-gradient(135deg,#334155,#64748B)',
+const CATEGORY_BG = {
+  '자취꿀팁': '#F0F5FF', '요리': '#FFF7ED', '공동구매': '#F0FDF4',
+  '냉장고나눔': '#F0FDFA', '동네정보': '#EFF6FF', '동네모임': '#F5F3FF',
+  '질문게시판': '#F8FAFC', '공지사항': '#EFF6FF',
 }
-const CATEGORY_EMOJI = { '자취꿀팁':'💡','요리':'🍳','공동구매':'🛒','냉장고나눔':'🥦','동네정보':'📍','동네모임':'🤝','질문게시판':'❓' }
+const CATEGORY_EMOJI = { '자취꿀팁':'💡','요리':'🍳','공동구매':'🛒','냉장고나눔':'🥦','동네정보':'📍','동네모임':'🤝','질문게시판':'❓','공지사항':'📢' }
 
 const PostCard = ({ post, onClick }) => (
-  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', border: '1px solid', borderColor: 'divider', boxShadow: 'none', '&:hover': { boxShadow: 2 }, transition: 'box-shadow 0.2s' }}>
     <CardActionArea onClick={onClick} sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
       <Box sx={{ position: 'relative', height: 160, flexShrink: 0, overflow: 'hidden' }}>
         {post.image_url ? (
           <Box component="img" src={post.image_url} alt="" sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            onError={(e) => { e.target.style.display = 'none'; e.target.parentNode.style.background = CATEGORY_GRADIENT[post.category] || '#94A3B8' }}
+            onError={(e) => { e.target.style.display = 'none' }}
           />
         ) : (
-          <Box sx={{ width: '100%', height: '100%', background: CATEGORY_GRADIENT[post.category] || 'linear-gradient(135deg,#94A3B8,#CBD5E1)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
-            <Typography sx={{ fontSize: 44, lineHeight: 1 }}>{CATEGORY_EMOJI[post.category] || '📝'}</Typography>
+          <Box sx={{ width: '100%', height: '100%', bgcolor: CATEGORY_BG[post.category] || '#F8FAFC', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+            <Typography sx={{ fontSize: 48, lineHeight: 1 }}>{CATEGORY_EMOJI[post.category] || '📝'}</Typography>
             {post.category === '동네정보' && post.region && (
-              <Typography sx={{ color: 'white', fontWeight: 800, fontSize: 15, textShadow: '0 1px 4px rgba(0,0,0,0.4)', letterSpacing: 1 }}>
+              <Typography sx={{ color: 'text.secondary', fontWeight: 700, fontSize: 13 }}>
                 📍 {post.region}
               </Typography>
             )}
@@ -170,7 +166,7 @@ const PostCard = ({ post, onClick }) => (
           </Box>
         )}
         <Box sx={{ position: 'absolute', top: 8, left: 8 }}>
-          <Chip label={post.category} size="small" sx={{ bgcolor: 'rgba(0,0,0,0.55)', color: 'white', fontSize: 11, fontWeight: 600 }} />
+          <Chip label={post.category} size="small" color="primary" sx={{ fontSize: 11, fontWeight: 600, opacity: 0.92 }} />
         </Box>
       </Box>
       <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: 2 }}>

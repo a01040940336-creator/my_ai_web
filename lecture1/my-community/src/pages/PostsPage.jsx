@@ -17,51 +17,47 @@ import { formatDistanceToNow } from '../utils/dateUtils'
 const STATUS_COLOR = { '모집중': 'primary', '진행중': 'warning', '마감완료': 'default' }
 
 const CATEGORY_META = {
-  '자취꿀팁':  { emoji: '💡', gradient: 'linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)' },
-  '요리':      { emoji: '🍳', gradient: 'linear-gradient(135deg, #0369A1 0%, #38BDF8 100%)' },
-  '공동구매':  { emoji: '🛒', gradient: 'linear-gradient(135deg, #0F766E 0%, #34D399 100%)' },
-  '냉장고나눔':{ emoji: '🥦', gradient: 'linear-gradient(135deg, #1D4ED8 0%, #34D399 100%)' },
-  '동네정보':  { emoji: '📍', gradient: 'linear-gradient(135deg, #1E293B 0%, #3B82F6 100%)' },
-  '동네모임':  { emoji: '🤝', gradient: 'linear-gradient(135deg, #0284C7 0%, #34D399 100%)' },
-  '질문게시판':{ emoji: '❓', gradient: 'linear-gradient(135deg, #334155 0%, #64748B 100%)' },
-  '공지사항':  { emoji: '📢', gradient: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)' },
+  '자취꿀팁':  { emoji: '💡', bg: '#F0F5FF' },
+  '요리':      { emoji: '🍳', bg: '#FFF7ED' },
+  '공동구매':  { emoji: '🛒', bg: '#F0FDF4' },
+  '냉장고나눔':{ emoji: '🥦', bg: '#F0FDFA' },
+  '동네정보':  { emoji: '📍', bg: '#EFF6FF' },
+  '동네모임':  { emoji: '🤝', bg: '#F5F3FF' },
+  '질문게시판':{ emoji: '❓', bg: '#F8FAFC' },
+  '공지사항':  { emoji: '📢', bg: '#EFF6FF' },
 }
 
 const PostCard = ({ post, onClick }) => {
-  const meta = CATEGORY_META[post.category] || { emoji: '📝', gradient: 'linear-gradient(135deg, #94A3B8 0%, #CBD5E1 100%)' }
+  const meta = CATEGORY_META[post.category] || { emoji: '📝', bg: '#F8FAFC' }
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', border: '1px solid', borderColor: 'divider', boxShadow: 'none', '&:hover': { boxShadow: 2 }, transition: 'box-shadow 0.2s' }}>
       <CardActionArea onClick={onClick} sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
         {/* 이미지 or 플레이스홀더 — 항상 160px */}
-        <Box sx={{ position: 'relative', height: 160, flexShrink: 0, overflow: 'hidden' }}>
+        <Box sx={{ position: 'relative', height: 160, flexShrink: 0, overflow: 'hidden', bgcolor: meta.bg }}>
           {post.image_url ? (
             <Box
               component="img"
               src={post.image_url}
               alt=""
               sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              onError={(e) => {
-                e.target.style.display = 'none'
-                e.target.parentNode.style.background = meta.gradient
-              }}
+              onError={(e) => { e.target.style.display = 'none' }}
             />
           ) : (
             <Box sx={{
-              width: '100%', height: '100%', background: meta.gradient,
+              width: '100%', height: '100%', bgcolor: meta.bg,
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 0.5,
             }}>
-              <Typography sx={{ fontSize: 44, lineHeight: 1 }}>{meta.emoji}</Typography>
+              <Typography sx={{ fontSize: 48, lineHeight: 1 }}>{meta.emoji}</Typography>
               {post.category === '동네정보' && post.region && (
-                <Typography sx={{ color: 'white', fontWeight: 800, fontSize: 15, textShadow: '0 1px 4px rgba(0,0,0,0.4)', letterSpacing: 1 }}>
+                <Typography sx={{ color: 'text.secondary', fontWeight: 700, fontSize: 13 }}>
                   📍 {post.region}
                 </Typography>
               )}
             </Box>
           )}
-          {/* 동네정보 이미지 있을 때 지역명 오버레이 */}
           {post.category === '동네정보' && post.region && post.image_url && (
-            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, px: 1.5, py: 1, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%)' }}>
+            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, px: 1.5, py: 1, background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)' }}>
               <Typography sx={{ color: 'white', fontWeight: 700, fontSize: 13 }}>📍 {post.region}</Typography>
             </Box>
           )}
