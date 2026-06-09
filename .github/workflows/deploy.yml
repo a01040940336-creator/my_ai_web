@@ -40,13 +40,18 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
 
+      - name: Prepare artifact directory structure
+        run: |
+          mkdir -p pages-root/lecture1/my-community
+          cp -r lecture1/my-community/dist/. pages-root/lecture1/my-community/
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'lecture1/my-community/dist'
+          path: 'pages-root'
 
   deploy:
     environment:
