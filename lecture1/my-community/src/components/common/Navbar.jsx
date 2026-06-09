@@ -34,7 +34,7 @@ const Navbar = () => {
       <Toolbar sx={{ gap: 2 }}>
         <Typography
           variant="h6"
-          onClick={() => navigate('/')}
+          onClick={() => { navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
           sx={{ cursor: 'pointer', color: 'primary.main', fontWeight: 800, fontSize: '1.4rem', flexShrink: 0 }}
         >
           집담

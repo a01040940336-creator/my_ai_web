@@ -2,7 +2,16 @@ import React from 'react'
 import { Box, Chip } from '@mui/material'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-const CATEGORIES = ['전체', '자취꿀팁', '요리', '공동구매', '냉장고나눔', '동네정보', '동네모임', '질문게시판']
+const CATEGORIES = [
+  { label: '전체', emoji: '🏠' },
+  { label: '자취꿀팁', emoji: '💡' },
+  { label: '요리', emoji: '🍳' },
+  { label: '공동구매', emoji: '🛒' },
+  { label: '냉장고나눔', emoji: '🥦' },
+  { label: '동네정보', emoji: '📍' },
+  { label: '동네모임', emoji: '🤝' },
+  { label: '질문게시판', emoji: '❓' },
+]
 
 const CategoryBar = () => {
   const navigate = useNavigate()
@@ -15,18 +24,42 @@ const CategoryBar = () => {
   }
 
   return (
-    <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', py: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
-      {CATEGORIES.map((cat) => (
-        <Chip
-          key={cat}
-          label={cat}
-          onClick={() => handleClick(cat)}
-          color={current === cat ? 'primary' : 'default'}
-          variant={current === cat ? 'filled' : 'outlined'}
-          size="small"
-          sx={{ cursor: 'pointer', flexShrink: 0, fontWeight: current === cat ? 600 : 400 }}
-        />
-      ))}
+    <Box sx={{
+      display: 'flex',
+      gap: 1,
+      py: 1.5,
+      flexWrap: { xs: 'nowrap', md: 'wrap' },
+      overflowX: { xs: 'auto', md: 'visible' },
+      justifyContent: { xs: 'flex-start', md: 'center' },
+      '&::-webkit-scrollbar': { display: 'none' },
+    }}>
+      {CATEGORIES.map(({ label, emoji }) => {
+        const isActive = current === label
+        return (
+          <Chip
+            key={label}
+            label={`${emoji} ${label}`}
+            onClick={() => handleClick(label)}
+            color={isActive ? 'primary' : 'default'}
+            variant={isActive ? 'filled' : 'outlined'}
+            sx={{
+              cursor: 'pointer',
+              flexShrink: 0,
+              fontWeight: isActive ? 700 : 500,
+              fontSize: 13,
+              height: 36,
+              px: 0.5,
+              borderWidth: isActive ? 0 : 1.5,
+              '&:hover': {
+                bgcolor: isActive ? 'primary.dark' : 'primary.light',
+                color: isActive ? 'white' : 'primary.dark',
+                borderColor: 'primary.main',
+              },
+              transition: 'all 0.15s ease',
+            }}
+          />
+        )
+      })}
     </Box>
   )
 }

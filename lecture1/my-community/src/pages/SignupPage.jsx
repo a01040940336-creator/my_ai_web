@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import {
   Box, Card, CardContent, Typography, TextField, Button,
-  Alert, Link, Stack, MenuItem, LinearProgress
+  Alert, Link, Stack, LinearProgress
 } from '@mui/material'
 import { useNavigate, Link as RouterLink } from 'react-router-dom'
 import { supabase } from '../supabase'
-
-const REGIONS = ['서울 강남구', '서울 마포구', '서울 성동구', '서울 용산구', '서울 종로구', '부산 해운대구', '인천 연수구', '기타']
 
 const getPasswordStrength = (pw) => {
   let score = 0
@@ -19,7 +17,7 @@ const getPasswordStrength = (pw) => {
 
 const SignupPage = () => {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ name: '', nickname: '', email: '', password: '', confirmPassword: '', phone: '', region: '' })
+  const [form, setForm] = useState({ name: '', nickname: '', email: '', password: '', confirmPassword: '', phone: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [agreed, setAgreed] = useState(false)
@@ -46,7 +44,7 @@ const SignupPage = () => {
       email: form.email,
       password: form.password,
       options: {
-        data: { name: form.name, nickname: form.nickname, phone: form.phone, region: form.region }
+        data: { name: form.name, nickname: form.nickname, phone: form.phone }
       }
     })
 
@@ -80,11 +78,6 @@ const SignupPage = () => {
               </Stack>
               <TextField label="이메일" name="email" type="email" value={form.email} onChange={handleChange} required fullWidth size="small" />
               <TextField label="전화번호" name="phone" value={form.phone} onChange={handleChange} fullWidth size="small" placeholder="010-0000-0000" />
-              <TextField
-                label="관심 지역" name="region" select value={form.region} onChange={handleChange} fullWidth size="small"
-              >
-                {REGIONS.map(r => <MenuItem key={r} value={r}>{r}</MenuItem>)}
-              </TextField>
               <Box>
                 <TextField
                   label="비밀번호" name="password" type="password" value={form.password}

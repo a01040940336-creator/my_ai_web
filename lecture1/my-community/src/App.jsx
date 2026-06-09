@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Box } from '@mui/material'
 import Navbar from './components/common/Navbar'
+import ScrollToTop from './components/common/ScrollToTop'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
@@ -21,6 +22,7 @@ function App() {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       <Navbar />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />

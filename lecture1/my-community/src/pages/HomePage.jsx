@@ -10,37 +10,51 @@ import { supabase } from '../supabase'
 import { formatDistanceToNow } from '../utils/dateUtils'
 
 const SHORTCUTS = [
-  { label: '자취꿀팁', color: '#3B82F6', emoji: '💡' },
-  { label: '요리', color: '#F59E0B', emoji: '🍳' },
-  { label: '공동구매', color: '#10B981', emoji: '🛒' },
-  { label: '냉장고나눔', color: '#EC4899', emoji: '🥦' },
-  { label: '동네정보', color: '#8B5CF6', emoji: '📍' },
+  { label: '자취꿀팁', gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)', emoji: '💡' },
+  { label: '요리', gradient: 'linear-gradient(135deg,#F59E0B,#FCD34D)', emoji: '🍳' },
+  { label: '공동구매', gradient: 'linear-gradient(135deg,#10B981,#34D399)', emoji: '🛒' },
+  { label: '냉장고나눔', gradient: 'linear-gradient(135deg,#EC4899,#F9A8D4)', emoji: '🥦' },
+  { label: '동네정보', gradient: 'linear-gradient(135deg,#8B5CF6,#C4B5FD)', emoji: '📍' },
 ]
 
+const CATEGORY_GRADIENT = {
+  '자취꿀팁':  'linear-gradient(135deg,#3B82F6,#60A5FA)',
+  '요리':      'linear-gradient(135deg,#F59E0B,#FCD34D)',
+  '공동구매':  'linear-gradient(135deg,#10B981,#34D399)',
+  '냉장고나눔':'linear-gradient(135deg,#EC4899,#F9A8D4)',
+  '동네정보':  'linear-gradient(135deg,#8B5CF6,#C4B5FD)',
+  '동네모임':  'linear-gradient(135deg,#0EA5E9,#7DD3FC)',
+  '질문게시판':'linear-gradient(135deg,#64748B,#94A3B8)',
+}
+const CATEGORY_EMOJI = { '자취꿀팁':'💡','요리':'🍳','공동구매':'🛒','냉장고나눔':'🥦','동네정보':'📍','동네모임':'🤝','질문게시판':'❓' }
+
 const PostCard = ({ post, onClick }) => (
-  <Card sx={{ height: '100%' }}>
-    <CardActionArea onClick={onClick} sx={{ height: '100%' }}>
-      {post.image_url && (
-        <Box
-          component="img"
-          src={post.image_url}
-          alt="post"
-          sx={{ width: '100%', height: 160, objectFit: 'cover' }}
-          onError={(e) => { e.target.style.display = 'none' }}
-        />
-      )}
-      <CardContent>
-        <Box sx={{ display: 'flex', gap: 0.5, mb: 1, flexWrap: 'wrap' }}>
-          <Chip label={post.category} size="small" sx={{ fontSize: 11 }} />
-          {post.region && <Chip label={post.region} size="small" variant="outlined" icon={<LocationOnIcon sx={{ fontSize: '14px !important' }} />} sx={{ fontSize: 11 }} />}
+  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <CardActionArea onClick={onClick} sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+      <Box sx={{ position: 'relative', height: 160, flexShrink: 0, overflow: 'hidden' }}>
+        {post.image_url ? (
+          <Box component="img" src={post.image_url} alt="" sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            onError={(e) => { e.target.style.display = 'none'; e.target.parentNode.style.background = CATEGORY_GRADIENT[post.category] || '#94A3B8' }}
+          />
+        ) : (
+          <Box sx={{ width: '100%', height: '100%', background: CATEGORY_GRADIENT[post.category] || 'linear-gradient(135deg,#94A3B8,#CBD5E1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography sx={{ fontSize: 48, lineHeight: 1 }}>{CATEGORY_EMOJI[post.category] || '📝'}</Typography>
+          </Box>
+        )}
+        <Box sx={{ position: 'absolute', top: 8, left: 8 }}>
+          <Chip label={post.category} size="small" sx={{ bgcolor: 'rgba(0,0,0,0.55)', color: 'white', fontSize: 11, fontWeight: 600 }} />
         </Box>
-        <Typography variant="subtitle2" fontWeight={600} noWrap>{post.title}</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', fontSize: 13 }}>
+      </Box>
+      <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: 2 }}>
+        <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 0.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          {post.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ flex: 1, fontSize: 12, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
           {post.content}
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: '1px solid', borderColor: 'divider' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <Avatar sx={{ width: 20, height: 20, fontSize: 11, bgcolor: 'primary.light', color: 'primary.dark' }}>
+            <Avatar sx={{ width: 18, height: 18, fontSize: 10, bgcolor: 'primary.light', color: 'primary.dark' }}>
               {post.profiles?.nickname?.[0]}
             </Avatar>
             <Typography variant="caption" color="text.secondary">{post.profiles?.nickname}</Typography>
@@ -101,15 +115,15 @@ const HomePage = () => {
       {/* 카테고리 바로가기 */}
       <Typography variant="h6" fontWeight={700} gutterBottom>카테고리 바로가기</Typography>
       <Stack direction="row" spacing={1.5} sx={{ mb: 4, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
-        {SHORTCUTS.map(({ label, color, emoji }) => (
+        {SHORTCUTS.map(({ label, gradient, emoji }) => (
           <Card
             key={label}
             onClick={() => navigate(`/posts?category=${encodeURIComponent(label)}`)}
-            sx={{ cursor: 'pointer', minWidth: 100, flexShrink: 0, textAlign: 'center', '&:hover': { transform: 'translateY(-2px)', transition: 'transform 0.2s' } }}
+            sx={{ cursor: 'pointer', minWidth: 100, flexShrink: 0, textAlign: 'center', background: gradient, color: 'white', '&:hover': { transform: 'translateY(-3px)', transition: 'transform 0.2s', boxShadow: 4 } }}
           >
             <CardContent sx={{ py: 2 }}>
               <Typography fontSize={28}>{emoji}</Typography>
-              <Typography variant="caption" fontWeight={600} color="text.primary">{label}</Typography>
+              <Typography variant="caption" fontWeight={700} color="white">{label}</Typography>
             </CardContent>
           </Card>
         ))}
