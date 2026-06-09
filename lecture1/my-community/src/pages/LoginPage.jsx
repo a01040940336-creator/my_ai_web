@@ -37,7 +37,13 @@ const LoginPage = () => {
       password: form.password,
     })
 
-    if (authErr) setError('비밀번호가 올바르지 않습니다.')
+    if (authErr) {
+      if (authErr.message?.toLowerCase().includes('email not confirmed')) {
+        setError('이메일 인증이 필요합니다. 가입 시 받은 이메일을 확인해 주세요.')
+      } else {
+        setError('아이디 또는 비밀번호가 올바르지 않습니다.')
+      }
+    }
     else navigate('/')
     setLoading(false)
   }
