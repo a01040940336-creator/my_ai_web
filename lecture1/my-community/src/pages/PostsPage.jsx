@@ -152,21 +152,22 @@ const PostsPage = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 3 }}>
-      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-        <Typography variant="h6" fontWeight={700} sx={{ flexShrink: 0 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 3 }, px: { xs: 1.5, sm: 2 } }}>
+      {/* 필터 바 */}
+      <Box sx={{ display: 'flex', gap: 1.5, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+        <Typography variant="h6" fontWeight={700} sx={{ flexShrink: 0, fontSize: { xs: '1rem', sm: '1.25rem' } }}>
           {category ? `#${category}` : searchKeyword ? `"${searchKeyword}" 검색 결과` : '전체 게시물'}
         </Typography>
         <TextField
           size="small"
-          placeholder="게시물 검색..."
+          placeholder="검색..."
           value={localSearch}
           onChange={(e) => setLocalSearch(e.target.value)}
           onKeyDown={handleSearch}
           InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }}
-          sx={{ maxWidth: 260 }}
+          sx={{ flex: 1, minWidth: 120, maxWidth: { xs: '100%', sm: 260 } }}
         />
-        <FormControl size="small" sx={{ minWidth: 120, ml: 'auto' }}>
+        <FormControl size="small" sx={{ minWidth: 100, ml: { xs: 0, sm: 'auto' } }}>
           <InputLabel>정렬</InputLabel>
           <Select value={sort} label="정렬" onChange={(e) => setSort(e.target.value)}>
             <MenuItem value="newest">최신순</MenuItem>

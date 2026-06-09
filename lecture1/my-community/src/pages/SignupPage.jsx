@@ -90,9 +90,9 @@ const SignupPage = () => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default', p: 2, py: 4 }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default', p: { xs: 1.5, sm: 2 }, py: { xs: 3, sm: 4 } }}>
       <Card sx={{ width: '100%', maxWidth: 480 }}>
-        <CardContent sx={{ p: 4 }}>
+        <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
           <Box sx={{ textAlign: 'center', mb: 3 }}>
             <Typography variant="h4" color="primary" fontWeight={800}>집담</Typography>
             <Typography variant="body2" color="text.secondary" mt={0.5}>회원가입</Typography>

@@ -133,7 +133,7 @@ const MyPage = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2 } }}>
       <Grid container spacing={3}>
         {/* 프로필 카드 */}
         <Grid item xs={12} md={4}>

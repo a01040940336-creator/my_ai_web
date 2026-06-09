@@ -144,7 +144,7 @@ const PostDetailPage = () => {
   if (!post) return <Container sx={{ py: 4 }}><Typography>게시물을 찾을 수 없습니다.</Typography></Container>
 
   return (
-    <Container maxWidth="md" sx={{ py: 3 }}>
+    <Container maxWidth="md" sx={{ py: { xs: 2, sm: 3 }, px: { xs: 1.5, sm: 2 } }}>
       <Button startIcon={<ArrowBackIcon />} onClick={() => navigate(-1)} sx={{ mb: 2 }}>목록으로</Button>
 
       <Card>

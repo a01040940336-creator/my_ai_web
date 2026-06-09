@@ -105,16 +105,16 @@ const HomePage = () => {
   }, [])
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2 } }}>
       {/* 헤로 배너 */}
       <Box sx={{
         background: 'linear-gradient(135deg, #3B82F6 0%, #34D399 100%)',
-        borderRadius: 3, p: { xs: 3, md: 5 }, mb: 4, color: 'white'
+        borderRadius: 3, p: { xs: 2.5, sm: 3, md: 5 }, mb: 3, color: 'white'
       }}>
-        <Typography variant="h4" fontWeight={800} gutterBottom>
+        <Typography variant="h4" fontWeight={800} gutterBottom sx={{ fontSize: { xs: '1.4rem', sm: '2.125rem' } }}>
           우리 동네 이웃과 함께 🏘️
         </Typography>
-        <Typography variant="body1" sx={{ opacity: 0.9, mb: 2 }}>
+        <Typography variant="body1" sx={{ opacity: 0.9, mb: 2, fontSize: { xs: '0.875rem', sm: '1rem' } }}>
           1인 가구의 생활 문제를 함께 해결해요.<br />
           식재료 나눔, 공동구매, 생활 도움까지!
         </Typography>

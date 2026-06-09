@@ -1,6 +1,7 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
-import { Box } from '@mui/material'
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { Box, Fab, Zoom } from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit'
 import Navbar from './components/common/Navbar'
 import ScrollToTop from './components/common/ScrollToTop'
 import HomePage from './pages/HomePage'
@@ -18,11 +19,40 @@ const PrivateRoute = ({ children }) => {
   return user ? children : <Navigate to="/login" replace />
 }
 
+// 글쓰기 FAB — 로그인 상태, 작성 페이지 제외, 모바일에서 표시
+const WriteFab = () => {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const hide = !user || location.hash.includes('/write') || location.hash.includes('/login') || location.hash.includes('/signup')
+  return (
+    <Zoom in={!hide}>
+      <Fab
+        color="secondary"
+        size="medium"
+        onClick={() => navigate('/write')}
+        sx={{
+          position: 'fixed',
+          bottom: { xs: 24, sm: 32 },
+          left: { xs: 24, sm: 32 },
+          zIndex: 1200,
+          display: { xs: 'flex', sm: 'none' }, // 모바일에서만 표시 (데스크탑은 Navbar에 있음)
+          boxShadow: 4,
+        }}
+        aria-label="글쓰기"
+      >
+        <EditIcon />
+      </Fab>
+    </Zoom>
+  )
+}
+
 function App() {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       <Navbar />
       <ScrollToTop />
+      <WriteFab />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
