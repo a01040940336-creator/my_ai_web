@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-
 import { Box, Fab, Zoom } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import Navbar from './components/common/Navbar'
+import SubNav from './components/common/SubNav'
 import ScrollToTop from './components/common/ScrollToTop'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
@@ -51,6 +52,7 @@ function App() {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       <Navbar />
+      <SubNav />
       <ScrollToTop />
       <WriteFab />
       <Routes>
