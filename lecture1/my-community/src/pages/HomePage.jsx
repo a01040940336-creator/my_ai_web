@@ -22,28 +22,28 @@ const BANNERS = [
   {
     title: '청년 월세 지원금 신청하세요 💸',
     desc: '만 19~34세 1인 가구 청년을 위한\n월 최대 20만원 월세 지원 혜택!',
-    gradient: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
+    gradient: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
     btnLabel: '지원 조건 확인하기',
     btnAction: 'https://www.lh.or.kr',
   },
   {
     title: '혼자 사도 건강하게 🥗',
     desc: '자취생을 위한 간편 건강식 레시피 모음\n5분 요리부터 일주일 밀프렙까지!',
-    gradient: 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)',
+    gradient: 'linear-gradient(135deg, #0369A1 0%, #34D399 100%)',
     btnLabel: '요리 게시물 보기',
     btnAction: 'posts-요리',
   },
   {
     title: '공동구매로 배달비 아끼기 🛒',
     desc: '이웃과 함께 주문하면 배달비도 나누고\n대용량도 부담 없이!',
-    gradient: 'linear-gradient(135deg, #10B981 0%, #06B6D4 100%)',
+    gradient: 'linear-gradient(135deg, #1E293B 0%, #3B82F6 100%)',
     btnLabel: '공동구매 게시물 보기',
     btnAction: 'posts-공동구매',
   },
   {
     title: '냉장고 식재료 나눔 받기 🥦',
     desc: '유통기한 임박 식재료, 버리지 말고 나눠요.\n내 동네 이웃과 함께 아끼면서 친해져요!',
-    gradient: 'linear-gradient(135deg, #0EA5E9 0%, #8B5CF6 100%)',
+    gradient: 'linear-gradient(135deg, #0F766E 0%, #34D399 100%)',
     btnLabel: '냉장고 나눔 보기',
     btnAction: 'posts-냉장고나눔',
   },
@@ -128,20 +128,20 @@ const HeroBanner = ({ navigate }) => {
 
 const SHORTCUTS = [
   { label: '자취꿀팁', gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)', emoji: '💡' },
-  { label: '요리', gradient: 'linear-gradient(135deg,#F59E0B,#FCD34D)', emoji: '🍳' },
-  { label: '공동구매', gradient: 'linear-gradient(135deg,#10B981,#34D399)', emoji: '🛒' },
-  { label: '냉장고나눔', gradient: 'linear-gradient(135deg,#EC4899,#F9A8D4)', emoji: '🥦' },
-  { label: '동네정보', gradient: 'linear-gradient(135deg,#8B5CF6,#C4B5FD)', emoji: '📍' },
+  { label: '요리', gradient: 'linear-gradient(135deg,#0369A1,#38BDF8)', emoji: '🍳' },
+  { label: '공동구매', gradient: 'linear-gradient(135deg,#0F766E,#34D399)', emoji: '🛒' },
+  { label: '냉장고나눔', gradient: 'linear-gradient(135deg,#1D4ED8,#34D399)', emoji: '🥦' },
+  { label: '동네정보', gradient: 'linear-gradient(135deg,#1E293B,#3B82F6)', emoji: '📍' },
 ]
 
 const CATEGORY_GRADIENT = {
   '자취꿀팁':  'linear-gradient(135deg,#3B82F6,#60A5FA)',
-  '요리':      'linear-gradient(135deg,#F59E0B,#FCD34D)',
-  '공동구매':  'linear-gradient(135deg,#10B981,#34D399)',
-  '냉장고나눔':'linear-gradient(135deg,#EC4899,#F9A8D4)',
-  '동네정보':  'linear-gradient(135deg,#8B5CF6,#C4B5FD)',
-  '동네모임':  'linear-gradient(135deg,#0EA5E9,#7DD3FC)',
-  '질문게시판':'linear-gradient(135deg,#64748B,#94A3B8)',
+  '요리':      'linear-gradient(135deg,#0369A1,#38BDF8)',
+  '공동구매':  'linear-gradient(135deg,#0F766E,#34D399)',
+  '냉장고나눔':'linear-gradient(135deg,#1D4ED8,#34D399)',
+  '동네정보':  'linear-gradient(135deg,#1E293B,#3B82F6)',
+  '동네모임':  'linear-gradient(135deg,#0284C7,#34D399)',
+  '질문게시판':'linear-gradient(135deg,#334155,#64748B)',
 }
 const CATEGORY_EMOJI = { '자취꿀팁':'💡','요리':'🍳','공동구매':'🛒','냉장고나눔':'🥦','동네정보':'📍','동네모임':'🤝','질문게시판':'❓' }
 
