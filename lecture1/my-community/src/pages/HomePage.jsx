@@ -37,8 +37,19 @@ const PostCard = ({ post, onClick }) => (
             onError={(e) => { e.target.style.display = 'none'; e.target.parentNode.style.background = CATEGORY_GRADIENT[post.category] || '#94A3B8' }}
           />
         ) : (
-          <Box sx={{ width: '100%', height: '100%', background: CATEGORY_GRADIENT[post.category] || 'linear-gradient(135deg,#94A3B8,#CBD5E1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography sx={{ fontSize: 48, lineHeight: 1 }}>{CATEGORY_EMOJI[post.category] || '📝'}</Typography>
+          <Box sx={{ width: '100%', height: '100%', background: CATEGORY_GRADIENT[post.category] || 'linear-gradient(135deg,#94A3B8,#CBD5E1)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+            <Typography sx={{ fontSize: 44, lineHeight: 1 }}>{CATEGORY_EMOJI[post.category] || '📝'}</Typography>
+            {post.category === '동네정보' && post.region && (
+              <Typography sx={{ color: 'white', fontWeight: 800, fontSize: 15, textShadow: '0 1px 4px rgba(0,0,0,0.4)', letterSpacing: 1 }}>
+                📍 {post.region}
+              </Typography>
+            )}
+          </Box>
+        )}
+        {/* 동네정보: 이미지 위에도 지역명 오버레이 */}
+        {post.category === '동네정보' && post.region && post.image_url && (
+          <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, px: 1.5, py: 1, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%)' }}>
+            <Typography sx={{ color: 'white', fontWeight: 700, fontSize: 13 }}>📍 {post.region}</Typography>
           </Box>
         )}
         <Box sx={{ position: 'absolute', top: 8, left: 8 }}>
@@ -114,20 +125,31 @@ const HomePage = () => {
 
       {/* 카테고리 바로가기 */}
       <Typography variant="h6" fontWeight={700} gutterBottom>카테고리 바로가기</Typography>
-      <Stack direction="row" spacing={1.5} sx={{ mb: 4, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
+      <Box sx={{
+        display: 'flex', flexWrap: { xs: 'nowrap', md: 'wrap' },
+        gap: 1.5, mb: 4, pb: 1,
+        overflowX: { xs: 'auto', md: 'visible' },
+        justifyContent: { xs: 'flex-start', md: 'center' },
+        '&::-webkit-scrollbar': { display: 'none' },
+      }}>
         {SHORTCUTS.map(({ label, gradient, emoji }) => (
           <Card
             key={label}
             onClick={() => navigate(`/posts?category=${encodeURIComponent(label)}`)}
-            sx={{ cursor: 'pointer', minWidth: 100, flexShrink: 0, textAlign: 'center', background: gradient, color: 'white', '&:hover': { transform: 'translateY(-3px)', transition: 'transform 0.2s', boxShadow: 4 } }}
+            sx={{
+              cursor: 'pointer', flexShrink: 0,
+              width: { xs: 100, md: 'auto' }, minWidth: { md: 110 },
+              textAlign: 'center', background: gradient, color: 'white',
+              '&:hover': { transform: 'translateY(-3px)', transition: 'transform 0.2s', boxShadow: 4 },
+            }}
           >
-            <CardContent sx={{ py: 2 }}>
-              <Typography fontSize={28}>{emoji}</Typography>
-              <Typography variant="caption" fontWeight={700} color="white">{label}</Typography>
+            <CardContent sx={{ py: 2, px: 2 }}>
+              <Typography fontSize={30}>{emoji}</Typography>
+              <Typography variant="caption" fontWeight={700} color="white" sx={{ display: 'block', mt: 0.5 }}>{label}</Typography>
             </CardContent>
           </Card>
         ))}
-      </Stack>
+      </Box>
 
       {/* 인기 게시물 */}
       {hotPosts.length > 0 && (
@@ -136,9 +158,9 @@ const HomePage = () => {
             <WhatshotIcon color="error" />
             <Typography variant="h6" fontWeight={700}>인기 게시물 TOP</Typography>
           </Box>
-          <Grid container spacing={2} sx={{ mb: 4 }}>
+          <Grid container spacing={2} sx={{ mb: 4 }} alignItems="stretch">
             {hotPosts.map((post) => (
-              <Grid item xs={12} sm={4} key={post.id}>
+              <Grid item xs={12} sm={4} key={post.id} sx={{ display: 'flex' }}>
                 <PostCard post={post} onClick={() => navigate(`/posts/${post.id}`)} />
               </Grid>
             ))}
@@ -158,9 +180,9 @@ const HomePage = () => {
           <Button variant="contained" sx={{ mt: 2 }} onClick={() => navigate('/write')}>글 작성하기</Button>
         </Box>
       ) : (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} alignItems="stretch">
           {recentPosts.map((post) => (
-            <Grid item xs={12} sm={6} md={4} key={post.id}>
+            <Grid item xs={12} sm={6} md={4} key={post.id} sx={{ display: 'flex' }}>
               <PostCard post={post} onClick={() => navigate(`/posts/${post.id}`)} />
             </Grid>
           ))}

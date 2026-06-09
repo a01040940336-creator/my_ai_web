@@ -8,7 +8,7 @@ import { supabase } from '../supabase'
 
 const LoginPage = () => {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ email: '', password: '' })
+  const [form, setForm] = useState({ username: '', password: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -18,8 +18,26 @@ const LoginPage = () => {
     e.preventDefault()
     setError('')
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({ email: form.email, password: form.password })
-    if (error) setError(error.message)
+
+    // 아이디로 이메일 조회
+    const { data: profileData, error: profileErr } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('username', form.username.toLowerCase().trim())
+      .single()
+
+    if (profileErr || !profileData?.email) {
+      setError('존재하지 않는 아이디입니다.')
+      setLoading(false)
+      return
+    }
+
+    const { error: authErr } = await supabase.auth.signInWithPassword({
+      email: profileData.email,
+      password: form.password,
+    })
+
+    if (authErr) setError('비밀번호가 올바르지 않습니다.')
     else navigate('/')
     setLoading(false)
   }
@@ -40,14 +58,15 @@ const LoginPage = () => {
           <Box component="form" onSubmit={handleSubmit}>
             <Stack spacing={2}>
               <TextField
-                label="이메일"
-                name="email"
-                type="email"
-                value={form.email}
+                label="아이디"
+                name="username"
+                value={form.username}
                 onChange={handleChange}
                 required
                 fullWidth
                 size="small"
+                placeholder="가입 시 설정한 아이디"
+                inputProps={{ autoCapitalize: 'none' }}
               />
               <TextField
                 label="비밀번호"
@@ -70,18 +89,12 @@ const LoginPage = () => {
           </Divider>
 
           <Stack spacing={1.5}>
-            <Button
-              fullWidth variant="outlined"
-              sx={{ bgcolor: '#FEE500', borderColor: '#FEE500', color: '#191919', '&:hover': { bgcolor: '#F5DC00', borderColor: '#F5DC00' } }}
-              disabled
-            >
+            <Button fullWidth variant="outlined" disabled
+              sx={{ bgcolor: '#FEE500', borderColor: '#FEE500', color: '#191919', '&:hover': { bgcolor: '#F5DC00', borderColor: '#F5DC00' } }}>
               카카오로 로그인 (준비중)
             </Button>
-            <Button
-              fullWidth variant="outlined"
-              sx={{ bgcolor: '#03C75A', borderColor: '#03C75A', color: '#fff', '&:hover': { bgcolor: '#02B050', borderColor: '#02B050' } }}
-              disabled
-            >
+            <Button fullWidth variant="outlined" disabled
+              sx={{ bgcolor: '#03C75A', borderColor: '#03C75A', color: '#fff', '&:hover': { bgcolor: '#02B050', borderColor: '#02B050' } }}>
               네이버로 로그인 (준비중)
             </Button>
           </Stack>

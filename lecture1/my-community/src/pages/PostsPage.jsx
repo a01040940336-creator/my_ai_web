@@ -45,29 +45,31 @@ const PostCard = ({ post, onClick }) => {
             />
           ) : (
             <Box sx={{
-              width: '100%', height: '100%',
-              background: meta.gradient,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '100%', height: '100%', background: meta.gradient,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 0.5,
             }}>
-              <Typography sx={{ fontSize: 48, lineHeight: 1 }}>{meta.emoji}</Typography>
+              <Typography sx={{ fontSize: 44, lineHeight: 1 }}>{meta.emoji}</Typography>
+              {post.category === '동네정보' && post.region && (
+                <Typography sx={{ color: 'white', fontWeight: 800, fontSize: 15, textShadow: '0 1px 4px rgba(0,0,0,0.4)', letterSpacing: 1 }}>
+                  📍 {post.region}
+                </Typography>
+              )}
+            </Box>
+          )}
+          {/* 동네정보 이미지 있을 때 지역명 오버레이 */}
+          {post.category === '동네정보' && post.region && post.image_url && (
+            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, px: 1.5, py: 1, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%)' }}>
+              <Typography sx={{ color: 'white', fontWeight: 700, fontSize: 13 }}>📍 {post.region}</Typography>
             </Box>
           )}
           {/* 카테고리 칩 오버레이 */}
           <Box sx={{ position: 'absolute', top: 8, left: 8, display: 'flex', gap: 0.5 }}>
             {post.category && (
-              <Chip
-                label={post.category}
-                size="small"
-                sx={{ bgcolor: 'rgba(0,0,0,0.55)', color: 'white', fontSize: 11, fontWeight: 600, backdropFilter: 'blur(4px)' }}
-              />
+              <Chip label={post.category} size="small"
+                sx={{ bgcolor: 'rgba(0,0,0,0.55)', color: 'white', fontSize: 11, fontWeight: 600, backdropFilter: 'blur(4px)' }} />
             )}
             {post.post_type !== '일반' && (
-              <Chip
-                label={post.status}
-                size="small"
-                color={STATUS_COLOR[post.status]}
-                sx={{ fontSize: 11, fontWeight: 600 }}
-              />
+              <Chip label={post.status} size="small" color={STATUS_COLOR[post.status]} sx={{ fontSize: 11, fontWeight: 600 }} />
             )}
           </Box>
         </Box>
