@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
-  Box, Container, Typography, Grid, Card, CardContent, CardActionArea,
+  Box, Container, Typography, Card, CardContent, CardActionArea,
   Chip, Button, Stack, Divider, Avatar
 } from '@mui/material'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
@@ -158,13 +158,15 @@ const HomePage = () => {
             <WhatshotIcon color="error" />
             <Typography variant="h6" fontWeight={700}>인기 게시물 TOP</Typography>
           </Box>
-          <Grid container spacing={2} sx={{ mb: 4 }} alignItems="stretch">
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
+            gap: 2, mb: 4,
+          }}>
             {hotPosts.map((post) => (
-              <Grid item xs={12} sm={6} md={4} key={post.id} sx={{ display: 'flex' }}>
-                <PostCard post={post} onClick={() => navigate(`/posts/${post.id}`)} />
-              </Grid>
+              <PostCard key={post.id} post={post} onClick={() => navigate(`/posts/${post.id}`)} />
             ))}
-          </Grid>
+          </Box>
           <Divider sx={{ mb: 4 }} />
         </>
       )}
@@ -180,13 +182,15 @@ const HomePage = () => {
           <Button variant="contained" sx={{ mt: 2 }} onClick={() => navigate('/write')}>글 작성하기</Button>
         </Box>
       ) : (
-        <Grid container spacing={2} alignItems="stretch">
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
+          gap: 2,
+        }}>
           {recentPosts.map((post) => (
-            <Grid item xs={12} sm={6} md={4} key={post.id} sx={{ display: 'flex' }}>
-              <PostCard post={post} onClick={() => navigate(`/posts/${post.id}`)} />
-            </Grid>
+            <PostCard key={post.id} post={post} onClick={() => navigate(`/posts/${post.id}`)} />
           ))}
-        </Grid>
+        </Box>
       )}
     </Container>
   )

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
-  Container, Box, Typography, Grid, Card, CardContent, CardActionArea,
+  Container, Box, Typography, Card, CardContent, CardActionArea,
   Chip, Select, MenuItem, FormControl, InputLabel, Avatar, Stack,
   TextField, InputAdornment, Button
 } from '@mui/material'
@@ -186,13 +186,15 @@ const PostsPage = () => {
             <Button variant="contained" onClick={() => navigate('/write')}>첫 글 작성하기</Button>
           </Box>
         ) : (
-          <Grid container spacing={2} alignItems="stretch">
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
+            gap: 2,
+          }}>
             {posts.map((post) => (
-              <Grid item xs={12} sm={6} md={4} key={post.id} sx={{ display: 'flex' }}>
-                <PostCard post={post} onClick={() => navigate(`/posts/${post.id}`)} />
-              </Grid>
+              <PostCard key={post.id} post={post} onClick={() => navigate(`/posts/${post.id}`)} />
             ))}
-          </Grid>
+          </Box>
         )}
       </Box>
     </Container>
