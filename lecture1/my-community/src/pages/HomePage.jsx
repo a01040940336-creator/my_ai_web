@@ -61,14 +61,14 @@ const HomePage = () => {
     const fetchPosts = async () => {
       const { data: hot } = await supabase
         .from('posts')
-        .select('*, profiles(nickname)')
+        .select('*, profiles!author_id(nickname)')
         .eq('visibility', 'public')
         .order('like_count', { ascending: false })
         .limit(3)
 
       const { data: recent } = await supabase
         .from('posts')
-        .select('*, profiles(nickname)')
+        .select('*, profiles!author_id(nickname)')
         .eq('visibility', 'public')
         .order('created_at', { ascending: false })
         .limit(6)

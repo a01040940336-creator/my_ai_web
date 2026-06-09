@@ -31,7 +31,7 @@ const PostsPage = () => {
       setLoading(true)
       let query = supabase
         .from('posts')
-        .select('*, profiles(nickname, region)')
+        .select('*, profiles!author_id(nickname, region)')
         .eq('visibility', 'public')
 
       if (category) query = query.eq('category', category)
