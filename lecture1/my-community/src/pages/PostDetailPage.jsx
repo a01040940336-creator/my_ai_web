@@ -155,6 +155,28 @@ const PostDetailPage = () => {
         )}
       </Box>
 
+      {/* 공지사항: 전용 UI */}
+      {post.category === '공지사항' ? (
+        <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
+          {/* 공지 헤더 바 */}
+          <Box sx={{ bgcolor: 'primary.main', px: 3, py: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Chip label="📢 공지사항" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 700 }} />
+            <Typography variant="caption" color="rgba(255,255,255,0.8)" sx={{ ml: 'auto' }}>
+              집담 운영팀 • {formatDistanceToNow(post.created_at)}
+            </Typography>
+          </Box>
+          {/* 공지 본문 */}
+          <Box sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+            <Typography variant="h5" fontWeight={800} mb={3} color="text.primary">{post.title}</Typography>
+            <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', lineHeight: 2, color: 'text.primary' }}>{post.content}</Typography>
+          </Box>
+          <Box sx={{ px: { xs: 2, md: 4 }, py: 2, bgcolor: 'background.default', borderTop: '1px solid', borderColor: 'divider' }}>
+            <Typography variant="caption" color="text.disabled">
+              본 공지사항은 집담 운영팀이 작성했습니다. 문의는 질문게시판을 이용해 주세요.
+            </Typography>
+          </Box>
+        </Box>
+      ) : (
       <Card>
         <CardContent sx={{ p: { xs: 2, md: 4 } }}>
           {/* 헤더 */}
@@ -206,6 +228,7 @@ const PostDetailPage = () => {
           </Stack>
         </CardContent>
       </Card>
+      )} {/* end 공지사항 조건부 */}
 
       {/* 댓글 */}
       <Box sx={{ mt: 3 }}>

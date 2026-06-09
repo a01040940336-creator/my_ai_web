@@ -127,11 +127,11 @@ const HeroBanner = ({ navigate }) => {
 }
 
 const SHORTCUTS = [
-  { label: '자취꿀팁', gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)', emoji: '💡' },
-  { label: '요리', gradient: 'linear-gradient(135deg,#0369A1,#38BDF8)', emoji: '🍳' },
-  { label: '공동구매', gradient: 'linear-gradient(135deg,#0F766E,#34D399)', emoji: '🛒' },
-  { label: '냉장고나눔', gradient: 'linear-gradient(135deg,#1D4ED8,#34D399)', emoji: '🥦' },
-  { label: '동네정보', gradient: 'linear-gradient(135deg,#1E293B,#3B82F6)', emoji: '📍' },
+  { label: '자취꿀팁', emoji: '💡' },
+  { label: '요리', emoji: '🍳' },
+  { label: '공동구매', emoji: '🛒' },
+  { label: '냉장고나눔', emoji: '🥦' },
+  { label: '동네정보', emoji: '📍' },
 ]
 
 const CATEGORY_GRADIENT = {
@@ -234,7 +234,7 @@ const HomePage = () => {
         overflowX: { xs: 'auto', md: 'visible' },
         '&::-webkit-scrollbar': { display: 'none' },
       }}>
-        {SHORTCUTS.map(({ label, gradient, emoji }) => (
+        {SHORTCUTS.map(({ label, emoji }) => (
           <Card
             key={label}
             onClick={() => navigate(`/posts?category=${encodeURIComponent(label)}`)}
@@ -242,13 +242,24 @@ const HomePage = () => {
               cursor: 'pointer',
               flexShrink: 0,
               flex: { xs: '0 0 100px', md: '1 1 0' },
-              textAlign: 'center', background: gradient, color: 'white',
-              '&:hover': { transform: 'translateY(-3px)', transition: 'transform 0.2s', boxShadow: 4 },
+              textAlign: 'center',
+              bgcolor: 'background.paper',
+              border: '1.5px solid',
+              borderColor: 'divider',
+              '&:hover': {
+                borderColor: 'primary.main',
+                transform: 'translateY(-3px)',
+                transition: 'all 0.2s',
+                boxShadow: 2,
+                '& .cat-label': { color: 'primary.main' },
+              },
             }}
           >
             <CardContent sx={{ py: 2, px: 1 }}>
-              <Typography fontSize={30}>{emoji}</Typography>
-              <Typography variant="caption" fontWeight={700} color="white" sx={{ display: 'block', mt: 0.5 }}>{label}</Typography>
+              <Typography fontSize={28}>{emoji}</Typography>
+              <Typography className="cat-label" variant="caption" fontWeight={600} color="text.primary" sx={{ display: 'block', mt: 0.5, transition: 'color 0.2s' }}>
+                {label}
+              </Typography>
             </CardContent>
           </Card>
         ))}

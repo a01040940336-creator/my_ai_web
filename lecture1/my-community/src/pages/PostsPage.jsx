@@ -174,8 +174,8 @@ const PostsPage = () => {
           sx={{ flex: '1 1 200px', minWidth: 160 }}
         />
 
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexShrink: 0 }}>
-          <FormControl size="small" sx={{ minWidth: 90 }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'stretch', flexShrink: 0 }}>
+          <FormControl size="small" sx={{ minWidth: 90, '& .MuiInputBase-root': { height: 40 } }}>
             <InputLabel>정렬</InputLabel>
             <Select value={sort} label="정렬" onChange={(e) => setSort(e.target.value)}>
               <MenuItem value="newest">최신순</MenuItem>
@@ -186,9 +186,8 @@ const PostsPage = () => {
             <Button
               variant="contained"
               startIcon={<EditIcon />}
-              size="small"
               onClick={() => navigate('/write')}
-              sx={{ flexShrink: 0, fontWeight: 700, px: 2 }}
+              sx={{ flexShrink: 0, fontWeight: 700, px: 2, height: 40, fontSize: 14 }}
             >
               글 작성
             </Button>

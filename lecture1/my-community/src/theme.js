@@ -22,7 +22,7 @@ const theme = createTheme({
     divider: '#E5E7EB',
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Pretendard", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: { fontSize: '2.125rem', fontWeight: 700 },
     h2: { fontSize: '1.875rem', fontWeight: 700 },
     h3: { fontSize: '1.5rem', fontWeight: 600 },

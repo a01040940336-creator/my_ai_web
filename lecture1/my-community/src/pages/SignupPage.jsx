@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import {
   Box, Card, CardContent, Typography, TextField, Button,
-  Alert, Link, Stack, LinearProgress, InputAdornment, CircularProgress
+  Alert, Link, Stack, LinearProgress, InputAdornment, CircularProgress,
+  Dialog, DialogContent, DialogActions
 } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CancelIcon from '@mui/icons-material/Cancel'
@@ -25,7 +26,8 @@ const SignupPage = () => {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [agreed, setAgreed] = useState(false)
-  const [usernameCheck, setUsernameCheck] = useState(null) // null | 'checking' | 'ok' | 'taken' | 'invalid'
+  const [usernameCheck, setUsernameCheck] = useState(null)
+  const [successOpen, setSuccessOpen] = useState(false)
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -69,7 +71,8 @@ const SignupPage = () => {
     })
 
     if (authErr) { setError(authErr.message); setLoading(false); return }
-    navigate('/', { state: { message: '회원가입이 완료됐어요! 이메일을 확인해 주세요.' } })
+    setLoading(false)
+    setSuccessOpen(true)
   }
 
   const pwStrength = getPasswordStrength(form.password)
@@ -90,6 +93,25 @@ const SignupPage = () => {
   }
 
   return (
+    <>
+    {/* 회원가입 완료 팝업 */}
+    <Dialog open={successOpen} maxWidth="xs" fullWidth>
+      <DialogContent sx={{ textAlign: 'center', py: 4, px: 3 }}>
+        <CheckCircleIcon sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
+        <Typography variant="h5" fontWeight={800} gutterBottom>회원가입 완료!</Typography>
+        <Typography variant="body2" color="text.secondary">
+          <strong>{form.username}</strong>님, 환영합니다! 🎉<br />
+          이제 로그인하고 집담을 시작해 보세요.
+        </Typography>
+      </DialogContent>
+      <DialogActions sx={{ justifyContent: 'center', pb: 3, gap: 1 }}>
+        <Button variant="outlined" onClick={() => { setSuccessOpen(false); navigate('/') }}>홈으로</Button>
+        <Button variant="contained" onClick={() => { setSuccessOpen(false); navigate('/login') }} autoFocus>
+          로그인하기
+        </Button>
+      </DialogActions>
+    </Dialog>
+
     <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default', p: { xs: 1.5, sm: 2 }, py: { xs: 3, sm: 4 } }}>
       <Card sx={{ width: '100%', maxWidth: 480 }}>
         <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
@@ -169,6 +191,7 @@ const SignupPage = () => {
         </CardContent>
       </Card>
     </Box>
+    </>
   )
 }
 

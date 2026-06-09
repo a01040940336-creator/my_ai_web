@@ -5,7 +5,7 @@ import {
   List, ListItem, ListItemText, Divider
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
@@ -74,8 +74,8 @@ const Navbar = () => {
 
             {user ? (
               <>
-                <IconButton size="small" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                  <NotificationsNoneIcon />
+                <IconButton size="small" sx={{ display: { xs: 'none', sm: 'flex' } }} title="쪽지">
+                  <ForumOutlinedIcon />
                 </IconButton>
 
                 {/* 글쓰기: sm+ 텍스트, xs 아이콘만 */}
