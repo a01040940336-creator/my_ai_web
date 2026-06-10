@@ -1,44 +1,49 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import { useNavigate } from 'react-router-dom'
-import { differenceInDays, getDdayLabel, formatDateShort, getStatus } from '../utils/date'
+import { differenceInDays, getDdayLabel, formatDateShort, getStatusLabel, getType, getTheme } from '../utils/date'
 
-const STATUS_COLOR = { 예정: '#888', 진행중: '#111', 종료: '#CCC' }
-const STATUS_BG = { 예정: '#F0F0F0', 진행중: '#111', 종료: '#EAEAEA' }
-const STATUS_TEXT = { 예정: '#555', 진행중: '#FFF', 종료: '#999' }
+const STATUS_STYLE = {
+  'CLOSING SOON': { bg: '#FF3B30', color: '#FFF' },
+  'NOW OPEN':     { bg: '#111',    color: '#FFF' },
+  'UPCOMING':     { bg: '#F0F0F0', color: '#666' },
+  'ENDED':        { bg: '#EAEAEA', color: '#999' },
+}
 
-const PostCard = ({ post, compact = false, isSaved = false, onToggleSave }) => {
+const PostCard = ({ post, isSaved = false, onToggleSave }) => {
   const navigate = useNavigate()
   const daysLeft = differenceInDays(post.end_date)
-  const isClosing = daysLeft >= 0 && daysLeft <= 3
-  const isEnded = daysLeft < 0
-  const status = getStatus(post.start_date, post.end_date)
+  const status = getStatusLabel(post.start_date, post.end_date)
+  const type = getType(post.category)
   const ddayLabel = getDdayLabel(post.end_date)
+  const isEnded = status === 'ENDED'
+  const isClosing = status === 'CLOSING SOON'
 
   const handleBookmark = (e) => {
     e.stopPropagation()
     onToggleSave?.(post.id, e)
   }
 
+  const { bg: statusBg, color: statusColor } = STATUS_STYLE[status] ?? STATUS_STYLE['NOW OPEN']
+
   return (
     <Box
       onClick={() => navigate(`/post/${post.id}`)}
       sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 0.75 }}
     >
-      {/* 이미지 영역 */}
+      {/* 이미지 */}
       <Box
         sx={{
           position: 'relative',
           width: '100%',
-          paddingTop: compact ? '120%' : '100%',
+          paddingTop: '120%',
           borderRadius: 1.5,
           overflow: 'hidden',
-          bgcolor: '#F5F5F5',
-          opacity: isEnded ? 0.6 : 1,
+          bgcolor: '#F0F0F0',
+          opacity: isEnded ? 0.55 : 1,
         }}
       >
         {post.images?.[0] ? (
@@ -46,118 +51,73 @@ const PostCard = ({ post, compact = false, isSaved = false, onToggleSave }) => {
             component="img"
             src={post.images[0]}
             alt={post.title}
-            sx={{
-              position: 'absolute',
-              top: 0, left: 0,
-              width: '100%', height: '100%',
-              objectFit: 'cover',
-            }}
+            sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
           />
         ) : (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 0, left: 0, right: 0, bottom: 0,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}
-          >
-            <Typography variant="caption" color="text.secondary">이미지 없음</Typography>
+          <Box sx={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography variant="caption" color="text.secondary">NO IMAGE</Typography>
           </Box>
         )}
 
-        {/* D-day 뱃지 - 좌상단 */}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 7, left: 7,
-            bgcolor: isClosing ? '#FF3B30' : isEnded ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.55)',
-            color: '#fff',
-            borderRadius: 0.75,
-            px: 0.75,
-            py: 0.25,
-            fontSize: '0.625rem',
-            fontWeight: 700,
-            lineHeight: 1.5,
-            letterSpacing: '0.02em',
-          }}
-        >
+        {/* D-day 뱃지 */}
+        <Box sx={{
+          position: 'absolute', top: 7, left: 7,
+          bgcolor: isClosing ? '#FF3B30' : 'rgba(0,0,0,0.52)',
+          color: '#fff', borderRadius: 0.75,
+          px: 0.75, py: 0.25,
+          fontSize: '0.625rem', fontWeight: 800, lineHeight: 1.5,
+        }}>
           {ddayLabel}
         </Box>
 
-        {/* 북마크 버튼 - 우상단 */}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 3, right: 3,
-          }}
-          onClick={handleBookmark}
-        >
-          <IconButton
-            size="small"
-            sx={{
-              bgcolor: 'rgba(255,255,255,0.9)',
-              backdropFilter: 'blur(4px)',
-              width: 28, height: 28,
-              '&:hover': { bgcolor: 'rgba(255,255,255,1)' },
-            }}
-          >
+        {/* 북마크 버튼 */}
+        <Box sx={{ position: 'absolute', top: 4, right: 4 }} onClick={handleBookmark}>
+          <IconButton size="small" sx={{
+            bgcolor: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(4px)',
+            width: 28, height: 28, '&:hover': { bgcolor: '#fff' },
+          }}>
             {isSaved
               ? <BookmarkIcon sx={{ fontSize: 15, color: '#111' }} />
               : <BookmarkBorderIcon sx={{ fontSize: 15, color: '#555' }} />
             }
           </IconButton>
         </Box>
+
+        {/* TYPE 뱃지 */}
+        <Box sx={{
+          position: 'absolute', bottom: 7, left: 7,
+          bgcolor: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(4px)',
+          borderRadius: 0.5, px: 0.75, py: 0.125,
+          fontSize: '0.5625rem', fontWeight: 700, color: '#333', lineHeight: 1.6,
+        }}>
+          {type}
+        </Box>
       </Box>
 
-      {/* 텍스트 영역 */}
+      {/* 텍스트 */}
       <Box sx={{ px: 0.25 }}>
-        {/* 지역 · 카테고리 */}
-        <Typography
-          variant="caption"
-          sx={{ color: '#999', letterSpacing: '0.03em', display: 'block', lineHeight: 1.4 }}
-        >
-          {post.region} · {post.category}
+        <Typography variant="caption" sx={{ color: '#999', fontSize: '0.625rem', letterSpacing: '0.04em' }}>
+          {post.region}
         </Typography>
 
-        {/* 제목 */}
-        <Typography
-          variant="body2"
-          sx={{
-            fontWeight: 700,
-            color: isEnded ? '#AAA' : '#111',
-            mt: 0.25,
-            overflow: 'hidden',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            lineHeight: 1.4,
-            fontSize: '0.8125rem',
-          }}
-        >
+        <Typography variant="body2" sx={{
+          fontWeight: 700, color: isEnded ? '#AAA' : '#111',
+          mt: 0.2, lineHeight: 1.35, fontSize: '0.8125rem',
+          overflow: 'hidden', display: '-webkit-box',
+          WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+        }}>
           {post.title}
         </Typography>
 
-        {/* 기간 + 상태 */}
-        <Box sx={{ mt: 0.5, display: 'flex', alignItems: 'center', gap: 0.75, flexWrap: 'wrap' }}>
-          <Typography
-            variant="caption"
-            sx={{ color: '#AAA', fontSize: '0.6875rem', lineHeight: 1 }}
-          >
-            {formatDateShort(post.start_date)} ~ {formatDateShort(post.end_date)}
+        <Box sx={{ mt: 0.5, display: 'flex', alignItems: 'center', gap: 0.625, flexWrap: 'wrap' }}>
+          <Typography sx={{ fontSize: '0.625rem', color: '#BBB', lineHeight: 1 }}>
+            {formatDateShort(post.start_date)} – {formatDateShort(post.end_date)}
           </Typography>
-          <Box
-            sx={{
-              px: 0.75,
-              py: 0.125,
-              borderRadius: 0.5,
-              bgcolor: STATUS_BG[status],
-              fontSize: '0.5625rem',
-              fontWeight: 700,
-              color: STATUS_TEXT[status],
-              lineHeight: 1.6,
-              flexShrink: 0,
-            }}
-          >
+          <Box sx={{
+            px: 0.625, py: 0.125, borderRadius: 0.5,
+            bgcolor: statusBg, color: statusColor,
+            fontSize: '0.5rem', fontWeight: 700, lineHeight: 1.6, flexShrink: 0,
+          }}>
             {status}
           </Box>
         </Box>
