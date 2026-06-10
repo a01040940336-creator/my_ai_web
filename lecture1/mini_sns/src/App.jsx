@@ -32,17 +32,20 @@ const App = () => (
       <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Layout>
           <Routes>
-            <Route path="/"         element={<HomePage />} />
-            <Route path="/search"   element={<SearchPage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="/saved"    element={<SavedPage />} />
-            <Route path="/profile"  element={<ProfilePage />} />
-            <Route path="/post/:id" element={<PostDetailPage />} />
-            <Route path="/write"    element={<PostWritePage />} />
-            <Route path="/auth"     element={<AuthPage />} />
+            <Route path="/"            element={<HomePage />} />
+            <Route path="/search"      element={<SearchPage />} />
+            <Route path="/search/map"  element={<SearchPage />} />
+            <Route path="/calendar"    element={<CalendarPage />} />
+            <Route path="/saved"       element={<SavedPage />} />
+            <Route path="/profile"     element={<ProfilePage />} />
+            <Route path="/post/:id"    element={<PostDetailPage />} />
+            <Route path="/write"       element={<PostWritePage />} />
+            <Route path="/auth"        element={<AuthPage />} />
             {/* 이전 경로 호환 */}
-            <Route path="/explore"  element={<SearchPage />} />
-            <Route path="/mypage"   element={<ProfilePage />} />
+            <Route path="/explore"     element={<SearchPage />} />
+            <Route path="/mypage"      element={<ProfilePage />} />
+            {/* fallback */}
+            <Route path="*"            element={<HomePage />} />
           </Routes>
         </Layout>
       </BrowserRouter>

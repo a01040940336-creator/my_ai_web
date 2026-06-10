@@ -1,69 +1,81 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
-import Chip from '@mui/material/Chip'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
 import Fab from '@mui/material/Fab'
 import SearchIcon from '@mui/icons-material/Search'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import PostCard from '../components/PostCard'
-import { sortByDday, getStatusLabel, getType, getTheme } from '../utils/date'
+import { SkeletonGrid } from '../components/SkeletonCard'
+import { sortByDday, getStatusLabel, haversineDistance } from '../utils/date'
 import { useSavedPosts } from '../hooks/useSavedPosts'
-import { useAuth } from '../context/AuthContext'
 
-const THEMES = ['ALL', 'IDOL', 'BEAUTY', 'FASHION', 'ART', 'LIFESTYLE']
-const TYPES  = ['ALL', 'POP-UP', 'EXHIBITION']
+const REGIONS = ['서울', '성수', '홍대', '강남', '한남', '부산', '제주']
+const CATEGORIES = ['전시', '팝업스토어', '아이돌', '뷰티', '패션', '라이프스타일']
+const SEOUL_DISTRICTS = ['성수', '홍대', '강남', '한남', '이태원', '연남']
 
-const FilterRow = ({ items, selected, onChange }) => (
-  <Box sx={{ overflowX: 'auto', display: 'flex', gap: 0.875, px: 2, '&::-webkit-scrollbar': { display: 'none' } }}>
-    {items.map(item => (
-      <Chip
-        key={item}
-        label={item}
-        size="small"
-        onClick={() => onChange(item)}
-        variant={selected === item ? 'filled' : 'outlined'}
-        sx={{
-          flexShrink: 0,
-          height: 26,
-          bgcolor: selected === item ? '#111' : 'transparent',
-          color: selected === item ? '#fff' : '#777',
-          borderColor: '#E0E0E0',
-          fontWeight: 600,
-          fontSize: '0.6875rem',
-          letterSpacing: '0.02em',
-        }}
-      />
-    ))}
-  </Box>
-)
+const matchRegion = (post, region) => {
+  if (!region) return true
+  if (region === '서울') return SEOUL_DISTRICTS.includes(post.region)
+  return post.region === region
+}
+
+const matchCategory = (post, category) => {
+  if (!category) return true
+  if (category === '팝업스토어') return post.category !== '전시'
+  return post.category === category
+}
 
 const SectionLabel = ({ label, sub, accent }) => (
   <Box sx={{ px: 2, mb: 1.25, display: 'flex', alignItems: 'baseline', gap: 1 }}>
     <Typography sx={{ fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.12em', color: accent ?? '#111' }}>
       {label}
     </Typography>
-    {sub && <Typography variant="caption" sx={{ color: '#BBB', fontSize: '0.6875rem' }}>{sub}</Typography>}
+    {sub && <Typography sx={{ fontSize: '0.6875rem', color: '#CCC' }}>{sub}</Typography>}
+  </Box>
+)
+
+const PostGrid = ({ posts, savedIds, onToggleSave }) => (
+  <Box sx={{ px: 2, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+    {posts.map(post => (
+      <PostCard
+        key={post.id} post={post}
+        isSaved={savedIds.has(post.id)}
+        onToggleSave={onToggleSave}
+      />
+    ))}
   </Box>
 )
 
 const HomePage = () => {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [type, setType] = useState('ALL')
-  const [theme, setTheme] = useState('ALL')
+  const [region, setRegion] = useState('')
+  const [category, setCategory] = useState('')
+  const [userLocation, setUserLocation] = useState(null)
   const [showTop, setShowTop] = useState(false)
   const navigate = useNavigate()
-  const { user } = useAuth()
   const { savedIds, toggleSave } = useSavedPosts()
 
   useEffect(() => {
     supabase.from('popspot_posts').select('*')
-      .then(({ data }) => { setPosts(sortByDday(data || [])); setLoading(false) })
+      .then(({ data }) => { setPosts(sortByDday(data ?? [])); setLoading(false) })
+  }, [])
+
+  useEffect(() => {
+    if (!navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      pos => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => setUserLocation(null),
+      { timeout: 4000 }
+    )
   }, [])
 
   useEffect(() => {
@@ -76,29 +88,54 @@ const HomePage = () => {
     if (!(await toggleSave(postId, e))) navigate('/auth')
   }
 
-  const filtered = posts.filter(p => {
-    const typeOk = type === 'ALL' || getType(p.category) === type
-    const themeOk = theme === 'ALL' || getTheme(p.category) === theme
-    return typeOk && themeOk
+  const filtered = useMemo(() =>
+    posts.filter(p => matchRegion(p, region) && matchCategory(p, category)),
+    [posts, region, category]
+  )
+
+  // CLOSING SOON: D-3 이내
+  const closingSoon = filtered.filter(p => getStatusLabel(p.start_date, p.end_date) === 'CLOSING SOON')
+
+  // NEAR YOU: 위치 기반, 없으면 인기 or 최근
+  const nearYou = useMemo(() => {
+    const active = filtered.filter(p => {
+      const s = getStatusLabel(p.start_date, p.end_date)
+      return s === 'NOW OPEN' || s === 'CLOSING SOON'
+    })
+    if (userLocation) {
+      return [...active]
+        .filter(p => p.latitude && p.longitude)
+        .sort((a, b) =>
+          haversineDistance(userLocation.lat, userLocation.lng, a.latitude, a.longitude) -
+          haversineDistance(userLocation.lat, userLocation.lng, b.latitude, b.longitude)
+        )
+        .slice(0, 4)
+    }
+    // 위치 권한 없으면 랜덤 4개
+    return [...active].sort(() => 0.5 - Math.random()).slice(0, 4)
+  }, [filtered, userLocation])
+
+  // TODAY PICK: 오늘 종료 (D-DAY) 우선, 없으면 D-1
+  const todayPick = useMemo(() => {
+    const ending = filtered.filter(p => {
+      const s = getStatusLabel(p.start_date, p.end_date)
+      return s === 'CLOSING SOON' || s === 'NOW OPEN'
+    })
+    const sorted = [...ending].sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
+    return sorted.slice(0, 4)
+  }, [filtered])
+
+  // FEATURED: 나머지 진행중 + 예정
+  const featured = filtered.filter(p => {
+    const s = getStatusLabel(p.start_date, p.end_date)
+    return s === 'NOW OPEN' || s === 'UPCOMING'
   })
 
-  const closingSoon = filtered.filter(p => getStatusLabel(p.start_date, p.end_date) === 'CLOSING SOON')
-  const nowOpen    = filtered.filter(p => getStatusLabel(p.start_date, p.end_date) === 'NOW OPEN')
-  const upcoming   = filtered.filter(p => getStatusLabel(p.start_date, p.end_date) === 'UPCOMING')
-
   const Section = ({ label, sub, accent, items }) =>
-    items.length === 0 ? null : (
+    !items?.length ? null : (
       <Box sx={{ mb: 3.5 }}>
         <SectionLabel label={label} sub={sub} accent={accent} />
-        <Box sx={{ px: 2, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-          {items.map(post => (
-            <PostCard
-              key={post.id} post={post}
-              isSaved={savedIds.has(post.id)}
-              onToggleSave={handleToggleSave}
-            />
-          ))}
-        </Box>
+        <PostGrid posts={items} savedIds={savedIds} onToggleSave={handleToggleSave} />
       </Box>
     )
 
@@ -116,29 +153,44 @@ const HomePage = () => {
         </Toolbar>
       </AppBar>
 
-      {/* TYPE 필터 */}
-      <Box sx={{ pt: 1.5, pb: 0.75 }}>
-        <FilterRow items={TYPES} selected={type} onChange={setType} />
-      </Box>
-
-      {/* THEME 필터 */}
-      <Box sx={{ pb: 1.5 }}>
-        <FilterRow items={THEMES} selected={theme} onChange={setTheme} />
+      {/* 필터 바 (지역 + 분야 드롭다운) */}
+      <Box sx={{ px: 2, pt: 1.5, pb: 1, display: 'flex', gap: 1.5 }}>
+        <FormControl size="small" sx={{ flex: 1 }}>
+          <Select
+            value={region}
+            onChange={e => setRegion(e.target.value)}
+            displayEmpty
+            sx={{ bgcolor: '#F7F7F7', '& fieldset': { border: 'none' }, borderRadius: 1.5, fontSize: '0.875rem' }}
+          >
+            <MenuItem value=""><Typography sx={{ color: '#999', fontSize: '0.875rem' }}>지역 전체</Typography></MenuItem>
+            {REGIONS.map(r => <MenuItem key={r} value={r} sx={{ fontSize: '0.875rem' }}>{r}</MenuItem>)}
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={{ flex: 1 }}>
+          <Select
+            value={category}
+            onChange={e => setCategory(e.target.value)}
+            displayEmpty
+            sx={{ bgcolor: '#F7F7F7', '& fieldset': { border: 'none' }, borderRadius: 1.5, fontSize: '0.875rem' }}
+          >
+            <MenuItem value=""><Typography sx={{ color: '#999', fontSize: '0.875rem' }}>분야 전체</Typography></MenuItem>
+            {CATEGORIES.map(c => <MenuItem key={c} value={c} sx={{ fontSize: '0.875rem' }}>{c}</MenuItem>)}
+          </Select>
+        </FormControl>
       </Box>
 
       {loading ? (
-        <Box sx={{ pt: 8, textAlign: 'center' }}>
-          <Typography variant="caption" color="text.secondary">Loading...</Typography>
-        </Box>
+        <Box sx={{ mt: 2 }}><SkeletonGrid count={6} /></Box>
       ) : (
         <>
-          <Section label="CLOSING SOON" sub={`${closingSoon.length}개`} accent="#FF3B30" items={closingSoon} />
-          <Section label="NOW OPEN"     sub={`${nowOpen.length}개`}    accent="#111"    items={nowOpen} />
-          <Section label="UPCOMING"     sub={`${upcoming.length}개`}   accent="#888"    items={upcoming} />
+          <Section label="CLOSING SOON" sub={`${closingSoon.length}개 · 마감 임박`} accent="#FF3B30" items={closingSoon} />
+          <Section label="NEAR YOU" sub={userLocation ? '내 주변' : '추천 픽'} items={nearYou} />
+          <Section label="TODAY PICK" sub="지금 가기 좋은" items={todayPick} />
+          <Section label="FEATURED" sub={`${featured.length}개 · 진행중/예정`} items={featured} />
 
           {filtered.length === 0 && (
             <Box sx={{ pt: 8, textAlign: 'center' }}>
-              <Typography variant="caption" color="text.secondary">해당 조건의 항목이 없어요.</Typography>
+              <Typography variant="caption" color="text.secondary">해당 조건의 팝업/전시가 없어요.</Typography>
             </Box>
           )}
         </>
