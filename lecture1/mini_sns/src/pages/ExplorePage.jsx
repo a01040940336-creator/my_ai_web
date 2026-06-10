@@ -6,11 +6,12 @@ import Chip from '@mui/material/Chip'
 import Fab from '@mui/material/Fab'
 import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
-import TuneIcon from '@mui/icons-material/Tune'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import PostCard from '../components/PostCard'
 import TopBar from '../components/TopBar'
+import { useSavedPosts } from '../hooks/useSavedPosts'
 
 const CATEGORIES = ['전체', '아이돌', '뷰티', '패션', '전시', '라이프스타일']
 
@@ -19,9 +20,15 @@ const ExplorePage = () => {
   const [query, setQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('전체')
   const [showTop, setShowTop] = useState(false)
+  const navigate = useNavigate()
+  const { savedIds, toggleSave } = useSavedPosts()
 
   useEffect(() => {
-    fetchPosts()
+    supabase
+      .from('popspot_posts')
+      .select('*')
+      .order('end_date', { ascending: true })
+      .then(({ data }) => setPosts(data || []))
   }, [])
 
   useEffect(() => {
@@ -30,12 +37,9 @@ const ExplorePage = () => {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const fetchPosts = async () => {
-    const { data } = await supabase
-      .from('popspot_posts')
-      .select('*')
-      .order('end_date', { ascending: true })
-    setPosts(data || [])
+  const handleToggleSave = async (postId, e) => {
+    const ok = await toggleSave(postId, e)
+    if (!ok) navigate('/auth')
   }
 
   const filtered = posts.filter(p => {
@@ -90,14 +94,20 @@ const ExplorePage = () => {
       {/* 결과 수 */}
       <Box sx={{ px: 2, mb: 1.5 }}>
         <Typography variant="caption" color="text.secondary">
-          {filtered.length}개 결과
+          {filtered.length}개 결과 · D-day 순
         </Typography>
       </Box>
 
       {/* 2열 그리드 */}
       <Box sx={{ px: 2, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
         {filtered.map(post => (
-          <PostCard key={post.id} post={post} compact />
+          <PostCard
+            key={post.id}
+            post={post}
+            compact
+            isSaved={savedIds.has(post.id)}
+            onToggleSave={handleToggleSave}
+          />
         ))}
       </Box>
 
