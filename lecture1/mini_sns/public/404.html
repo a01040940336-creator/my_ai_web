@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <title>POP SPOT</title>
   <script>
-    // GitHub Pages SPA redirect hack
     var l = window.location;
+    var base = '/my_ai_web';
+    var pathAfterBase = l.pathname.slice(base.length).replace(/^\//, '');
     l.replace(
-      l.protocol + '//' + l.host + l.pathname.split('/').slice(0, 2).join('/') +
-      '/?/' + l.pathname.slice(1) + (l.search ? '&' + l.search.slice(1) : '') + l.hash
+      l.protocol + '//' + l.host + base +
+      '/?/' + pathAfterBase +
+      (l.search ? '&' + l.search.slice(1) : '') + l.hash
     );
   </script>
 </head>
