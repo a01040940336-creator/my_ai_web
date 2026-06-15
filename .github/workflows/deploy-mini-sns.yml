@@ -1,4 +1,4 @@
-name: Deploy mini_sns to GitHub Pages
+name: Deploy POP SPOT + 집담 to GitHub Pages
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'lecture1/mini_sns/**'
+      - 'lecture1/my-community/**'
       - '.github/workflows/deploy-mini-sns.yml'
   workflow_dispatch:
 
@@ -30,18 +31,32 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      # ── POP SPOT (mini_sns) 빌드 ──────────────────────────────────
+      - name: Install dependencies (mini_sns)
         working-directory: lecture1/mini_sns
         run: npm install
 
-      - name: Build
+      - name: Build (mini_sns)
         working-directory: lecture1/mini_sns
         run: npm run build
 
+      # ── 집담 (my-community) 빌드 ─────────────────────────────────
+      - name: Install dependencies (my-community)
+        working-directory: lecture1/my-community
+        run: npm install
+
+      - name: Build (my-community)
+        working-directory: lecture1/my-community
+        run: npm run build
+
+      # ── artifact 폴더 구조 생성 ───────────────────────────────────
+      # POP SPOT → /my_ai_web/  (vite base: /my_ai_web/)
+      # 집담     → /my_ai_web/lecture1/my-community/  (vite base: /my_ai_web/lecture1/my-community/)
       - name: Prepare artifact directory structure
         run: |
-          mkdir -p pages-root/my_ai_web
+          mkdir -p pages-root/my_ai_web/lecture1/my-community
           cp -r lecture1/mini_sns/dist/. pages-root/my_ai_web/
+          cp -r lecture1/my-community/dist/. pages-root/my_ai_web/lecture1/my-community/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
