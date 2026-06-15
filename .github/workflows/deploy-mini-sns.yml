@@ -50,13 +50,16 @@ jobs:
         run: npm run build
 
       # ── artifact 폴더 구조 생성 ───────────────────────────────────
-      # POP SPOT → /my_ai_web/  (vite base: /my_ai_web/)
-      # 집담     → /my_ai_web/lecture1/my-community/  (vite base: /my_ai_web/lecture1/my-community/)
+      # GitHub Pages 루트 = https://a01040940336-creator.github.io/my_ai_web/
+      # artifact 루트가 곧 사이트 루트이므로 /my_ai_web/ 폴더를 만들지 않음
+      #
+      # POP SPOT → pages-root/        (URL: /my_ai_web/, vite base: /my_ai_web/)
+      # 집담     → pages-root/lecture1/my-community/  (URL: /my_ai_web/lecture1/my-community/)
       - name: Prepare artifact directory structure
         run: |
-          mkdir -p pages-root/my_ai_web/lecture1/my-community
-          cp -r lecture1/mini_sns/dist/. pages-root/my_ai_web/
-          cp -r lecture1/my-community/dist/. pages-root/my_ai_web/lecture1/my-community/
+          mkdir -p pages-root/lecture1/my-community
+          cp -r lecture1/mini_sns/dist/. pages-root/
+          cp -r lecture1/my-community/dist/. pages-root/lecture1/my-community/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
