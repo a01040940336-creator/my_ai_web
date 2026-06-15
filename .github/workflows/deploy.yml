@@ -1,11 +1,6 @@
 name: Deploy 집담 to GitHub Pages
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'lecture1/my-community/**'
-      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 permissions:
