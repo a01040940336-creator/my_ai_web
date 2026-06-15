@@ -32,7 +32,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: lecture1/mini_sns
-        run: npm ci
+        run: npm install
 
       - name: Build
         working-directory: lecture1/mini_sns
