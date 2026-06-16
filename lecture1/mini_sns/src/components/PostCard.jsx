@@ -43,8 +43,9 @@ const ExhibitionCard = ({ post, isSaved, onToggleSave, navigate }) => {
     <Box
       onClick={() => navigate(`/post/${post.id}`)}
       sx={{
-        gridColumn: 'span 2', cursor: 'pointer', mb: 0.5,
-        borderRadius: 2, overflow: 'hidden', position: 'relative',
+        gridColumn: { xs: 'span 1', sm: 'span 2', md: 'span 3' },
+        cursor: 'pointer', mb: 0.5,
+        borderRadius: { xs: 1.5, md: 2 }, overflow: 'hidden', position: 'relative',
         bgcolor: FALLBACK_BG,
         transition: 'transform 0.18s ease',
         '&:active': { transform: 'scale(0.985)' },
@@ -93,12 +94,12 @@ const ExhibitionCard = ({ post, isSaved, onToggleSave, navigate }) => {
         <BookmarkBtn isSaved={isSaved} onToggleSave={onToggleSave} postId={post.id} />
 
         {/* 하단 텍스트 오버레이 */}
-        <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, px: 1.75, pb: 1.5 }}>
-          <Typography sx={{ fontWeight: 800, color: '#fff', fontSize: '1rem', lineHeight: 1.3, mb: 0.5 }}>
+        <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, px: { xs: 1.75, md: 3 }, pb: { xs: 1.5, md: 2.5 } }}>
+          <Typography sx={{ fontWeight: 800, color: '#fff', fontSize: { xs: '1rem', md: '1.375rem' }, lineHeight: 1.3, mb: 0.5 }}>
             {post.title}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography sx={{ fontSize: '0.6875rem', color: 'rgba(255,255,255,0.75)' }}>
+            <Typography sx={{ fontSize: { xs: '0.6875rem', md: '0.875rem' }, color: 'rgba(255,255,255,0.75)' }}>
               {post.region} · {formatDateShort(post.start_date)} – {formatDateShort(post.end_date)}
             </Typography>
             <Box sx={{

@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+import Box from '@mui/material/Box'
 import theme from './theme'
 import { AuthProvider } from './context/AuthContext'
+import { SearchProvider } from './context/SearchContext'
 import BottomNav from './components/BottomNav'
 import HomePage       from './pages/HomePage'
 import SearchPage     from './pages/SearchPage'
@@ -19,7 +21,14 @@ const Layout = ({ children }) => {
   const { pathname } = useLocation()
   return (
     <>
-      {children}
+      <Box sx={{
+        maxWidth: { xs: '100%', md: 900, lg: 1200 },
+        mx: 'auto',
+        minHeight: '100dvh',
+        position: 'relative',
+      }}>
+        {children}
+      </Box>
       {!HIDE_NAV.includes(pathname) && <BottomNav />}
     </>
   )
@@ -30,6 +39,7 @@ const App = () => (
     <CssBaseline />
     <AuthProvider>
       <BrowserRouter basename={import.meta.env.BASE_URL}>
+        <SearchProvider>
         <Layout>
           <Routes>
             <Route path="/"            element={<HomePage />} />
@@ -48,6 +58,7 @@ const App = () => (
             <Route path="*"            element={<HomePage />} />
           </Routes>
         </Layout>
+        </SearchProvider>
       </BrowserRouter>
     </AuthProvider>
   </ThemeProvider>

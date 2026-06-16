@@ -7,6 +7,7 @@ import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useSearch } from '../context/SearchContext'
 
 const TABS = [
   { label: 'HOME',     icon: <HomeOutlinedIcon />,           path: '/'         },
@@ -19,14 +20,28 @@ const TABS = [
 const BottomNav = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const { searchOpen, openSearch } = useSearch()
 
-  const currentTab = TABS.findIndex(t => t.path === location.pathname)
+  const currentTab = searchOpen ? 1 : TABS.findIndex(t => t.path === location.pathname)
+
+  const handleChange = (_, v) => {
+    if (TABS[v].path === '/search') {
+      if (location.pathname !== '/') navigate('/')
+      openSearch()
+    } else {
+      navigate(TABS[v].path)
+    }
+  }
 
   return (
-    <Paper elevation={0} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100 }}>
+    <Paper elevation={0} sx={{
+      position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
+      maxWidth: { md: 900, lg: 1200 },
+      mx: 'auto',
+    }}>
       <BottomNavigation
         value={currentTab === -1 ? false : currentTab}
-        onChange={(_, v) => navigate(TABS[v].path)}
+        onChange={handleChange}
         showLabels
       >
         {TABS.map(tab => (

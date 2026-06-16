@@ -155,7 +155,12 @@ const SearchPage = () => {
           </Box>
         ) : (
           <>
-            <Box sx={{ px: 2, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+            <Box sx={{
+              px: { xs: 2, md: 3 },
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(3, 1fr)' },
+              gap: { xs: 2, md: 2.5 },
+            }}>
               {visible.map(post => (
                 <PostCard key={post.id} post={post}
                   isSaved={savedIds.has(post.id)}

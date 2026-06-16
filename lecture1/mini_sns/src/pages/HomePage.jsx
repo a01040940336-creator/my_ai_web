@@ -13,9 +13,11 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import PostCard from '../components/PostCard'
+import InlineSearch from '../components/InlineSearch'
 import { SkeletonGrid } from '../components/SkeletonCard'
 import { sortByDday, getStatusLabel, haversineDistance } from '../utils/date'
 import { useSavedPosts } from '../hooks/useSavedPosts'
+import { useSearch } from '../context/SearchContext'
 
 const REGIONS = ['서울', '성수', '홍대', '강남', '한남', '부산', '제주']
 const CATEGORIES = ['전시', '팝업스토어', '아이돌', '뷰티', '패션', '라이프스타일']
@@ -34,7 +36,7 @@ const matchCategory = (post, category) => {
 }
 
 const SectionLabel = ({ label, sub, accent }) => (
-  <Box sx={{ px: 2, mb: 1.25, display: 'flex', alignItems: 'baseline', gap: 1 }}>
+  <Box sx={{ px: { xs: 2, md: 3 }, mb: 1.25, display: 'flex', alignItems: 'baseline', gap: 1 }}>
     <Typography sx={{ fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.12em', color: accent ?? '#111' }}>
       {label}
     </Typography>
@@ -43,7 +45,12 @@ const SectionLabel = ({ label, sub, accent }) => (
 )
 
 const PostGrid = ({ posts, savedIds, onToggleSave }) => (
-  <Box sx={{ px: 2, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+  <Box sx={{
+    px: { xs: 2, md: 3 },
+    display: 'grid',
+    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(3, 1fr)' },
+    gap: { xs: 2, md: 2.5 },
+  }}>
     {posts.map(post => (
       <PostCard
         key={post.id} post={post}
@@ -63,6 +70,7 @@ const HomePage = () => {
   const [showTop, setShowTop] = useState(false)
   const navigate = useNavigate()
   const { savedIds, toggleSave } = useSavedPosts()
+  const { searchOpen, openSearch, closeSearch } = useSearch()
 
   useEffect(() => {
     supabase.from('popspot_posts').select('*')
@@ -147,14 +155,14 @@ const HomePage = () => {
           <Typography sx={{ flexGrow: 1, fontWeight: 900, letterSpacing: '-0.04em', fontSize: '1.25rem', color: '#111' }}>
             POP SPOT
           </Typography>
-          <IconButton onClick={() => navigate('/search')} sx={{ color: '#111' }}>
+          <IconButton onClick={openSearch} sx={{ color: '#111' }}>
             <SearchIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
 
       {/* 필터 바 (지역 + 분야 드롭다운) */}
-      <Box sx={{ px: 2, pt: 1.5, pb: 1, display: 'flex', gap: 1.5 }}>
+      <Box sx={{ px: { xs: 2, md: 3 }, pt: 1.5, pb: 1, display: 'flex', gap: 1.5 }}>
         <FormControl size="small" sx={{ flex: 1 }}>
           <Select
             value={region}
@@ -202,6 +210,14 @@ const HomePage = () => {
           <KeyboardArrowUpIcon sx={{ fontSize: 18 }} />
         </Fab>
       )}
+
+      <InlineSearch
+        open={searchOpen}
+        onClose={closeSearch}
+        posts={posts}
+        savedIds={savedIds}
+        onToggleSave={handleToggleSave}
+      />
     </Box>
   )
 }

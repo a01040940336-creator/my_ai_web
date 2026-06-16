@@ -147,7 +147,7 @@ const PostDetailPage = () => {
               alt={post.title}
               loading="lazy"
               onError={() => setImgErrors(prev => ({ ...prev, [currentImg]: true }))}
-              sx={{ width: '100%', aspectRatio: '4/5', objectFit: 'cover', display: 'block', opacity: 0.95 }}
+              sx={{ width: '100%', aspectRatio: { xs: '4/5', md: '16/9' }, objectFit: 'cover', display: 'block', opacity: 0.95 }}
             />
           ) : (
             <Box sx={{ width: '100%', aspectRatio: '4/5', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#1A1A1A' }}>
@@ -283,8 +283,10 @@ const PostDetailPage = () => {
       {/* ── 하단 액션바 ── */}
       <Box sx={{
         position: 'fixed', bottom: 60, left: 0, right: 0,
+        maxWidth: { md: 900, lg: 1200 },
+        mx: 'auto',
         bgcolor: '#fff', borderTop: '1px solid #EAEAEA',
-        px: 2.5, py: 1.25,
+        px: { xs: 2.5, md: 3 }, py: 1.25,
         display: 'flex', alignItems: 'center', gap: 1,
       }}>
         {/* 저장 */}

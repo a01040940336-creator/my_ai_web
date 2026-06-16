@@ -6,6 +6,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -13,8 +14,7 @@ body {
   padding: 0;
   background: #ffffff;
   font-family: "Pretendard", "Noto Sans KR", -apple-system, sans-serif;
-  max-width: 480px;
-  margin: 0 auto;
+  overflow-x: hidden;
 }
 
 a {
