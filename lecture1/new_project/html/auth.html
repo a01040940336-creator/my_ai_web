@@ -11,14 +11,12 @@
   <link rel="stylesheet" href="../css/auth.css">
 </head>
 <body>
-  <!-- 좌측 상단 뒤로가기 / 홈 버튼 -->
-  <div class="auth-nav">
-    <button class="auth-back-btn" id="back-btn">← 뒤로가기</button>
-    <a class="auth-home-btn" id="home-btn" href="../index.html">🏠 홈으로</a>
-  </div>
-
   <div class="auth-page">
     <div class="auth-card">
+
+      <!-- 홈 링크 (카드 상단) -->
+      <a class="auth-home-link" href="../index.html">← 홈으로</a>
+
       <div class="auth-logo">MOVION</div>
       <p class="auth-subtitle">지금 바로 스트리밍을 시작하세요</p>
 
@@ -69,16 +67,6 @@
   </div>
 
   <div class="toast" id="toast"></div>
-
   <script type="module" src="../js/auth-page.js"></script>
-  <script>
-    document.getElementById('back-btn').addEventListener('click', () => {
-      if (history.length > 1) {
-        history.back()
-      } else {
-        window.location.href = '../index.html'
-      }
-    })
-  </script>
 </body>
 </html>

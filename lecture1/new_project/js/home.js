@@ -9,14 +9,16 @@ let filteredContents = []
 let visibleCount = 6
 const STEP = 3
 
-// ── 카드 HTML ──
+// ── 카드 HTML (common.css .card 기준) ──
 function cardHTML(item) {
   return `
     <div class="card" data-id="${item.id}">
       <img src="${item.thumbnail_url || ''}" alt="${item.title}" loading="lazy"
            onerror="this.src='https://picsum.photos/seed/${item.id}/400/600'">
-      <h3>${item.title}</h3>
-      <p>${(item.genre || []).slice(0, 2).join(' / ') || formatType(item.type)}</p>
+      <div class="card-body">
+        <div class="card-title">${item.title}</div>
+        <div class="card-meta">${(item.genre || []).slice(0, 2).join(' · ') || formatType(item.type)}</div>
+      </div>
     </div>`
 }
 

@@ -1,181 +1,119 @@
-/* ── 상단 뒤로가기 내비 ── */
-.auth-nav {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.auth-back-btn,
-.auth-home-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 16px;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-primary);
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  text-decoration: none;
-  transition: background 0.2s, border-color 0.2s;
-  min-height: 44px; /* 모바일 터치 영역 확보 */
-}
-.auth-back-btn:hover,
-.auth-home-btn:hover {
-  background: rgba(124, 58, 237, 0.25);
-  border-color: rgba(124, 58, 237, 0.5);
-}
-
-@media (max-width: 480px) {
-  .auth-nav { top: 12px; left: 12px; }
-  .auth-back-btn, .auth-home-btn { font-size: 0.8rem; padding: 8px 14px; }
-}
-
-/* ── Auth 페이지 본체 ── */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   로그인/회원가입 페이지
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .auth-page {
+  width: 100%;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px 16px;
-  background: radial-gradient(ellipse at 50% -20%, rgba(124,58,237,0.2) 0%, transparent 60%), var(--bg-primary);
+  background: var(--bg-primary);
 }
 
 .auth-card {
   width: 100%;
   max-width: 420px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: 40px 32px;
-  box-shadow: var(--shadow-card);
+  background: #141414;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 36px 28px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+@media (max-width: 480px) {
+  .auth-card { padding: 28px 20px; }
 }
 
+/* 홈 링크 */
+.auth-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 22px;
+  transition: color 0.15s;
+}
+.auth-home-link:hover { color: var(--text-primary); }
+
+/* 로고 */
 .auth-logo {
   text-align: center;
-  font-size: 2rem;
-  font-weight: 900;
-  background: var(--color-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 8px;
+  font-size: 1.8rem; font-weight: 900;
+  color: var(--color-primary);
+  margin-bottom: 6px;
   letter-spacing: -1px;
 }
 .auth-subtitle {
   text-align: center;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  margin-bottom: 32px;
+  color: var(--text-secondary); font-size: 0.82rem; margin-bottom: 28px;
 }
 
+/* 탭 */
 .tab-group {
-  display: flex;
-  background: var(--bg-primary);
-  border-radius: var(--radius-md);
-  padding: 4px;
-  margin-bottom: 28px;
+  display: flex; background: var(--bg-primary);
+  border-radius: 8px; padding: 4px; margin-bottom: 24px;
 }
 .tab-btn {
-  flex: 1;
-  padding: 9px;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
+  flex: 1; padding: 8px; border-radius: 6px;
+  font-size: 0.875rem; font-weight: 600; color: var(--text-secondary);
+  background: none; border: none; cursor: pointer; font-family: inherit;
+  transition: all 0.2s; min-height: 38px;
 }
-.tab-btn.active {
-  background: var(--color-primary);
-  color: white;
-  box-shadow: 0 2px 8px rgba(124,58,237,0.4);
-}
+.tab-btn.active { background: var(--color-primary); color: white; }
 
-.form-group { margin-bottom: 16px; }
+/* 폼 */
+.form-group { margin-bottom: 14px; }
 .form-label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
+  display: block; font-size: 0.78rem; font-weight: 600;
+  color: var(--text-secondary); margin-bottom: 6px;
 }
 .form-input {
-  width: 100%;
-  padding: 12px 14px;
+  width: 100%; padding: 11px 13px;
   background: var(--bg-primary);
-  border: 1.5px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  transition: border-color 0.2s;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary); font-size: 0.875rem;
+  transition: border-color 0.2s; min-height: 44px;
 }
-.form-input:focus { border-color: var(--color-primary); }
+.form-input:focus { border-color: var(--color-primary); outline: none; }
 .form-input::placeholder { color: var(--text-muted); }
 
 .form-error {
-  color: #F87171;
-  font-size: 0.78rem;
-  margin-top: 4px;
-  display: none;
+  color: #f87171; font-size: 0.75rem; margin-top: 5px; display: none;
 }
 .form-error.show { display: block; }
 
+/* 제출 버튼 */
 .submit-btn {
-  width: 100%;
-  padding: 13px;
-  background: var(--color-gradient);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: opacity 0.2s, transform 0.2s;
+  width: 100%; padding: 13px;
+  background: var(--color-primary); color: white;
+  border: none; border-radius: 8px;
+  font-size: 0.95rem; font-weight: 700; font-family: inherit;
+  cursor: pointer; margin-top: 6px; min-height: 48px;
+  transition: opacity 0.2s, transform 0.15s;
 }
 .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+/* 구분선 */
 .social-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 20px 0;
-  color: var(--text-muted);
-  font-size: 0.8rem;
+  display: flex; align-items: center; gap: 12px;
+  margin: 20px 0; color: var(--text-muted); font-size: 0.78rem;
 }
 .social-divider::before, .social-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border-subtle);
+  content: ''; flex: 1; height: 1px; background: var(--border-color);
 }
 
+/* 소셜 버튼 */
 .social-btn {
-  width: 100%;
-  padding: 11px;
+  width: 100%; padding: 11px; min-height: 44px;
   background: var(--bg-primary);
-  border: 1.5px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: border-color 0.2s;
+  border: 1px solid var(--border-color);
+  border-radius: 8px; color: var(--text-primary);
+  font-size: 0.875rem; font-weight: 500; font-family: inherit;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; gap: 10px; transition: border-color 0.2s;
 }
-.social-btn:hover { border-color: var(--color-primary); }
+.social-btn:hover { border-color: #555; }

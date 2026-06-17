@@ -1,136 +1,120 @@
-.mypage { padding: 28px 0 40px; }
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   마이페이지
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.mypage { padding: var(--section-pad) 0 40px; }
+@media (max-width: 768px) { .mypage { padding: var(--section-pad-mobile) 0 32px; } }
+
+.mypage > * { padding-left: 24px; padding-right: 24px; }
+@media (max-width: 768px) { .mypage > * { padding-left: 16px; padding-right: 16px; } }
 
 /* 프로필 카드 */
 .profile-card {
   background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: 28px 24px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 28px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 22px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px;
 }
+@media (max-width: 480px) { .profile-card { flex-wrap: wrap; } }
+
 .profile-avatar {
-  width: 72px; height: 72px;
-  border-radius: 50%;
-  background: var(--color-gradient);
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--color-primary);
   display: flex; align-items: center; justify-content: center;
-  font-size: 2rem;
-  font-weight: 900;
-  color: white;
-  flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(124,58,237,0.4);
+  font-size: 1.75rem; font-weight: 900; color: white; flex-shrink: 0;
 }
 .profile-info { flex: 1; overflow: hidden; }
 .profile-email {
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.9rem; font-weight: 700;
   color: var(--text-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 4px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 3px;
 }
-.profile-since {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
+.profile-since { font-size: 0.75rem; color: var(--text-muted); }
+
 .logout-btn-profile {
-  padding: 8px 16px;
-  background: rgba(248,113,113,0.1);
+  padding: 8px 14px;
+  background: rgba(248,113,113,0.08);
   border: 1px solid rgba(248,113,113,0.2);
-  color: #F87171;
-  border-radius: var(--radius-md);
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.2s;
+  color: #f87171;
+  border-radius: 6px; font-size: 0.78rem; font-weight: 600;
+  cursor: pointer; flex-shrink: 0; font-family: inherit;
+  transition: all 0.2s; min-height: 36px;
 }
-.logout-btn-profile:hover { background: rgba(248,113,113,0.2); }
+.logout-btn-profile:hover { background: rgba(248,113,113,0.18); }
 
 /* 통계 */
 .stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 28px;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-bottom: 24px;
 }
 .stat-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  text-align: center;
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 10px; padding: 16px; text-align: center;
 }
 .stat-value {
-  font-size: 1.6rem;
-  font-weight: 900;
-  background: var(--color-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 1.5rem; font-weight: 900; color: var(--color-primary); margin-bottom: 4px;
 }
-.stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+.stat-label { font-size: 0.72rem; color: var(--text-muted); }
 
-/* 찜 목록 그리드 */
+/* 섹션 제목 */
+.mypage .section-title { margin-bottom: 14px; }
+
+/* 찜 목록 그리드 - common .card, .grid 상속 */
 .watchlist-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 14px;
+  align-items: stretch;
 }
-@media (min-width: 480px) { .watchlist-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 768px) { .watchlist-grid { grid-template-columns: repeat(4, 1fr); } }
-@media (min-width: 1024px) { .watchlist-grid { grid-template-columns: repeat(5, 1fr); } }
+@media (max-width: 768px) {
+  .watchlist-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+@media (min-width: 1024px) {
+  .watchlist-grid { grid-template-columns: repeat(5, 1fr); }
+}
 
+/* 찜 카드 */
 .watchlist-card {
-  cursor: pointer;
-  border-radius: var(--radius-md);
+  display: flex; flex-direction: column;
+  border-radius: var(--radius);
   overflow: hidden;
   background: var(--bg-card);
-  position: relative;
-  transition: transform 0.2s;
+  border: 1px solid var(--border-color);
+  cursor: pointer; position: relative;
+  transition: transform 0.2s, border-color 0.2s;
 }
-.watchlist-card:hover { transform: scale(1.03); }
-.watchlist-card img {
-  width: 100%;
-  aspect-ratio: 2/3;
-  object-fit: cover;
-  display: block;
+.watchlist-card:hover { transform: scale(1.03); border-color: #555; }
+
+.watchlist-card > img {
+  width: 100%; aspect-ratio: 2/3;
+  object-fit: cover; display: block; background: #1a1a1a;
 }
+
 .watchlist-card-info {
   padding: 8px 10px 10px;
 }
 .watchlist-card-title {
-  font-size: 0.8rem;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 4px;
+  font-size: 0.78rem; font-weight: 600; color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px;
 }
+
 .watchlist-remove {
-  position: absolute;
-  top: 6px; right: 6px;
-  width: 26px; height: 26px;
-  background: rgba(15,23,42,0.8);
-  border: none;
-  color: #F87171;
-  border-radius: 50%;
-  font-size: 0.8rem;
-  cursor: pointer;
+  position: absolute; top: 6px; right: 6px;
+  width: 28px; height: 28px;
+  background: rgba(0,0,0,0.75);
+  border: none; color: #f87171;
+  border-radius: 50%; font-size: 0.75rem;
+  cursor: pointer; font-family: inherit;
   display: flex; align-items: center; justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s;
+  opacity: 0; transition: opacity 0.2s;
 }
 .watchlist-card:hover .watchlist-remove { opacity: 1; }
 
 /* 로그인 유도 */
 .login-prompt {
-  text-align: center;
-  padding: 64px 24px;
+  text-align: center; padding: 60px 24px;
 }
-.login-prompt-icon { font-size: 3rem; margin-bottom: 16px; }
-.login-prompt h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
-.login-prompt p { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 24px; }
+.login-prompt-icon { font-size: 2.8rem; margin-bottom: 14px; }
+.login-prompt h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+.login-prompt p { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 22px; }

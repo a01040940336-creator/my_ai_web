@@ -7,26 +7,24 @@ let allContents = []
 const urlType = new URLSearchParams(location.search).get('type')
 let activeFilter = urlType || 'all'
 
+// common.css .card 기준 통일 HTML
 function gridCardHTML(item) {
   return `
-    <div class="grid-card" data-id="${item.id}">
-      <img class="grid-thumb" src="${item.thumbnail_url}" alt="${item.title}" loading="lazy">
-      <div class="grid-overlay">
-        <div class="grid-overlay-title">${item.title}</div>
-        <div class="grid-overlay-meta">
-          <span class="badge badge-type">${formatType(item.type)}</span>
-          <span class="badge badge-rating">⭐${item.rating}</span>
-        </div>
-        <div class="grid-overlay-actions">
-          <button class="btn btn-primary play-btn" data-trailer="${item.trailer_url || ''}">▶ 예고편</button>
-          <a href="${BASE}html/detail.html?id=${item.id}" class="btn btn-ghost">정보</a>
+    <div class="card" data-id="${item.id}">
+      <img src="${item.thumbnail_url || ''}" alt="${item.title}" loading="lazy"
+           onerror="this.src='https://picsum.photos/seed/${item.id}/400/600'">
+      <div class="card-overlay">
+        <div class="card-overlay-title">${item.title}</div>
+        <div class="card-overlay-actions">
+          <button class="btn btn-primary play-btn btn-sm" data-trailer="${item.trailer_url || ''}">▶ 예고편</button>
+          <a href="${BASE}html/detail.html?id=${item.id}" class="btn btn-ghost btn-sm">정보</a>
         </div>
       </div>
-      <div class="grid-info">
-        <div class="grid-title">${item.title}</div>
-        <div class="grid-meta">
-          <span class="badge badge-genre">${(item.genre || []).slice(0,1).join('')}</span>
-          <span style="font-size:.7rem;color:var(--text-muted)">${item.release_year}</span>
+      <div class="card-body">
+        <div class="card-title">${item.title}</div>
+        <div class="card-meta">
+          <span class="badge badge-type">${formatType(item.type)}</span>
+          <span>⭐${item.rating}</span>
         </div>
       </div>
     </div>`
@@ -37,7 +35,7 @@ function renderGrid(filter) {
   const filtered = filter === 'all' ? allContents : allContents.filter(c => c.type === filter)
 
   if (!filtered.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+    grid.innerHTML = `<div class="empty-state">
       <div class="empty-icon">🎬</div>
       <p class="empty-text">해당 콘텐츠가 없습니다</p>
     </div>`
@@ -49,7 +47,7 @@ function renderGrid(filter) {
   grid.querySelectorAll('.play-btn').forEach(btn => {
     btn.addEventListener('click', e => { e.stopPropagation(); openTrailer(btn.dataset.trailer) })
   })
-  grid.querySelectorAll('.grid-card').forEach(card => {
+  grid.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', e => {
       if (e.target.closest('.play-btn') || e.target.closest('a')) return
       window.location.href = BASE + 'html/detail.html?id=' + card.dataset.id
