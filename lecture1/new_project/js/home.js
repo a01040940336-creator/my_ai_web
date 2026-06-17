@@ -1,4 +1,5 @@
 import { supabase } from './supabase.js'
+import { getUser } from './auth.js'
 import { showToast, formatType } from './utils.js'
 
 const BASE = import.meta.env.BASE_URL
@@ -23,22 +24,35 @@ function closeTrailer() {
   document.getElementById('trailer-iframe').src = ''
 }
 
-function setHero(item) {
-  const section = document.getElementById('hero-section')
-  section.style.backgroundImage = `url('${item.backdrop_url || item.thumbnail_url}')`
+async function addToWatchlist(contentId) {
+  const user = await getUser()
+  if (!user) { showToast('로그인 후 저장할 수 있습니다'); return }
 
-  document.getElementById('hero-label').textContent = formatType(item.type) + ' · ' + (item.genre || []).slice(0, 2).join(' · ')
-  document.getElementById('hero-title').textContent = item.title
-  document.getElementById('hero-desc').textContent = item.description || ''
-  document.getElementById('hero-play-btn').onclick = () => openTrailer(item.trailer_url)
-  document.getElementById('hero-detail-btn').onclick = () => {
-    window.location.href = BASE + 'html/detail.html?id=' + item.id
+  const { data: existing } = await supabase
+    .from('movion_watchlist')
+    .select('id').eq('user_id', user.id).eq('content_id', contentId).single()
+
+  if (existing) {
+    showToast('이미 저장된 콘텐츠입니다')
+  } else {
+    await supabase.from('movion_watchlist').insert({ user_id: user.id, content_id: contentId })
+    showToast('마이페이지에 저장했습니다! 🎬')
   }
 }
 
+function setHero(item) {
+  document.getElementById('hero-img').src = item.backdrop_url || item.thumbnail_url || ''
+  document.getElementById('hero-label').textContent =
+    formatType(item.type) + ' · ' + (item.genre || []).slice(0, 2).join(' · ')
+  document.getElementById('hero-title').textContent = item.title
+  document.getElementById('hero-desc').textContent = item.description || ''
+
+  document.getElementById('hero-play-btn').onclick = () => openTrailer(item.trailer_url)
+  document.getElementById('hero-save-btn').onclick = () => addToWatchlist(item.id)
+}
+
 function setDetailCard(item) {
-  const card = document.getElementById('detail-card')
-  card.innerHTML = `
+  document.getElementById('detail-card').innerHTML = `
     <div class="detail-poster">
       <img src="${item.thumbnail_url || ''}" alt="${item.title}">
     </div>
@@ -68,25 +82,16 @@ function fillGrid(id, items) {
 
 async function init() {
   const { data, error } = await supabase
-    .from('movion_contents')
-    .select('*')
-    .order('created_at', { ascending: false })
+    .from('movion_contents').select('*').order('created_at', { ascending: false })
 
   if (error) { showToast('콘텐츠를 불러올 수 없습니다'); return }
   const all = data || []
 
   const featured = all.find(c => c.is_featured) || all[0]
-  if (featured) {
-    setHero(featured)
-    setDetailCard(featured)
-  }
+  if (featured) { setHero(featured); setDetailCard(featured) }
 
-  // 주요 콘텐츠: 최신 6개
   fillGrid('main-grid', all.slice(0, 6))
-
-  // 추천 콘텐츠: featured 제외 다른 4개
-  const others = all.filter(c => c.id !== featured?.id).slice(0, 4)
-  fillGrid('recommend-grid', others)
+  fillGrid('recommend-grid', all.filter(c => c.id !== featured?.id).slice(0, 4))
 
   document.getElementById('modal-close').addEventListener('click', closeTrailer)
   document.getElementById('trailer-modal').addEventListener('click', e => {
