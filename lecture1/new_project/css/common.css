@@ -148,6 +148,56 @@
   margin: 8px 20px;
 }
 
+/* ── 드로어 장르 필터 ── */
+.drawer-section-label {
+  padding: 10px 20px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.drawer-filter-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 11px 20px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  border-left: 3px solid transparent;
+}
+.drawer-filter-item:hover { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+.drawer-filter-item.active {
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+  background: rgba(229,9,20,0.06);
+}
+
+/* ── 더보기 버튼 ── */
+.load-more-btn {
+  padding: 12px 32px;
+  background: none;
+  border: 1px solid #333;
+  color: #aaa;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.load-more-btn:hover {
+  border-color: var(--color-primary);
+  color: white;
+  background: rgba(229,9,20,0.08);
+}
+
 .drawer-bottom {
   padding: 16px 20px;
   border-top: 1px solid var(--border-color);

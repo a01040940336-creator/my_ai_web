@@ -70,6 +70,14 @@ function inject(user) {
         <a href="${BASE}html/upload.html" class="${cur === 'upload' ? 'active' : ''}">
           <span class="d-icon">➕</span>콘텐츠 등록
         </a>
+        ${cur === 'home' ? `
+        <div class="drawer-divider"></div>
+        <div class="drawer-section-label">장르 필터</div>
+        <button class="drawer-filter-item active" data-type="all"     onclick="window.movionFilter?.('all')">전체</button>
+        <button class="drawer-filter-item"         data-type="movie"  onclick="window.movionFilter?.('movie')">🎬 영화</button>
+        <button class="drawer-filter-item"         data-type="drama"  onclick="window.movionFilter?.('drama')">📺 드라마</button>
+        <button class="drawer-filter-item"         data-type="series" onclick="window.movionFilter?.('series')">🎞️ 시리즈</button>
+        ` : ''}
       </nav>
       <div class="drawer-bottom">
         ${user
