@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOVION - 콘텐츠 등록</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/upload.css">
+</head>
+<body>
+  <div id="sidebar"></div>
+  <div id="bottom-nav"></div>
+
+  <div class="page-wrapper">
+    <header class="top-header">
+      <span style="font-weight:700;font-size:1rem">콘텐츠 등록</span>
+    </header>
+
+    <main class="page-content">
+      <div class="container">
+        <div class="upload-page">
+          <div class="upload-header">
+            <h1>🎬 콘텐츠 등록</h1>
+            <p>새로운 콘텐츠를 MOVION에 등록하세요</p>
+          </div>
+
+          <form class="upload-form" id="upload-form">
+            <!-- 제목 -->
+            <div class="form-group">
+              <label class="form-label">제목 <span>*</span></label>
+              <input type="text" class="form-input" id="f-title" placeholder="콘텐츠 제목을 입력하세요" required>
+            </div>
+
+            <!-- 타입 / 평점 -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">타입 <span>*</span></label>
+                <select class="form-select" id="f-type" required>
+                  <option value="">선택하세요</option>
+                  <option value="movie">영화</option>
+                  <option value="drama">드라마</option>
+                  <option value="series">시리즈</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">평점 (0~10)</label>
+                <input type="number" class="form-input" id="f-rating" min="0" max="10" step="0.1" placeholder="예: 8.5">
+              </div>
+            </div>
+
+            <!-- 출시연도 / 러닝타임 / 에피소드 -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">출시연도</label>
+                <input type="number" class="form-input" id="f-year" min="1900" max="2030" placeholder="예: 2024">
+              </div>
+              <div class="form-group">
+                <label class="form-label">상영시간 / 편당시간</label>
+                <input type="text" class="form-input" id="f-duration" placeholder="예: 2시간 10분 / 60분/회">
+              </div>
+            </div>
+
+            <!-- 에피소드 (드라마/시리즈) -->
+            <div class="form-group" id="episodes-group" style="display:none">
+              <label class="form-label">에피소드 수</label>
+              <input type="number" class="form-input" id="f-episodes" min="1" placeholder="예: 16">
+            </div>
+
+            <!-- 장르 태그 -->
+            <div class="form-group">
+              <label class="form-label">장르 (복수 선택 가능)</label>
+              <div class="genre-tags" id="genre-tags">
+                <button type="button" class="genre-tag" data-genre="액션">액션</button>
+                <button type="button" class="genre-tag" data-genre="드라마">드라마</button>
+                <button type="button" class="genre-tag" data-genre="로맨스">로맨스</button>
+                <button type="button" class="genre-tag" data-genre="SF">SF</button>
+                <button type="button" class="genre-tag" data-genre="공포">공포</button>
+                <button type="button" class="genre-tag" data-genre="미스터리">미스터리</button>
+                <button type="button" class="genre-tag" data-genre="스릴러">스릴러</button>
+                <button type="button" class="genre-tag" data-genre="코미디">코미디</button>
+                <button type="button" class="genre-tag" data-genre="판타지">판타지</button>
+                <button type="button" class="genre-tag" data-genre="음악">음악</button>
+              </div>
+            </div>
+
+            <!-- 썸네일 URL -->
+            <div class="image-preview-group">
+              <label class="form-label">썸네일 이미지</label>
+              <input type="url" class="form-input" id="f-thumb" placeholder="이미지 URL을 입력하거나 아래 버튼으로 랜덤 선택">
+              <button type="button" class="random-img-btn" id="random-btn">🎲 Unsplash 랜덤 이미지 선택</button>
+              <img class="image-preview" id="thumb-preview" alt="썸네일 미리보기">
+            </div>
+
+            <!-- 배경 이미지 URL -->
+            <div class="form-group">
+              <label class="form-label">배경 이미지 URL (선택)</label>
+              <input type="url" class="form-input" id="f-backdrop" placeholder="배경 이미지 URL (비워두면 썸네일 사용)">
+            </div>
+
+            <!-- 예고편 URL -->
+            <div class="form-group">
+              <label class="form-label">예고편 YouTube URL (선택)</label>
+              <input type="url" class="form-input" id="f-trailer" placeholder="예: https://www.youtube.com/embed/xxxxxx">
+            </div>
+
+            <!-- 줄거리 -->
+            <div class="form-group">
+              <label class="form-label">줄거리 <span>*</span></label>
+              <textarea class="form-textarea" id="f-desc" placeholder="콘텐츠 줄거리를 입력하세요" required></textarea>
+            </div>
+
+            <!-- 대표 콘텐츠 -->
+            <div class="form-group" style="display:flex;align-items:center;gap:10px">
+              <input type="checkbox" id="f-featured" style="width:16px;height:16px;accent-color:var(--color-primary)">
+              <label for="f-featured" class="form-label" style="margin:0;cursor:pointer">홈 메인 배너에 표시 (대표 콘텐츠)</label>
+            </div>
+
+            <div class="submit-row">
+              <button type="button" class="btn btn-outline" onclick="history.back()">취소</button>
+              <button type="submit" class="btn btn-primary" id="submit-btn">등록하기</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="../js/nav.js"></script>
+  <script type="module" src="../js/upload.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+.detail-backdrop {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+@media (min-width: 768px) { .detail-backdrop { height: 420px; } }
+
+.detail-backdrop img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.5);
+}
+.detail-backdrop-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--bg-primary) 0%, transparent 60%);
+}
+.detail-back-btn {
+  position: absolute;
+  top: 16px; left: 16px;
+  background: rgba(15,23,42,0.7);
+  border: 1px solid var(--border-subtle);
+  color: white;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+.detail-back-btn:hover { background: rgba(124,58,237,0.3); }
+
+.detail-body {
+  padding: 24px 0 40px;
+}
+.detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 24px;
+}
+@media (min-width: 768px) {
+  .detail-main {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 32px;
+  }
+}
+
+.detail-poster {
+  width: 160px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  margin: -80px 0 0;
+  position: relative;
+  z-index: 1;
+}
+@media (min-width: 768px) {
+  .detail-poster { width: 220px; margin-top: -120px; }
+}
+.detail-poster img { width: 100%; aspect-ratio: 2/3; object-fit: cover; }
+
+.detail-info { flex: 1; }
+.detail-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+@media (min-width: 768px) { .detail-title { font-size: 2.25rem; } }
+
+.detail-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.detail-meta-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.detail-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.detail-meta-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+.detail-meta-value { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+
+.detail-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.detail-actions .btn { min-width: 130px; }
+
+.detail-desc-section { margin-bottom: 28px; }
+.detail-desc-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+}
+.detail-desc {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: rgba(248,250,252,0.85);
+}
+
+.watchlist-added {
+  background: rgba(124,58,237,0.2) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}

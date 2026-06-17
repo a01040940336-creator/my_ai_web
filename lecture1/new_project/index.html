@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOVION - 당신의 스트리밍 세상</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/common.css">
+  <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+  <!-- 사이드바 (PC) / 하단 탭 (모바일) - nav.js가 주입 -->
+  <div id="sidebar"></div>
+  <div id="bottom-nav"></div>
+
+  <div class="page-wrapper">
+    <!-- PC 상단 헤더 -->
+    <header class="top-header">
+      <span class="text-gradient" style="font-size:1.25rem;font-weight:900;letter-spacing:-0.5px">MOVION</span>
+      <div style="flex:1"></div>
+      <a href="./html/contents.html" class="btn btn-ghost btn-sm">전체 목록</a>
+    </header>
+
+    <main class="page-content">
+      <!-- Hero 섹션 -->
+      <section class="hero" id="hero-section">
+        <img class="hero-bg" id="hero-img" src="" alt="featured content">
+        <div class="hero-gradient"></div>
+        <div class="hero-content fade-in" id="hero-content">
+          <div class="hero-badge">
+            <span class="badge badge-type" id="hero-type">드라마</span>
+          </div>
+          <h1 class="hero-title" id="hero-title">로딩 중...</h1>
+          <p class="hero-desc" id="hero-desc"></p>
+          <div class="hero-meta">
+            <span class="hero-rating">⭐ <span id="hero-rating"></span></span>
+            <span class="hero-year" id="hero-year"></span>
+            <span class="badge badge-genre" id="hero-genre"></span>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" id="hero-play-btn">▶ 예고편 보기</button>
+            <button class="btn btn-outline btn-lg" id="hero-detail-btn">상세 정보</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 추천 콘텐츠 -->
+      <section class="content-section">
+        <div class="container">
+          <h2 class="section-title">오늘의 추천 콘텐츠</h2>
+          <div class="content-row" id="featured-row">
+            <div class="spinner-wrap"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 인기 영화 -->
+      <section class="content-section">
+        <div class="container">
+          <h2 class="section-title">🎬 인기 영화</h2>
+          <div class="content-row" id="movies-row">
+            <div class="spinner-wrap"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 드라마 & 시리즈 -->
+      <section class="content-section">
+        <div class="container">
+          <h2 class="section-title">📺 드라마 & 시리즈</h2>
+          <div class="content-row" id="drama-row">
+            <div class="spinner-wrap"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 예고편 모달 -->
+  <div id="trailer-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.85);align-items:center;justify-content:center">
+    <div style="position:relative;width:90%;max-width:800px">
+      <button id="modal-close" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:1.5rem;cursor:pointer">✕ 닫기</button>
+      <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden">
+        <iframe id="trailer-iframe" style="position:absolute;inset:0;width:100%;height:100%" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- 토스트 -->
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="./js/nav.js"></script>
+  <script type="module" src="./js/home.js"></script>
+</body>
+</html>
