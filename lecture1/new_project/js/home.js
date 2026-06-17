@@ -189,29 +189,6 @@ window.movionLoadMore = function() {
 }
 
 /* ──────────────────────────────
-   ⑤ DETAIL SECTION (기존 상세)
-────────────────────────────── */
-function setDetailCard(item) {
-  const el = document.getElementById('detail-card')
-  if (!el) return
-  el.innerHTML = `
-    <div class="detail-poster">
-      <img src="${item.thumbnail_url || ''}" alt="${item.title}">
-    </div>
-    <div class="detail-info">
-      <h3>${item.title}</h3>
-      <p>${item.description || '줄거리 정보가 없습니다.'}</p>
-      <ul>
-        <li>장르: ${(item.genre || []).join(', ') || '-'}</li>
-        <li>러닝타임: ${item.duration || '-'}</li>
-        <li>${item.type === 'movie' ? '유형: 영화' : `에피소드: ${item.episodes || '-'}회`}</li>
-        <li>평점: ⭐ ${item.rating}</li>
-      </ul>
-      <div class="highlight">🔥 지금 가장 인기 있는 콘텐츠</div>
-    </div>`
-}
-
-/* ──────────────────────────────
    초기화
 ────────────────────────────── */
 async function init() {
@@ -224,23 +201,15 @@ async function init() {
 
   const featured = allContents.find(c => c.is_featured) || allContents[0]
 
-  // ① Hero
-  if (featured) setHero(featured)
-
-  // ② TOP PICK (featured 콘텐츠 강조)
-  if (featured) setTopPick(featured)
+  if (featured) setHero(featured)           // ① Hero
+  if (featured) setTopPick(featured)        // ② TOP PICK
 
   // ③ Carousel (featured 제외 최대 10개)
   const carouselItems = allContents.filter(c => c.id !== featured?.id).slice(0, 10)
   fillCarousel(carouselItems)
 
-  // ④ Main grid (전체)
-  renderMainGrid()
+  renderMainGrid()                          // ④ (CTA 아래) Main grid
 
-  // ⑤ Detail section
-  if (featured) setDetailCard(featured)
-
-  // 모달
   document.getElementById('modal-close')?.addEventListener('click', closeTrailer)
   document.getElementById('trailer-modal')?.addEventListener('click', e => {
     if (e.target === e.currentTarget) closeTrailer()

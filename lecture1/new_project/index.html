@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MOVION - 당신의 스트리밍 세상</title>
+  <title>MOVION - AI 기반 OTT 콘텐츠 추천</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/reset.css">
@@ -27,7 +27,7 @@
             <p id="hero-desc"></p>
             <div class="cta">
               <button class="btn-watch" id="hero-play-btn">▶ 재생</button>
-              <button class="btn-save" id="hero-save-btn">＋ 저장</button>
+              <button class="btn-save"  id="hero-save-btn">＋ 저장</button>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@
         </div>
       </section>
 
-      <!-- ② TOP PICK (가장 인기 있는 콘텐츠 - HERO 바로 아래) -->
+      <!-- ② TOP PICK -->
       <section class="home-section top-pick-section">
         <div class="top-pick-header">
           <span class="top-pick-label">🔥 TOP PICK</span>
@@ -58,7 +58,7 @@
         </div>
       </section>
 
-      <!-- ③ RECOMMEND CAROUSEL (가로 스크롤) -->
+      <!-- ③ RECOMMEND CAROUSEL -->
       <section class="home-section carousel-section">
         <h2>추천 콘텐츠</h2>
         <div class="carousel-track" id="carousel-track">
@@ -66,28 +66,71 @@
         </div>
       </section>
 
-      <!-- ④ ALL CONTENT GRID (주요 콘텐츠 + 더보기 버튼) -->
+      <!-- ④ CENTER CTA (섹션 전환 유도) -->
+      <div class="explore-cta">
+        <p class="explore-cta-label">MOVION의 모든 콘텐츠</p>
+        <a href="./html/contents.html" class="explore-cta-btn">
+          <span>🎬</span>
+          전체 콘텐츠 탐색하기
+          <span class="explore-arrow">→</span>
+        </a>
+        <p class="explore-cta-hint">영화 · 드라마 · 시리즈 전체 보기</p>
+      </div>
+
+      <!-- ⑤ ALL CONTENT GRID -->
       <section class="home-section">
         <h2>주요 콘텐츠</h2>
         <div class="grid" id="main-grid">
           <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
         </div>
         <div class="load-more-wrap">
-          <button id="load-more-btn" class="load-more-btn" onclick="window.movionLoadMore()" style="display:none">더보기 ↓</button>
+          <button id="load-more-btn" class="load-more-btn" onclick="window.movionLoadMore()" style="display:none">
+            더 불러오기 ↓
+          </button>
         </div>
       </section>
 
-      <!-- ⑤ DETAIL SECTION -->
-      <section class="home-section">
-        <h2>상세 정보</h2>
-        <div class="detail-card" id="detail-card">
-          <div class="spinner-wrap" style="width:100%"><div class="spinner"></div></div>
-        </div>
-      </section>
-
-      <footer class="home-footer">© 2026 MOVION | All Rights Reserved</footer>
     </main>
   </div>
+
+  <!-- ⑥ FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo">MOVION</div>
+        <p class="footer-desc">AI 기반 OTT 콘텐츠 추천 서비스.<br>취향을 분석해 당신만의 콘텐츠를 추천합니다.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">서비스</h4>
+        <ul class="footer-links">
+          <li><a href="./index.html">홈</a></li>
+          <li><a href="./html/contents.html">인기 콘텐츠</a></li>
+          <li><a href="./html/contents.html?type=movie">최신 영화</a></li>
+          <li><a href="./html/contents.html?type=drama">드라마</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">계정</h4>
+        <ul class="footer-links">
+          <li><a href="./html/auth.html">로그인 / 가입</a></li>
+          <li><a href="./html/mypage.html">마이페이지</a></li>
+          <li><a href="./html/upload.html">콘텐츠 등록</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">정보</h4>
+        <ul class="footer-links">
+          <li><a href="#">이용약관</a></li>
+          <li><a href="#">개인정보처리방침</a></li>
+          <li><a href="#">서비스 소개</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MOVION · AI OTT Platform</span>
+      <span class="footer-credit">Created with AI UI System</span>
+    </div>
+  </footer>
 
   <!-- 예고편 모달 -->
   <div id="trailer-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.9);align-items:center;justify-content:center">
@@ -100,7 +143,6 @@
   </div>
 
   <div class="toast" id="toast"></div>
-
   <script type="module" src="./js/nav.js"></script>
   <script type="module" src="./js/home.js"></script>
 </body>
