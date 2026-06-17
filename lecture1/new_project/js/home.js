@@ -25,10 +25,9 @@ function closeTrailer() {
 
 function setHero(item) {
   const section = document.getElementById('hero-section')
-  section.style.backgroundImage =
-    `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.88)), url('${item.backdrop_url || item.thumbnail_url}')`
+  section.style.backgroundImage = `url('${item.backdrop_url || item.thumbnail_url}')`
 
-  document.getElementById('hero-eyebrow').textContent = formatType(item.type) + ' · ' + (item.genre || []).slice(0, 2).join(' · ')
+  document.getElementById('hero-label').textContent = formatType(item.type) + ' · ' + (item.genre || []).slice(0, 2).join(' · ')
   document.getElementById('hero-title').textContent = item.title
   document.getElementById('hero-desc').textContent = item.description || ''
   document.getElementById('hero-play-btn').onclick = () => openTrailer(item.trailer_url)

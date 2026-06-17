@@ -11,27 +11,25 @@
   <link rel="stylesheet" href="./css/home.css">
 </head>
 <body>
-  <div id="sidebar"></div>
-  <div id="bottom-nav"></div>
+  <!-- 상단 헤더 (nav.js가 채움) -->
+  <header class="top-header"></header>
+  <!-- 하단 탭바 (nav.js가 채움) -->
+  <nav id="bottom-nav" class="bottom-nav"></nav>
 
   <div class="page-wrapper">
-    <!-- PC 상단 헤더 -->
-    <header class="top-header">
-      <span class="text-gradient" style="font-size:1.25rem;font-weight:900;letter-spacing:-0.5px">MOVION</span>
-      <div style="flex:1"></div>
-      <a href="./html/contents.html" class="btn btn-ghost btn-sm">전체 목록</a>
-    </header>
-
-    <main class="page-content">
+    <main>
 
       <!-- HERO -->
       <section class="hero" id="hero-section">
-        <div class="hero-eyebrow" id="hero-eyebrow">추천 콘텐츠</div>
-        <h1 id="hero-title">로딩 중...</h1>
-        <p id="hero-desc"></p>
-        <div class="cta">
-          <button class="btn-watch" id="hero-play-btn">▶ 예고편 보기</button>
-          <button class="btn-trailer" id="hero-detail-btn">🎬 상세 정보</button>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <div class="hero-label" id="hero-label">추천 콘텐츠</div>
+          <h1 id="hero-title">로딩 중...</h1>
+          <p id="hero-desc"></p>
+          <div class="cta">
+            <button class="btn-watch" id="hero-play-btn">▶ 예고편 보기</button>
+            <button class="btn-trailer" id="hero-detail-btn">🎬 상세 정보</button>
+          </div>
         </div>
       </section>
 
@@ -44,7 +42,7 @@
       </section>
 
       <!-- 상세 정보 -->
-      <section class="home-section" style="padding-top:0">
+      <section class="home-section" style="margin-top:32px">
         <h2>상세 정보</h2>
         <div class="detail-card" id="detail-card">
           <div class="spinner-wrap" style="width:100%"><div class="spinner"></div></div>
@@ -52,7 +50,7 @@
       </section>
 
       <!-- 추천 콘텐츠 -->
-      <section class="home-section">
+      <section class="home-section" style="margin-top:40px">
         <h2>추천 콘텐츠</h2>
         <div class="grid" id="recommend-grid">
           <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
@@ -60,18 +58,15 @@
       </section>
 
       <!-- 푸터 -->
-      <footer class="home-footer">
-        © 2026 MOVION | All Rights Reserved
-      </footer>
-
+      <footer class="home-footer">© 2026 MOVION | All Rights Reserved</footer>
     </main>
   </div>
 
   <!-- 예고편 모달 -->
-  <div id="trailer-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.85);align-items:center;justify-content:center">
-    <div style="position:relative;width:90%;max-width:800px">
-      <button id="modal-close" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:1.5rem;cursor:pointer">✕ 닫기</button>
-      <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden">
+  <div id="trailer-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.9);align-items:center;justify-content:center">
+    <div style="position:relative;width:90%;max-width:860px">
+      <button id="modal-close" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:1.4rem;cursor:pointer">✕ 닫기</button>
+      <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:8px;overflow:hidden">
         <iframe id="trailer-iframe" style="position:absolute;inset:0;width:100%;height:100%" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>

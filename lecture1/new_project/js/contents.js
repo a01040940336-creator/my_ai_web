@@ -3,7 +3,9 @@ import { showToast, formatType } from './utils.js'
 
 const BASE = import.meta.env.BASE_URL
 let allContents = []
-let activeFilter = 'all'
+// URL 파라미터로 필터 초기값 (드로어 메뉴에서 전달)
+const urlType = new URLSearchParams(location.search).get('type')
+let activeFilter = urlType || 'all'
 
 function gridCardHTML(item) {
   return `
@@ -71,9 +73,11 @@ async function init() {
   const { data, error } = await supabase.from('movion_contents').select('*').order('created_at', { ascending: false })
   if (error) { showToast('콘텐츠를 불러올 수 없습니다'); return }
   allContents = data || []
-  renderGrid('all')
+  renderGrid(activeFilter)
 
+  // URL 파라미터로 전달된 필터 탭 활성화
   document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.filter === activeFilter)
     tab.addEventListener('click', () => {
       document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'))
       tab.classList.add('active')
