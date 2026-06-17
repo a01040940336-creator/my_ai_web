@@ -1,3 +1,45 @@
+/* ── 상단 뒤로가기 내비 ── */
+.auth-nav {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auth-back-btn,
+.auth-home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+  min-height: 44px; /* 모바일 터치 영역 확보 */
+}
+.auth-back-btn:hover,
+.auth-home-btn:hover {
+  background: rgba(124, 58, 237, 0.25);
+  border-color: rgba(124, 58, 237, 0.5);
+}
+
+@media (max-width: 480px) {
+  .auth-nav { top: 12px; left: 12px; }
+  .auth-back-btn, .auth-home-btn { font-size: 0.8rem; padding: 8px 14px; }
+}
+
+/* ── Auth 페이지 본체 ── */
 .auth-page {
   min-height: 100vh;
   display: flex;

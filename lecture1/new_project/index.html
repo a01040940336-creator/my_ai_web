@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="./css/home.css">
 </head>
 <body>
-  <!-- 사이드바 (PC) / 하단 탭 (모바일) - nav.js가 주입 -->
   <div id="sidebar"></div>
   <div id="bottom-nav"></div>
 
@@ -24,57 +23,47 @@
     </header>
 
     <main class="page-content">
-      <!-- Hero 섹션 -->
+
+      <!-- HERO -->
       <section class="hero" id="hero-section">
-        <img class="hero-bg" id="hero-img" src="" alt="featured content">
-        <div class="hero-gradient"></div>
-        <div class="hero-content fade-in" id="hero-content">
-          <div class="hero-badge">
-            <span class="badge badge-type" id="hero-type">드라마</span>
-          </div>
-          <h1 class="hero-title" id="hero-title">로딩 중...</h1>
-          <p class="hero-desc" id="hero-desc"></p>
-          <div class="hero-meta">
-            <span class="hero-rating">⭐ <span id="hero-rating"></span></span>
-            <span class="hero-year" id="hero-year"></span>
-            <span class="badge badge-genre" id="hero-genre"></span>
-          </div>
-          <div class="hero-actions">
-            <button class="btn btn-primary btn-lg" id="hero-play-btn">▶ 예고편 보기</button>
-            <button class="btn btn-outline btn-lg" id="hero-detail-btn">상세 정보</button>
-          </div>
+        <div class="hero-eyebrow" id="hero-eyebrow">추천 콘텐츠</div>
+        <h1 id="hero-title">로딩 중...</h1>
+        <p id="hero-desc"></p>
+        <div class="cta">
+          <button class="btn-watch" id="hero-play-btn">▶ 예고편 보기</button>
+          <button class="btn-trailer" id="hero-detail-btn">🎬 상세 정보</button>
+        </div>
+      </section>
+
+      <!-- 주요 콘텐츠 -->
+      <section class="home-section">
+        <h2>주요 콘텐츠</h2>
+        <div class="grid" id="main-grid">
+          <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
+        </div>
+      </section>
+
+      <!-- 상세 정보 -->
+      <section class="home-section" style="padding-top:0">
+        <h2>상세 정보</h2>
+        <div class="detail-card" id="detail-card">
+          <div class="spinner-wrap" style="width:100%"><div class="spinner"></div></div>
         </div>
       </section>
 
       <!-- 추천 콘텐츠 -->
-      <section class="content-section">
-        <div class="container">
-          <h2 class="section-title">오늘의 추천 콘텐츠</h2>
-          <div class="content-row" id="featured-row">
-            <div class="spinner-wrap"><div class="spinner"></div></div>
-          </div>
+      <section class="home-section">
+        <h2>추천 콘텐츠</h2>
+        <div class="grid" id="recommend-grid">
+          <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
         </div>
       </section>
 
-      <!-- 인기 영화 -->
-      <section class="content-section">
-        <div class="container">
-          <h2 class="section-title">🎬 인기 영화</h2>
-          <div class="content-row" id="movies-row">
-            <div class="spinner-wrap"><div class="spinner"></div></div>
-          </div>
-        </div>
-      </section>
+      <!-- 푸터 -->
+      <footer class="home-footer">
+        © 2026 MOVION | All Rights Reserved
+      </footer>
 
-      <!-- 드라마 & 시리즈 -->
-      <section class="content-section">
-        <div class="container">
-          <h2 class="section-title">📺 드라마 & 시리즈</h2>
-          <div class="content-row" id="drama-row">
-            <div class="spinner-wrap"><div class="spinner"></div></div>
-          </div>
-        </div>
-      </section>
     </main>
   </div>
 
@@ -88,7 +77,6 @@
     </div>
   </div>
 
-  <!-- 토스트 -->
   <div class="toast" id="toast"></div>
 
   <script type="module" src="./js/nav.js"></script>

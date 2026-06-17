@@ -11,6 +11,12 @@
   <link rel="stylesheet" href="../css/auth.css">
 </head>
 <body>
+  <!-- 좌측 상단 뒤로가기 / 홈 버튼 -->
+  <div class="auth-nav">
+    <button class="auth-back-btn" id="back-btn">← 뒤로가기</button>
+    <a class="auth-home-btn" id="home-btn" href="../index.html">🏠 홈으로</a>
+  </div>
+
   <div class="auth-page">
     <div class="auth-card">
       <div class="auth-logo">MOVION</div>
@@ -65,5 +71,14 @@
   <div class="toast" id="toast"></div>
 
   <script type="module" src="../js/auth-page.js"></script>
+  <script>
+    document.getElementById('back-btn').addEventListener('click', () => {
+      if (history.length > 1) {
+        history.back()
+      } else {
+        window.location.href = '../index.html'
+      }
+    })
+  </script>
 </body>
 </html>
