@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MOVION - 프리미엄 OTT 콘텐츠</title>
+  <title>MOVION - AI 기반 OTT 콘텐츠 추천</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/reset.css">
@@ -20,8 +20,13 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="hero-inner">
+        <div class="hero-ai-tag">
+          <span class="ai-dot"></span>
+          오늘의 AI 추천 콘텐츠
+        </div>
         <span class="hero-badge" id="hero-badge">추천 콘텐츠</span>
         <h1 class="hero-title" id="hero-title">로딩 중...</h1>
+        <p class="hero-service-tagline">당신의 취향을 분석하여<br>영화와 드라마를 추천합니다.</p>
         <div class="hero-meta" id="hero-meta"></div>
         <p class="hero-desc" id="hero-desc"></p>
         <div class="hero-cta">
@@ -29,10 +34,10 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
             지금 시청하기
           </button>
-          <button class="btn-hero-save" id="hero-save-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            내 목록 추가
-          </button>
+          <a href="./html/contents.html" class="btn-hero-save">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            콘텐츠 둘러보기
+          </a>
         </div>
       </div>
     </div>
@@ -41,7 +46,76 @@
     </div>
   </section>
 
-  <!-- ② 주요 콘텐츠 -->
+  <!-- ② 검색 섹션 -->
+  <section class="search-section">
+    <div class="search-inner">
+      <div class="search-wrap">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="search-input" class="search-input" placeholder="영화, 드라마, 시리즈 제목 또는 장르 검색..." autocomplete="off">
+        <button class="search-clear" id="search-clear" style="display:none" aria-label="검색 지우기">✕</button>
+      </div>
+      <div class="search-tags" aria-label="인기 장르">
+        <span class="search-tag-label">인기 장르</span>
+        <button class="search-tag" data-genre="액션">액션</button>
+        <button class="search-tag" data-genre="로맨스">로맨스</button>
+        <button class="search-tag" data-genre="스릴러">스릴러</button>
+        <button class="search-tag" data-genre="SF">SF</button>
+        <button class="search-tag" data-genre="코미디">코미디</button>
+        <button class="search-tag" data-genre="드라마">드라마</button>
+      </div>
+      <div class="search-result-msg" id="search-result-msg" style="display:none"></div>
+    </div>
+  </section>
+
+  <!-- ③ AI 추천 알고리즘 섹션 -->
+  <section class="ai-section fade-up">
+    <div class="ai-section-inner">
+      <div class="ai-text">
+        <span class="section-eyebrow">AI 추천 알고리즘</span>
+        <h2 class="ai-title">당신만을 위한<br>맞춤 추천</h2>
+        <p class="ai-desc">MOVION의 AI가 수백만 건의 데이터를 분석해<br>지금 당신에게 꼭 맞는 콘텐츠를 찾아드립니다.</p>
+        <ul class="ai-features">
+          <li><span class="ai-check">✓</span> 시청 기록 분석</li>
+          <li><span class="ai-check">✓</span> 선호 장르 분석</li>
+          <li><span class="ai-check">✓</span> 실시간 인기 콘텐츠 반영</li>
+          <li><span class="ai-check">✓</span> 개인 맞춤 추천</li>
+        </ul>
+        <a href="./html/auth.html" class="btn btn-primary btn-lg">추천받기 →</a>
+      </div>
+      <div class="ai-visual" aria-hidden="true">
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <div class="ai-card-avatar"></div>
+            <div>
+              <div class="ai-card-name">AI 분석 중</div>
+              <div class="ai-card-sub">취향 프로파일 생성</div>
+            </div>
+            <div class="ai-status-dot"></div>
+          </div>
+          <div class="ai-bar-wrap">
+            <div class="ai-bar-label"><span>액션</span><span>87%</span></div>
+            <div class="ai-bar"><div class="ai-bar-fill" style="width:87%"></div></div>
+          </div>
+          <div class="ai-bar-wrap">
+            <div class="ai-bar-label"><span>스릴러</span><span>72%</span></div>
+            <div class="ai-bar"><div class="ai-bar-fill" style="width:72%"></div></div>
+          </div>
+          <div class="ai-bar-wrap">
+            <div class="ai-bar-label"><span>드라마</span><span>65%</span></div>
+            <div class="ai-bar"><div class="ai-bar-fill" style="width:65%"></div></div>
+          </div>
+          <div class="ai-card-result">
+            <span class="ai-result-icon">🎬</span>
+            <span>3개 콘텐츠 추천 완료</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 주요 콘텐츠 -->
   <div class="page-wrapper home-wrapper">
     <main>
       <section class="home-section fade-up">
@@ -54,7 +128,7 @@
         </div>
       </section>
 
-      <!-- ③ 상세 소개 -->
+      <!-- ⑤ 상세 소개 -->
       <section class="detail-section fade-up" id="detail-section" style="display:none">
         <div class="detail-inner">
           <div class="detail-poster-wrap">
@@ -75,7 +149,29 @@
     </main>
   </div>
 
-  <!-- ④ TOP 10 전체폭 배너 -->
+  <!-- ⑥ 서비스 신뢰도 (통계) -->
+  <section class="stats-section fade-up">
+    <div class="stats-inner">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number" data-count="25000" data-suffix="+">0</div>
+          <div class="stat-label">누적 추천 수</div>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <div class="stat-number" data-count="5000" data-suffix="+">0</div>
+          <div class="stat-label">등록 콘텐츠</div>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <div class="stat-number" data-count="95" data-suffix="%">0</div>
+          <div class="stat-label">사용자 만족도</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦ TOP 10 전체폭 배너 -->
   <section class="banner-section fade-up" id="banner-section" style="display:none">
     <div class="banner-bg" id="banner-bg"></div>
     <div class="banner-overlay"></div>
@@ -89,7 +185,7 @@
     </div>
   </section>
 
-  <!-- ⑤ 추천 콘텐츠 (카테고리 탭) -->
+  <!-- ⑧ 추천 콘텐츠 (카테고리 탭) -->
   <div class="page-wrapper home-wrapper">
     <section class="home-section recommend-section fade-up">
       <div class="section-header">
@@ -107,13 +203,50 @@
     </section>
   </div>
 
-  <!-- ⑥ FOOTER -->
+  <!-- ⑨ About 섹션 -->
+  <section class="about-section fade-up">
+    <div class="about-inner">
+      <div class="about-text">
+        <span class="section-eyebrow">About MOVION</span>
+        <h2 class="about-title">MOVION은 AI 기반<br>OTT 콘텐츠 추천 플랫폼입니다.</h2>
+        <p class="about-desc">
+          사용자의 취향과 선호도를 분석하여 맞춤형 영화와 드라마를 추천합니다.<br>
+          수천 개의 콘텐츠 중에서 지금 당신에게 꼭 맞는 작품을 발견하세요.
+        </p>
+        <div class="about-tags">
+          <span class="about-tag">AI 기반 추천</span>
+          <span class="about-tag">맞춤형 큐레이션</span>
+          <span class="about-tag">실시간 업데이트</span>
+          <span class="about-tag">다양한 장르</span>
+        </div>
+      </div>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="about-feature-icon">🎯</div>
+          <h3>정확한 추천</h3>
+          <p>AI가 분석한 취향 데이터로 정확도 높은 콘텐츠를 추천합니다.</p>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">⚡</div>
+          <h3>실시간 업데이트</h3>
+          <p>매일 새로운 콘텐츠와 인기 순위가 실시간으로 반영됩니다.</p>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">🔒</div>
+          <h3>개인정보 보호</h3>
+          <p>사용자 데이터는 안전하게 암호화되어 보호됩니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑩ FOOTER -->
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
           <div class="footer-logo">MOVION</div>
-          <p class="footer-tagline">프리미엄 OTT 콘텐츠 플랫폼.<br>취향에 맞는 콘텐츠를 발견하세요.</p>
+          <p class="footer-tagline">AI 기반 프리미엄 OTT 콘텐츠 플랫폼.<br>취향에 맞는 콘텐츠를 발견하세요.</p>
           <div class="footer-sns">
             <a href="#" class="sns-btn" aria-label="Instagram">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -192,7 +325,6 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- TOP 버튼 -->
   <button class="top-btn" id="top-btn" aria-label="맨 위로">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
       <polyline points="18 15 12 9 6 15"/>

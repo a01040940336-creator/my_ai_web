@@ -86,7 +86,7 @@ function getYear(item) {
 
 /* ──────────────────────────────
    카드 HTML
-   ★ data-category 추가, DOM 재생성 없이 show/hide 필터 적용
+   ★ data-category, 줄거리(synopsis) 호버 오버레이 추가
 ────────────────────────────── */
 function cardHTML(item) {
   const year    = getYear(item)
@@ -94,14 +94,22 @@ function cardHTML(item) {
   const rating  = item.rating ? '★ ' + Number(item.rating).toFixed(1) : ''
   const safeUrl = (item.trailer_url || '').replace(/'/g, "\\'")
   const poster  = item._poster || item.thumbnail_url || `https://picsum.photos/seed/${item.id}/300/450`
+  const desc    = (item.description || '').substring(0, 80) + (item.description?.length > 80 ? '...' : '')
+  const genreStr = (item.genre || []).join(' ').toLowerCase()
 
   return `
-    <div class="card" data-id="${item.id}" data-category="${item.type || 'movie'}" role="article" aria-label="${item.title}">
+    <div class="card"
+         data-id="${item.id}"
+         data-category="${item.type || 'movie'}"
+         data-title="${item.title.toLowerCase()}"
+         data-genres="${genreStr}"
+         role="article" aria-label="${item.title}">
       <div class="card-poster">
         <img src="${poster}" alt="${item.title}" loading="lazy"
              onerror="this.onerror=null;this.src='https://picsum.photos/seed/${item.id}x/300/450'">
         <div class="card-hover-overlay" aria-hidden="true">
-          <button class="card-play-btn" onclick="event.stopPropagation();window.movionPlay('${safeUrl}')" aria-label="예고편 재생">▶</button>
+          ${desc ? `<p class="card-overlay-desc">${desc}</p>` : ''}
+          <button class="card-play-btn" onclick="event.stopPropagation();window.movionPlay('${safeUrl}')" aria-label="예고편 재생">▶ 재생</button>
         </div>
       </div>
       <div class="card-body">
@@ -370,6 +378,108 @@ window.movionFilter = function(type) {
 }
 
 /* ──────────────────────────────
+   검색 기능
+────────────────────────────── */
+function applySearch(query) {
+  const grids = ['main-grid', 'recommend-grid']
+  let totalVisible = 0
+
+  grids.forEach(gridId => {
+    const grid = document.getElementById(gridId)
+    if (!grid) return
+    const cards = grid.querySelectorAll('.card[data-category]')
+    cards.forEach(card => {
+      if (!query) {
+        card.style.display = 'flex'
+        card.style.opacity = '1'
+        totalVisible++
+        return
+      }
+      const title  = card.dataset.title  || ''
+      const genres = card.dataset.genres || ''
+      const match  = title.includes(query) || genres.includes(query)
+      card.style.display = match ? 'flex' : 'none'
+      card.style.opacity = match ? '1' : '0'
+      if (match) totalVisible++
+    })
+  })
+
+  const msgEl = document.getElementById('search-result-msg')
+  if (!msgEl) return
+  if (!query) {
+    msgEl.style.display = 'none'
+    return
+  }
+  msgEl.style.display = 'block'
+  if (totalVisible === 0) {
+    msgEl.className = 'search-result-msg no-result'
+    msgEl.textContent = `"${query}"에 대한 검색 결과가 없습니다.`
+  } else {
+    msgEl.className = 'search-result-msg'
+    msgEl.textContent = `"${query}" 검색 결과 ${totalVisible}개`
+  }
+}
+
+function initSearch() {
+  const input    = document.getElementById('search-input')
+  const clearBtn = document.getElementById('search-clear')
+  if (!input) return
+
+  let timer = null
+  input.addEventListener('input', () => {
+    clearTimeout(timer)
+    const q = input.value.trim().toLowerCase()
+    clearBtn.style.display = q ? 'flex' : 'none'
+    timer = setTimeout(() => applySearch(q), 180)
+  })
+
+  clearBtn?.addEventListener('click', () => {
+    input.value = ''
+    clearBtn.style.display = 'none'
+    applySearch('')
+    input.focus()
+  })
+
+  document.querySelectorAll('.search-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      input.value = tag.dataset.genre
+      clearBtn.style.display = 'flex'
+      applySearch(tag.dataset.genre.toLowerCase())
+    })
+  })
+}
+
+/* ──────────────────────────────
+   통계 카운터 애니메이션
+────────────────────────────── */
+function initStatsCounter() {
+  const section = document.querySelector('.stats-section')
+  if (!section) return
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return
+      entry.target.querySelectorAll('[data-count]').forEach(el => {
+        const target  = parseInt(el.dataset.count)
+        const suffix  = el.dataset.suffix || ''
+        const dur     = 1400
+        const start   = performance.now()
+        const tick    = (now) => {
+          const prog = Math.min((now - start) / dur, 1)
+          const ease = 1 - Math.pow(1 - prog, 3)
+          el.textContent = Math.floor(ease * target).toLocaleString() + suffix
+          if (prog < 1) requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+      })
+      observer.unobserve(entry.target)
+    })
+  }, { threshold: 0.4 })
+
+  observer.observe(section)
+}
+
+/* ──────────────────────────────
    TOP 버튼
 ────────────────────────────── */
 function initTopBtn() {
@@ -434,6 +544,8 @@ async function init() {
   })
 
   initTopBtn()
+  initSearch()
+  initStatsCounter()
   initScrollAnimations()
 }
 
