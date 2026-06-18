@@ -96,10 +96,10 @@
         <h2 class="section-title-lg">추천 콘텐츠</h2>
       </div>
       <div class="category-tabs" role="tablist">
-        <button class="cat-tab active" data-cat="popular" role="tab" onclick="window.movionCategory('popular')">실시간 인기</button>
-        <button class="cat-tab" data-cat="latest" role="tab" onclick="window.movionCategory('latest')">최신 공개작</button>
-        <button class="cat-tab" data-cat="top-rated" role="tab" onclick="window.movionCategory('top-rated')">평점 높은 작품</button>
-        <button class="cat-tab" data-cat="family" role="tab" onclick="window.movionCategory('family')">가족 추천</button>
+        <button class="cat-tab active" data-cat="all"    role="tab" aria-selected="true"  onclick="window.movionCategory('all')">전체</button>
+        <button class="cat-tab"        data-cat="movie"  role="tab" aria-selected="false" onclick="window.movionCategory('movie')">영화</button>
+        <button class="cat-tab"        data-cat="drama"  role="tab" aria-selected="false" onclick="window.movionCategory('drama')">드라마</button>
+        <button class="cat-tab"        data-cat="series" role="tab" aria-selected="false" onclick="window.movionCategory('series')">시리즈</button>
       </div>
       <div class="content-grid" id="recommend-grid">
         <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
@@ -191,6 +191,14 @@
   </div>
 
   <div class="toast" id="toast"></div>
+
+  <!-- TOP 버튼 -->
+  <button class="top-btn" id="top-btn" aria-label="맨 위로">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
   <script type="module" src="./js/nav.js"></script>
   <script type="module" src="./js/home.js"></script>
 </body>

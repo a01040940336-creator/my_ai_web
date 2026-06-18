@@ -467,6 +467,34 @@
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOP 버튼
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.top-btn {
+  position: fixed;
+  bottom: 80px; right: 24px;
+  width: 50px; height: 50px;
+  background: var(--color-primary);
+  border: none; border-radius: 50%;
+  color: white;
+  cursor: pointer; z-index: 150;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s, transform 0.2s, background 0.2s;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.5);
+}
+.top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+}
+.top-btn:hover {
+  transform: scale(1.15);
+  background: var(--color-primary-hover);
+}
+@media (min-width: 768px) {
+  .top-btn { bottom: 40px; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    ⑥ FOOTER
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .site-footer {

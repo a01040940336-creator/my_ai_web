@@ -7,28 +7,99 @@ const BASE = import.meta.env.BASE_URL
 let allContents = []
 
 /* ──────────────────────────────
+   카테고리별 이미지 시스템
+   (Supabase thumbnail_url이 없거나 구분이 안 될 때 사용)
+────────────────────────────── */
+const TYPE_IMAGES = {
+  movie: [
+    'https://picsum.photos/seed/mov001/300/450',
+    'https://picsum.photos/seed/mov002/300/450',
+    'https://picsum.photos/seed/mov003/300/450',
+    'https://picsum.photos/seed/mov004/300/450',
+    'https://picsum.photos/seed/mov005/300/450',
+  ],
+  drama: [
+    'https://picsum.photos/seed/drm101/300/450',
+    'https://picsum.photos/seed/drm102/300/450',
+    'https://picsum.photos/seed/drm103/300/450',
+    'https://picsum.photos/seed/drm104/300/450',
+    'https://picsum.photos/seed/drm105/300/450',
+  ],
+  series: [
+    'https://picsum.photos/seed/ser201/300/450',
+    'https://picsum.photos/seed/ser202/300/450',
+    'https://picsum.photos/seed/ser203/300/450',
+    'https://picsum.photos/seed/ser204/300/450',
+    'https://picsum.photos/seed/ser205/300/450',
+  ],
+}
+
+const TYPE_BACKDROPS = {
+  movie: [
+    'https://picsum.photos/seed/movbg01/1280/720',
+    'https://picsum.photos/seed/movbg02/1280/720',
+    'https://picsum.photos/seed/movbg03/1280/720',
+  ],
+  drama: [
+    'https://picsum.photos/seed/drmbg01/1280/720',
+    'https://picsum.photos/seed/drmbg02/1280/720',
+    'https://picsum.photos/seed/drmbg03/1280/720',
+  ],
+  series: [
+    'https://picsum.photos/seed/serbg01/1280/720',
+    'https://picsum.photos/seed/serbg02/1280/720',
+    'https://picsum.photos/seed/serbg03/1280/720',
+  ],
+}
+
+/* 전체 카테고리 카운터 (타입별 이미지 순환) */
+const typeCounts = { movie: 0, drama: 0, series: 0 }
+
+function assignImages(items) {
+  const counts = { movie: 0, drama: 0, series: 0 }
+  return items.map(item => {
+    const type = item.type || 'movie'
+    const idx  = counts[type] ?? 0
+    counts[type] = (idx + 1)
+
+    const imgs     = TYPE_IMAGES[type]     || TYPE_IMAGES.movie
+    const bgImgs   = TYPE_BACKDROPS[type]  || TYPE_BACKDROPS.movie
+    const totalImg = imgs.length
+    const totalBg  = bgImgs.length
+
+    return {
+      ...item,
+      _poster:   item.thumbnail_url || imgs[idx % totalImg],
+      _backdrop: item.backdrop_url  || bgImgs[idx % totalBg],
+    }
+  })
+}
+
+/* ──────────────────────────────
    유틸
 ────────────────────────────── */
 function getYear(item) {
   if (item.release_date) return item.release_date.substring(0, 4)
-  if (item.created_at) return item.created_at.substring(0, 4)
+  if (item.created_at)   return item.created_at.substring(0, 4)
   return ''
 }
 
 /* ──────────────────────────────
    카드 HTML
+   ★ data-category 추가, DOM 재생성 없이 show/hide 필터 적용
 ────────────────────────────── */
 function cardHTML(item) {
-  const year = getYear(item)
-  const genres = (item.genre || []).slice(0, 2)
-  const rating = item.rating ? '★ ' + Number(item.rating).toFixed(1) : ''
+  const year    = getYear(item)
+  const genres  = (item.genre || []).slice(0, 2)
+  const rating  = item.rating ? '★ ' + Number(item.rating).toFixed(1) : ''
   const safeUrl = (item.trailer_url || '').replace(/'/g, "\\'")
+  const poster  = item._poster || item.thumbnail_url || `https://picsum.photos/seed/${item.id}/300/450`
 
   return `
-    <div class="card fade-in" data-id="${item.id}" role="article" aria-label="${item.title}">
+    <div class="card" data-id="${item.id}" data-category="${item.type || 'movie'}" role="article" aria-label="${item.title}">
       <div class="card-poster">
-        <img src="${item.thumbnail_url || ''}" alt="${item.title}" loading="lazy"
-             onerror="this.src='https://picsum.photos/seed/${item.id}/300/450'">
+        <img src="${poster}" alt="${item.title}" loading="lazy"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/${item.id}x/300/450'">
         <div class="card-hover-overlay" aria-hidden="true">
           <button class="card-play-btn" onclick="event.stopPropagation();window.movionPlay('${safeUrl}')" aria-label="예고편 재생">▶</button>
         </div>
@@ -41,10 +112,41 @@ function cardHTML(item) {
         </div>
         <div class="card-bottom-row">
           ${rating ? `<span class="card-rating">${rating}</span>` : ''}
-          ${year ? `<span class="card-year">${year}</span>` : ''}
+          ${year   ? `<span class="card-year">${year}</span>`     : ''}
         </div>
       </div>
     </div>`
+}
+
+/* ──────────────────────────────
+   DOM 기반 필터 (재생성 없이 show/hide)
+   transition: opacity 0.3s 적용
+────────────────────────────── */
+function filterGrid(gridEl, type) {
+  if (!gridEl) return
+  const cards = gridEl.querySelectorAll('.card[data-category]')
+
+  /* step1: 모든 카드 fade out */
+  cards.forEach(c => { c.style.opacity = '0'; c.style.transform = 'scale(0.97)' })
+
+  setTimeout(() => {
+    /* step2: 해당 카테고리만 display block, 나머지 none */
+    cards.forEach(c => {
+      const match = (type === 'all' || c.dataset.category === type)
+      c.style.display = match ? 'flex' : 'none'
+    })
+    /* step3: 보이는 카드 fade in */
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        cards.forEach(c => {
+          if (c.style.display !== 'none') {
+            c.style.opacity = '1'
+            c.style.transform = ''
+          }
+        })
+      })
+    })
+  }, 220)
 }
 
 /* ──────────────────────────────
@@ -83,9 +185,8 @@ async function addToWatchlist(contentId) {
 ────────────────────────────── */
 function setHero(item) {
   const backdrop = document.getElementById('hero-backdrop')
-  if (backdrop) {
-    const img = item.backdrop_url || item.thumbnail_url || ''
-    if (img) backdrop.style.backgroundImage = `url('${img}')`
+  if (backdrop && item._backdrop) {
+    backdrop.style.backgroundImage = `url('${item._backdrop}')`
   }
 
   const badge = document.getElementById('hero-badge')
@@ -99,15 +200,19 @@ function setHero(item) {
 
   const metaEl = document.getElementById('hero-meta')
   if (metaEl) {
-    const year = getYear(item)
-    const rating = item.rating ? Number(item.rating).toFixed(1) : null
-    const runtime = item.runtime ? item.runtime + '분' : (item.type === 'series' && item.season_count ? item.season_count + '시즌' : null)
-    const genres = (item.genre || []).slice(0, 3)
+    const year    = getYear(item)
+    const rating  = item.rating ? Number(item.rating).toFixed(1) : null
+    const runtime = item.runtime
+      ? item.runtime + '분'
+      : (item.type === 'series' && item.season_count ? item.season_count + '시즌' : null)
+    const genres  = (item.genre || []).slice(0, 3)
 
     metaEl.innerHTML = [
-      rating ? `<span class="hero-meta-rating">★ ${rating}</span>` : '',
-      year ? `<span class="hero-meta-info">${year}</span>` : '',
-      genres.length ? `<span class="hero-meta-sep">|</span>` + genres.map(g => `<span class="hero-meta-genre">${g}</span>`).join('') : '',
+      rating  ? `<span class="hero-meta-rating">★ ${rating}</span>` : '',
+      year    ? `<span class="hero-meta-info">${year}</span>` : '',
+      genres.length
+        ? `<span class="hero-meta-sep">|</span>` + genres.map(g => `<span class="hero-meta-genre">${g}</span>`).join('')
+        : '',
       runtime ? `<span class="hero-meta-sep">|</span><span class="hero-meta-info">${runtime}</span>` : '',
     ].join('')
   }
@@ -120,19 +225,19 @@ function setHero(item) {
 }
 
 /* ──────────────────────────────
-   ② 주요 콘텐츠 그리드 (6개+)
+   ② 주요 콘텐츠 그리드
+   ★ 모든 카드 data-category 포함해 한 번만 렌더링
 ────────────────────────────── */
 function renderMainGrid(items) {
   const grid = document.getElementById('main-grid')
   if (!grid) return
 
-  const slice = items.slice(0, 8)
-  if (!slice.length) {
+  if (!items.length) {
     grid.innerHTML = '<p style="color:#555;font-size:.875rem;grid-column:1/-1;padding:20px 0">콘텐츠가 없습니다</p>'
     return
   }
 
-  grid.innerHTML = slice.map(cardHTML).join('')
+  grid.innerHTML = items.map(cardHTML).join('')
   grid.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => {
       window.location.href = BASE + 'html/detail.html?id=' + card.dataset.id
@@ -149,9 +254,9 @@ function setDetail(item) {
 
   const posterEl = document.getElementById('detail-poster')
   if (posterEl) {
-    posterEl.src = item.thumbnail_url || ''
-    posterEl.alt = item.title
-    posterEl.onerror = () => { posterEl.src = `https://picsum.photos/seed/${item.id}/300/450` }
+    posterEl.src   = item._poster || item.thumbnail_url || ''
+    posterEl.alt   = item.title
+    posterEl.onerror = () => { posterEl.src = `https://picsum.photos/seed/${item.id}d/300/450` }
   }
 
   const titleEl = document.getElementById('detail-title')
@@ -160,17 +265,17 @@ function setDetail(item) {
   const descEl = document.getElementById('detail-desc')
   if (descEl) descEl.textContent = item.description || ''
 
-  const year = getYear(item)
+  const year    = getYear(item)
   const runtime = item.runtime
     ? item.runtime + '분'
     : (item.type === 'series' ? (item.season_count ? item.season_count + '시즌' : '정보 없음') : '정보 없음')
-  const genres = (item.genre || []).join(' · ') || formatType(item.type)
+  const genres  = (item.genre || []).join(' · ') || formatType(item.type)
 
   const metaCards = [
-    { icon: '🎬', label: '감독',     value: item.director  || '정보 없음' },
-    { icon: '👥', label: '출연진',   value: item.cast      || '정보 없음' },
+    { icon: '🎬', label: '감독',     value: item.director   || '정보 없음' },
+    { icon: '👥', label: '출연진',   value: item.cast        || '정보 없음' },
     { icon: '📅', label: '공개일',   value: item.release_date || year + '년' || '-' },
-    { icon: '🔞', label: '관람등급', value: item.age_rating || '전체 이용가' },
+    { icon: '🔞', label: '관람등급', value: item.age_rating  || '전체 이용가' },
     { icon: '⏱️', label: item.type === 'series' ? '시즌' : '러닝타임', value: runtime },
     { icon: '🎭', label: '장르',     value: genres },
   ]
@@ -185,9 +290,7 @@ function setDetail(item) {
       </div>`).join('')
   }
 
-  const playBtn = document.getElementById('detail-play-btn')
-  playBtn?.addEventListener('click', () => openTrailer(item.trailer_url))
-
+  document.getElementById('detail-play-btn')?.addEventListener('click', () => openTrailer(item.trailer_url))
   const moreLink = document.getElementById('detail-more-link')
   if (moreLink) moreLink.href = BASE + 'html/detail.html?id=' + item.id
 
@@ -202,10 +305,7 @@ function setBanner(item) {
   if (!section || !item) return
 
   const bgEl = document.getElementById('banner-bg')
-  if (bgEl) {
-    const img = item.backdrop_url || item.thumbnail_url || ''
-    if (img) bgEl.style.backgroundImage = `url('${img}')`
-  }
+  if (bgEl) bgEl.style.backgroundImage = `url('${item._backdrop || item.backdrop_url || ''}')`
 
   const titleEl = document.getElementById('banner-title')
   if (titleEl) titleEl.textContent = item.title
@@ -221,18 +321,18 @@ function setBanner(item) {
 
 /* ──────────────────────────────
    ⑤ 추천 그리드
+   ★ 모든 카드 한 번만 렌더링 → 이후 filterGrid로 show/hide
 ────────────────────────────── */
 function renderRecommendGrid(items) {
   const grid = document.getElementById('recommend-grid')
   if (!grid) return
 
-  const slice = items.slice(0, 8)
-  if (!slice.length) {
+  if (!items.length) {
     grid.innerHTML = '<p style="color:#555;font-size:.875rem;grid-column:1/-1;padding:20px 0">콘텐츠가 없습니다</p>'
     return
   }
 
-  grid.innerHTML = slice.map(cardHTML).join('')
+  grid.innerHTML = items.map(cardHTML).join('')
   grid.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => {
       window.location.href = BASE + 'html/detail.html?id=' + card.dataset.id
@@ -241,34 +341,21 @@ function renderRecommendGrid(items) {
 }
 
 /* ──────────────────────────────
-   카테고리 탭
+   카테고리 탭 (영화/드라마/시리즈)
+   ★ DOM 재생성 없이 filterGrid 사용
 ────────────────────────────── */
 window.movionCategory = function(cat) {
   document.querySelectorAll('.cat-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.cat === cat)
-    t.setAttribute('aria-selected', t.dataset.cat === cat)
+    const isActive = t.dataset.cat === cat
+    t.classList.toggle('active', isActive)
+    t.setAttribute('aria-selected', isActive)
   })
-
-  let items = [...allContents]
-
-  if (cat === 'popular') {
-    items.sort((a, b) => (Number(b.rating) || 0) - (Number(a.rating) || 0))
-  } else if (cat === 'latest') {
-    items.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-  } else if (cat === 'top-rated') {
-    const high = items.filter(c => Number(c.rating || 0) >= 8).sort((a, b) => Number(b.rating) - Number(a.rating))
-    items = high.length >= 4 ? high : items.sort((a, b) => (Number(b.rating) || 0) - (Number(a.rating) || 0))
-  } else if (cat === 'family') {
-    const familyGenres = ['가족', '애니메이션', '코미디', '판타지', '어드벤처', '뮤지컬']
-    const filtered = items.filter(c => (c.genre || []).some(g => familyGenres.some(fg => g.includes(fg))))
-    items = filtered.length >= 2 ? filtered : [...allContents]
-  }
-
-  renderRecommendGrid(items)
+  filterGrid(document.getElementById('recommend-grid'), cat)
 }
 
 /* ──────────────────────────────
-   장르 필터 (드로어)
+   드로어 필터 (주요 콘텐츠 그리드 필터링)
+   ★ 실제 필터 동작 추가
 ────────────────────────────── */
 window.movionFilter = function(type) {
   document.querySelectorAll('.drawer-filter-item').forEach(el => {
@@ -278,6 +365,24 @@ window.movionFilter = function(type) {
   document.getElementById('drawer-overlay')?.classList.remove('show')
   document.getElementById('hamburger-btn')?.classList.remove('open')
   document.body.style.overflow = ''
+
+  filterGrid(document.getElementById('main-grid'), type)
+}
+
+/* ──────────────────────────────
+   TOP 버튼
+────────────────────────────── */
+function initTopBtn() {
+  const btn = document.getElementById('top-btn')
+  if (!btn) return
+
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 300)
+  }, { passive: true })
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  })
 }
 
 /* ──────────────────────────────
@@ -305,10 +410,11 @@ async function init() {
 
   if (error) { showToast('콘텐츠를 불러올 수 없습니다'); return }
 
-  allContents = data || []
+  /* 카테고리별 이미지 할당 */
+  allContents = assignImages(data || [])
 
-  const featured = allContents.find(c => c.is_featured) || allContents[0]
-  const byRating = [...allContents].sort((a, b) => (Number(b.rating) || 0) - (Number(a.rating) || 0))
+  const featured   = allContents.find(c => c.is_featured) || allContents[0]
+  const byRating   = [...allContents].sort((a, b) => (Number(b.rating) || 0) - (Number(a.rating) || 0))
   const bannerItem = byRating.find(c => c.id !== featured?.id) || byRating[0]
 
   if (featured) {
@@ -317,14 +423,17 @@ async function init() {
   }
 
   setBanner(bannerItem)
+
+  /* 모든 카드를 한 번만 렌더링 */
   renderMainGrid(allContents)
-  renderRecommendGrid([...allContents].sort((a, b) => (Number(b.rating) || 0) - (Number(a.rating) || 0)))
+  renderRecommendGrid(allContents)
 
   document.getElementById('modal-close')?.addEventListener('click', closeTrailer)
   document.getElementById('trailer-modal')?.addEventListener('click', e => {
     if (e.target === e.currentTarget) closeTrailer()
   })
 
+  initTopBtn()
   initScrollAnimations()
 }
 
