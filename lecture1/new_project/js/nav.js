@@ -8,15 +8,14 @@ const MENU = [
   { href: BASE + 'html/contents.html',             icon: '🔥', label: '인기 콘텐츠', id: 'contents' },
   { href: BASE + 'html/contents.html?type=movie',  icon: '🎬', label: '최신 영화',  id: 'movie' },
   { href: BASE + 'html/contents.html?type=drama',  icon: '📺', label: '드라마',     id: 'drama' },
-  { href: BASE + 'html/contents.html?type=series', icon: '🎞️', label: '추천 콘텐츠', id: 'series' },
+  { href: BASE + 'html/contents.html?type=series', icon: '🎞️', label: '시리즈',     id: 'series' },
   { href: BASE + 'html/mypage.html',               icon: '👤', label: '마이페이지', id: 'mypage' },
 ]
 
 const BOTTOM = [
-  { href: BASE + 'index.html',           icon: '🏠', label: '홈',     id: 'home' },
-  { href: BASE + 'html/contents.html',   icon: '🎬', label: '목록',   id: 'contents' },
-  { href: BASE + 'html/upload.html',     icon: '➕', label: '등록',   id: 'upload' },
-  { href: BASE + 'html/mypage.html',     icon: '👤', label: '마이',   id: 'mypage' },
+  { href: BASE + 'index.html',         icon: '🏠', label: '홈',   id: 'home' },
+  { href: BASE + 'html/contents.html', icon: '🎬', label: '목록', id: 'contents' },
+  { href: BASE + 'html/mypage.html',   icon: '👤', label: '마이', id: 'mypage' },
 ]
 
 function currentPage() {
@@ -24,7 +23,6 @@ function currentPage() {
   const q = new URLSearchParams(location.search)
   if (p.endsWith('index.html') || p === BASE || p.endsWith('/new_project/')) return 'home'
   if (p.includes('mypage'))   return 'mypage'
-  if (p.includes('upload'))   return 'upload'
   if (p.includes('auth'))     return 'auth'
   if (p.includes('detail'))   return 'detail'
   if (p.includes('contents')) {
@@ -37,7 +35,6 @@ function currentPage() {
 function inject(user) {
   const cur = currentPage()
 
-  // ── 상단 헤더 ──
   const headerEl = document.querySelector('.top-header')
   if (headerEl) {
     headerEl.innerHTML = `
@@ -47,13 +44,11 @@ function inject(user) {
       <a href="${BASE}index.html" class="header-logo">MOVION</a>
       <div style="flex:1"></div>
       ${user
-        ? `<span style="font-size:.8rem;color:#aaa;display:none" class="d-md">${user.email.split('@')[0]}</span>
-           <button id="header-logout" class="btn btn-ghost btn-sm">로그아웃</button>`
+        ? `<button id="header-logout" class="btn btn-ghost btn-sm">로그아웃</button>`
         : `<a href="${BASE}html/auth.html" class="btn btn-primary btn-sm">로그인</a>`
       }`
   }
 
-  // ── 드로어 ──
   const drawerEl = document.getElementById('drawer')
   if (drawerEl) {
     drawerEl.innerHTML = `
@@ -66,10 +61,6 @@ function inject(user) {
           <a href="${m.href}" class="${cur === m.id ? 'active' : ''}">
             <span class="d-icon">${m.icon}</span>${m.label}
           </a>`).join('')}
-        <div class="drawer-divider"></div>
-        <a href="${BASE}html/upload.html" class="${cur === 'upload' ? 'active' : ''}">
-          <span class="d-icon">➕</span>콘텐츠 등록
-        </a>
         ${cur === 'home' ? `
         <div class="drawer-divider"></div>
         <div class="drawer-section-label">장르 필터</div>
@@ -84,17 +75,16 @@ function inject(user) {
           ? `<div class="drawer-user">
               <div class="drawer-avatar">${user.email[0].toUpperCase()}</div>
               <div style="flex:1;min-width:0">
-                <div style="font-size:.8rem;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${user.email.split('@')[0]}</div>
+                <div style="font-size:.82rem;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${user.email.split('@')[0]}</div>
                 <div style="font-size:.72rem;color:#555">로그인됨</div>
               </div>
-              <button id="drawer-logout" style="font-size:.72rem;color:#666;background:none;border:none;cursor:pointer">로그아웃</button>
+              <button id="drawer-logout" style="font-size:.72rem;color:#555;background:none;border:none;cursor:pointer">로그아웃</button>
              </div>`
           : `<a href="${BASE}html/auth.html" class="btn btn-primary" style="width:100%;justify-content:center">로그인 / 가입</a>`
         }
       </div>`
   }
 
-  // ── 하단 탭바 ──
   const bottomEl = document.getElementById('bottom-nav')
   if (bottomEl) {
     bottomEl.innerHTML = BOTTOM.map(b => `
@@ -103,7 +93,6 @@ function inject(user) {
       </a>`).join('')
   }
 
-  // ── 이벤트 ──
   const burger = document.getElementById('hamburger-btn')
   const drawer = document.getElementById('drawer')
   const overlay = document.getElementById('drawer-overlay')
@@ -135,7 +124,6 @@ function inject(user) {
 async function init() {
   const { data: { user } } = await supabase.auth.getUser()
 
-  // 드로어 + 오버레이 마운트 (body에 삽입)
   if (!document.getElementById('drawer')) {
     const d = document.createElement('div')
     d.className = 'drawer'
