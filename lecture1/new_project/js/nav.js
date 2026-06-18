@@ -1,5 +1,5 @@
 import { supabase } from './supabase.js'
-import { signOut } from './auth.js'
+import { signOut, getUserProfile, getSocialUser } from './auth.js'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -32,7 +32,7 @@ function currentPage() {
   return 'home'
 }
 
-function inject(user) {
+function inject(user, displayName) {
   const cur = currentPage()
 
   const headerEl = document.querySelector('.top-header')
@@ -44,7 +44,8 @@ function inject(user) {
       <a href="${BASE}index.html" class="header-logo">MOVION</a>
       <div style="flex:1"></div>
       ${user
-        ? `<button id="header-logout" class="btn btn-ghost btn-sm">로그아웃</button>`
+        ? `<span class="header-username">안녕하세요, ${displayName || '회원'}님</span>
+           <button id="header-logout" class="btn btn-ghost btn-sm">로그아웃</button>`
         : `<a href="${BASE}html/auth.html" class="btn btn-primary btn-sm">로그인</a>`
       }`
   }
@@ -83,9 +84,9 @@ function inject(user) {
       <div class="drawer-bottom">
         ${user
           ? `<div class="drawer-user">
-              <div class="drawer-avatar">${user.email[0].toUpperCase()}</div>
+              <div class="drawer-avatar">${(displayName || user.email || '?')[0].toUpperCase()}</div>
               <div style="flex:1;min-width:0">
-                <div style="font-size:.82rem;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${user.email.split('@')[0]}</div>
+                <div style="font-size:.82rem;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${displayName || user.email?.split('@')[0] || '사용자'}</div>
                 <div style="font-size:.72rem;color:#555">로그인됨</div>
               </div>
               <button id="drawer-logout" style="font-size:.72rem;color:#555;background:none;border:none;cursor:pointer">로그아웃</button>
@@ -133,21 +134,30 @@ function inject(user) {
 
 async function init() {
   const { data: { user } } = await supabase.auth.getUser()
+  const socialUser = getSocialUser()
+  const activeUser = user || socialUser
+
+  /* username 조회 */
+  let displayName = null
+  if (user) {
+    const profile = await getUserProfile(user.id)
+    displayName = profile?.username || user.email?.split('@')[0]
+  } else if (socialUser) {
+    displayName = socialUser.username
+  }
 
   if (!document.getElementById('drawer')) {
     const d = document.createElement('div')
-    d.className = 'drawer'
-    d.id = 'drawer'
+    d.className = 'drawer'; d.id = 'drawer'
     document.body.appendChild(d)
   }
   if (!document.getElementById('drawer-overlay')) {
     const o = document.createElement('div')
-    o.className = 'drawer-overlay'
-    o.id = 'drawer-overlay'
+    o.className = 'drawer-overlay'; o.id = 'drawer-overlay'
     document.body.appendChild(o)
   }
 
-  inject(user)
+  inject(activeUser, displayName)
 }
 
 init()
