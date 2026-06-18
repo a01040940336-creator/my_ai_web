@@ -1,27 +1,28 @@
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   CSS 변수
+   CSS 변수 (Spotify 스타일)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 :root {
-  --bg-primary: #0A0A0A;
-  --bg-secondary: #111111;
-  --bg-card: #161616;
+  --bg-primary: #121212;
+  --bg-secondary: #181818;
+  --bg-card: #181818;
+  --bg-card-hover: #282828;
   --color-primary: #7C3AED;
   --color-primary-hover: #6D28D9;
   --color-primary-dim: rgba(124, 58, 237, 0.15);
   --color-primary-glow: rgba(124, 58, 237, 0.35);
   --text-primary: #FFFFFF;
-  --text-secondary: #A0A0A0;
-  --text-muted: #555555;
-  --border-color: #222222;
-  --border-hover: #383838;
+  --text-secondary: #B3B3B3;
+  --text-muted: #535353;
+  --border-color: #282828;
+  --border-hover: #3E3E3E;
   --nav-height: 64px;
   --nav-height-mobile: 60px;
   --drawer-width: 280px;
   --max-width: 1280px;
   --section-pad: 48px 40px;
   --section-pad-mobile: 28px 16px;
-  --radius: 10px;
-  --radius-lg: 16px;
+  --radius: 8px;
+  --radius-lg: 12px;
 }
 
 body {
@@ -259,15 +260,14 @@ body {
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: none;
   cursor: pointer; position: relative;
-  /* opacity: 필터 transition용 */
-  transition: opacity 0.3s ease, transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: opacity 0.3s ease, transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
 .card:hover {
-  transform: scale(1.03);
-  border-color: rgba(124, 58, 237, 0.5);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,58,237,0.2);
+  transform: translateY(-5px);
+  background: var(--bg-card-hover);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
 }
 
 .card > img,
@@ -323,7 +323,16 @@ body {
   margin-top: auto; padding-top: 4px;
 }
 .card-rating { font-size: 0.72rem; color: #F59E0B; font-weight: 600; }
-.card-year { font-size: 0.7rem; color: var(--text-muted); }
+.card-year   { font-size: 0.7rem;  color: var(--text-muted); }
+
+.card-rec {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-color);
+}
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    통일 그리드

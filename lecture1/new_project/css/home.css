@@ -933,6 +933,149 @@
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   섹션 서브타이틀
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.section-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Made For You
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.mfy-section { padding: var(--section-pad); padding-bottom: 0; }
+@media (max-width: 768px) { .mfy-section { padding: var(--section-pad-mobile); padding-bottom: 0; } }
+
+.mfy-track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 8px 0 20px;
+  cursor: grab;
+}
+.mfy-track::-webkit-scrollbar { display: none; }
+.mfy-track.grabbing { cursor: grabbing; user-select: none; }
+
+.mfy-card {
+  flex-shrink: 0;
+  width: 160px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
+}
+.mfy-card:hover {
+  transform: translateY(-5px);
+  background: var(--bg-card-hover);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+}
+@media (min-width: 768px) { .mfy-card { width: 180px; } }
+
+.mfy-poster-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2/3;
+  overflow: hidden;
+}
+.mfy-poster-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+.mfy-rec-badge {
+  position: absolute;
+  top: 8px; left: 8px;
+  background: var(--color-primary);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 3px 9px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+  z-index: 1;
+}
+
+.mfy-body {
+  padding: 10px 12px 14px;
+}
+.mfy-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 5px;
+}
+.mfy-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+.mfy-type {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   기분 선택
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.mood-section { padding: var(--section-pad); padding-bottom: 32px; }
+@media (max-width: 768px) { .mood-section { padding: var(--section-pad-mobile); padding-bottom: 24px; } }
+
+.mood-pills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.mood-pill {
+  padding: 10px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+.mood-pill:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.mood-pill.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+@media (max-width: 480px) {
+  .mood-pill { padding: 8px 14px; font-size: 0.82rem; }
+}
+
+.mood-hint, .mood-empty {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 24px 0;
+}
+.mood-empty { color: #e55; }
+
+.mood-grid { margin-top: 8px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    TOP 버튼
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .top-btn {

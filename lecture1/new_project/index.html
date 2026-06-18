@@ -20,67 +20,187 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="hero-inner">
-        <div class="hero-ai-tag">
-          <span class="ai-dot"></span>
-          오늘의 AI 추천 콘텐츠
-        </div>
+        <div class="hero-ai-tag"><span class="ai-dot"></span>오늘 당신을 위한 추천</div>
         <span class="hero-badge" id="hero-badge">추천 콘텐츠</span>
         <h1 class="hero-title" id="hero-title">로딩 중...</h1>
-        <p class="hero-service-tagline">당신의 취향을 분석하여<br>영화와 드라마를 추천합니다.</p>
+        <p class="hero-service-tagline">취향을 분석하여<br>지금 가장 좋아할 콘텐츠를 추천합니다.</p>
         <div class="hero-meta" id="hero-meta"></div>
         <p class="hero-desc" id="hero-desc"></p>
         <div class="hero-cta">
           <button class="btn-hero-play" id="hero-play-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-            지금 시청하기
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            추천받기
           </button>
           <a href="./html/contents.html" class="btn-hero-save">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             콘텐츠 둘러보기
           </a>
         </div>
       </div>
     </div>
-    <div class="hero-scroll-hint" aria-hidden="true">
-      <div class="scroll-dot"></div>
-    </div>
+    <div class="hero-scroll-hint" aria-hidden="true"><div class="scroll-dot"></div></div>
   </section>
 
-  <!-- ② 검색 섹션 -->
+  <!-- ② 검색 -->
   <section class="search-section">
     <div class="search-inner">
       <div class="search-wrap">
         <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" id="search-input" class="search-input" placeholder="영화, 드라마, 시리즈 제목 또는 장르 검색..." autocomplete="off">
+        <input type="text" id="search-input" class="search-input" placeholder="영화 또는 드라마 검색..." autocomplete="off">
         <button class="search-clear" id="search-clear" style="display:none" aria-label="검색 지우기">✕</button>
       </div>
-      <div class="search-tags" aria-label="인기 장르">
+      <div class="search-tags">
         <span class="search-tag-label">인기 장르</span>
         <button class="search-tag" data-genre="액션">액션</button>
         <button class="search-tag" data-genre="로맨스">로맨스</button>
         <button class="search-tag" data-genre="스릴러">스릴러</button>
         <button class="search-tag" data-genre="SF">SF</button>
-        <button class="search-tag" data-genre="코미디">코미디</button>
         <button class="search-tag" data-genre="드라마">드라마</button>
+        <button class="search-tag" data-genre="판타지">판타지</button>
       </div>
       <div class="search-result-msg" id="search-result-msg" style="display:none"></div>
     </div>
   </section>
 
-  <!-- ③ AI 추천 알고리즘 섹션 -->
+  <!-- ③ Made For You -->
+  <div class="page-wrapper home-wrapper">
+    <section class="mfy-section fade-up">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title-lg">Made For You</h2>
+          <p class="section-subtitle">당신의 취향을 분석한 AI 추천 콘텐츠</p>
+        </div>
+      </div>
+      <div class="mfy-track" id="mfy-track">
+        <div class="spinner-wrap" style="min-width:100%"><div class="spinner"></div></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ④ 기분 기반 추천 -->
+  <div class="page-wrapper home-wrapper">
+    <section class="mood-section fade-up">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title-lg">기분으로 고르기</h2>
+          <p class="section-subtitle">지금 어떤 기분인가요?</p>
+        </div>
+      </div>
+      <div class="mood-pills" role="group" aria-label="기분 선택">
+        <button class="mood-pill" data-mood="신나는"         onclick="window.movionMood('신나는')">😆 신나는</button>
+        <button class="mood-pill" data-mood="감성적인"        onclick="window.movionMood('감성적인')">😭 감성적인</button>
+        <button class="mood-pill" data-mood="생각하게 하는"   onclick="window.movionMood('생각하게 하는')">🤔 생각하게 하는</button>
+        <button class="mood-pill" data-mood="몰입감 있는"     onclick="window.movionMood('몰입감 있는')">🔥 몰입감 있는</button>
+        <button class="mood-pill" data-mood="편안한"          onclick="window.movionMood('편안한')">😌 편안한</button>
+      </div>
+      <p class="mood-hint" id="mood-hint">기분을 선택하면 추천 콘텐츠가 표시됩니다.</p>
+      <p class="mood-empty" id="mood-empty" style="display:none">이 기분에 맞는 콘텐츠가 없습니다.</p>
+      <div class="content-grid mood-grid" id="mood-grid" style="display:none"></div>
+    </section>
+  </div>
+
+  <!-- ⑤ 주요 콘텐츠 (카테고리 필터) -->
+  <div class="page-wrapper home-wrapper">
+    <section class="home-section fade-up">
+      <div class="section-header">
+        <h2 class="section-title-lg">주요 콘텐츠</h2>
+        <a href="./html/contents.html" class="see-all-link">전체 보기 →</a>
+      </div>
+      <div class="content-grid" id="main-grid">
+        <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- ⑥ 상세 소개 -->
+    <section class="detail-section fade-up" id="detail-section" style="display:none">
+      <div class="detail-inner">
+        <div class="detail-poster-wrap">
+          <img class="detail-poster" id="detail-poster" src="" alt="">
+        </div>
+        <div class="detail-info">
+          <span class="detail-badge">작품 소개</span>
+          <h2 class="detail-title" id="detail-title"></h2>
+          <p class="detail-desc" id="detail-desc"></p>
+          <div class="detail-meta-grid" id="detail-meta-grid"></div>
+          <div class="detail-cta">
+            <button class="btn btn-primary btn-lg" id="detail-play-btn">▶ 예고편 보기</button>
+            <a id="detail-more-link" href="./html/contents.html" class="btn btn-outline btn-lg">더 알아보기</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ⑦ 통계 -->
+  <section class="stats-section fade-up">
+    <div class="stats-inner">
+      <p class="stats-eyebrow">MOVION 서비스 현황</p>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number" data-count="25000" data-suffix="+">0</div>
+          <div class="stat-label">누적 추천 수</div>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <div class="stat-number" data-count="5000" data-suffix="+">0</div>
+          <div class="stat-label">등록 콘텐츠</div>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <div class="stat-number" data-count="95" data-suffix="%">0</div>
+          <div class="stat-label">사용자 만족도</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑧ TOP 10 배너 -->
+  <section class="banner-section fade-up" id="banner-section" style="display:none">
+    <div class="banner-bg" id="banner-bg"></div>
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+      <div class="banner-inner">
+        <div class="banner-rank-badge">TOP 10</div>
+        <h2 class="banner-title" id="banner-title">이번 주 최고 인기작</h2>
+        <p class="banner-desc" id="banner-desc"></p>
+        <a href="./html/contents.html" class="btn-banner">지금 탐색하기 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑨ 추천 콘텐츠 (카테고리 탭) -->
+  <div class="page-wrapper home-wrapper">
+    <section class="home-section recommend-section fade-up">
+      <div class="section-header">
+        <h2 class="section-title-lg">추천 콘텐츠</h2>
+      </div>
+      <div class="category-tabs" role="tablist">
+        <button class="cat-tab active" data-cat="all"    role="tab" aria-selected="true"  onclick="window.movionCategory('all')">전체</button>
+        <button class="cat-tab"        data-cat="movie"  role="tab" aria-selected="false" onclick="window.movionCategory('movie')">영화</button>
+        <button class="cat-tab"        data-cat="drama"  role="tab" aria-selected="false" onclick="window.movionCategory('drama')">드라마</button>
+        <button class="cat-tab"        data-cat="series" role="tab" aria-selected="false" onclick="window.movionCategory('series')">시리즈</button>
+      </div>
+      <div class="content-grid" id="recommend-grid">
+        <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ⑩ AI 추천 엔진 -->
   <section class="ai-section fade-up">
     <div class="ai-section-inner">
       <div class="ai-text">
-        <span class="section-eyebrow">AI 추천 알고리즘</span>
+        <span class="section-eyebrow">AI 추천 엔진</span>
         <h2 class="ai-title">당신만을 위한<br>맞춤 추천</h2>
         <p class="ai-desc">MOVION의 AI가 수백만 건의 데이터를 분석해<br>지금 당신에게 꼭 맞는 콘텐츠를 찾아드립니다.</p>
         <ul class="ai-features">
-          <li><span class="ai-check">✓</span> 시청 기록 분석</li>
-          <li><span class="ai-check">✓</span> 선호 장르 분석</li>
-          <li><span class="ai-check">✓</span> 실시간 인기 콘텐츠 반영</li>
-          <li><span class="ai-check">✓</span> 개인 맞춤 추천</li>
+          <li><span class="ai-check">✓</span>시청 기록 분석</li>
+          <li><span class="ai-check">✓</span>선호 장르 분석</li>
+          <li><span class="ai-check">✓</span>실시간 인기 콘텐츠 반영</li>
+          <li><span class="ai-check">✓</span>개인 맞춤 추천</li>
+          <li><span class="ai-check">✓</span>추천 정확도 시각화</li>
         </ul>
         <a href="./html/auth.html" class="btn btn-primary btn-lg">추천받기 →</a>
       </div>
@@ -103,116 +223,29 @@
             <div class="ai-bar"><div class="ai-bar-fill" style="width:72%"></div></div>
           </div>
           <div class="ai-bar-wrap">
-            <div class="ai-bar-label"><span>드라마</span><span>65%</span></div>
+            <div class="ai-bar-label"><span>SF</span><span>65%</span></div>
             <div class="ai-bar"><div class="ai-bar-fill" style="width:65%"></div></div>
+          </div>
+          <div class="ai-bar-wrap">
+            <div class="ai-bar-label"><span>로맨스</span><span>48%</span></div>
+            <div class="ai-bar"><div class="ai-bar-fill" style="width:48%"></div></div>
           </div>
           <div class="ai-card-result">
             <span class="ai-result-icon">🎬</span>
-            <span>3개 콘텐츠 추천 완료</span>
+            <span>5개 콘텐츠 추천 완료</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ④ 주요 콘텐츠 -->
-  <div class="page-wrapper home-wrapper">
-    <main>
-      <section class="home-section fade-up">
-        <div class="section-header">
-          <h2 class="section-title-lg">주요 콘텐츠</h2>
-          <a href="./html/contents.html" class="see-all-link">전체 보기 →</a>
-        </div>
-        <div class="content-grid" id="main-grid">
-          <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
-        </div>
-      </section>
-
-      <!-- ⑤ 상세 소개 -->
-      <section class="detail-section fade-up" id="detail-section" style="display:none">
-        <div class="detail-inner">
-          <div class="detail-poster-wrap">
-            <img class="detail-poster" id="detail-poster" src="" alt="">
-          </div>
-          <div class="detail-info">
-            <span class="detail-badge">작품 소개</span>
-            <h2 class="detail-title" id="detail-title"></h2>
-            <p class="detail-desc" id="detail-desc"></p>
-            <div class="detail-meta-grid" id="detail-meta-grid"></div>
-            <div class="detail-cta">
-              <button class="btn btn-primary btn-lg" id="detail-play-btn">▶ 예고편 보기</button>
-              <a id="detail-more-link" href="./html/contents.html" class="btn btn-outline btn-lg">더 알아보기</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- ⑥ 서비스 신뢰도 (통계) -->
-  <section class="stats-section fade-up">
-    <div class="stats-inner">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-number" data-count="25000" data-suffix="+">0</div>
-          <div class="stat-label">누적 추천 수</div>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <div class="stat-number" data-count="5000" data-suffix="+">0</div>
-          <div class="stat-label">등록 콘텐츠</div>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <div class="stat-number" data-count="95" data-suffix="%">0</div>
-          <div class="stat-label">사용자 만족도</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ⑦ TOP 10 전체폭 배너 -->
-  <section class="banner-section fade-up" id="banner-section" style="display:none">
-    <div class="banner-bg" id="banner-bg"></div>
-    <div class="banner-overlay"></div>
-    <div class="banner-content">
-      <div class="banner-inner">
-        <div class="banner-rank-badge">TOP 10</div>
-        <h2 class="banner-title" id="banner-title">이번 주 최고 인기작</h2>
-        <p class="banner-desc" id="banner-desc"></p>
-        <a href="./html/contents.html" class="btn-banner">지금 탐색하기 →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ⑧ 추천 콘텐츠 (카테고리 탭) -->
-  <div class="page-wrapper home-wrapper">
-    <section class="home-section recommend-section fade-up">
-      <div class="section-header">
-        <h2 class="section-title-lg">추천 콘텐츠</h2>
-      </div>
-      <div class="category-tabs" role="tablist">
-        <button class="cat-tab active" data-cat="all"    role="tab" aria-selected="true"  onclick="window.movionCategory('all')">전체</button>
-        <button class="cat-tab"        data-cat="movie"  role="tab" aria-selected="false" onclick="window.movionCategory('movie')">영화</button>
-        <button class="cat-tab"        data-cat="drama"  role="tab" aria-selected="false" onclick="window.movionCategory('drama')">드라마</button>
-        <button class="cat-tab"        data-cat="series" role="tab" aria-selected="false" onclick="window.movionCategory('series')">시리즈</button>
-      </div>
-      <div class="content-grid" id="recommend-grid">
-        <div class="spinner-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>
-      </div>
-    </section>
-  </div>
-
-  <!-- ⑨ About 섹션 -->
+  <!-- ⑪ About -->
   <section class="about-section fade-up">
     <div class="about-inner">
       <div class="about-text">
         <span class="section-eyebrow">About MOVION</span>
         <h2 class="about-title">MOVION은 AI 기반<br>OTT 콘텐츠 추천 플랫폼입니다.</h2>
-        <p class="about-desc">
-          사용자의 취향과 선호도를 분석하여 맞춤형 영화와 드라마를 추천합니다.<br>
-          수천 개의 콘텐츠 중에서 지금 당신에게 꼭 맞는 작품을 발견하세요.
-        </p>
+        <p class="about-desc">사용자의 취향과 선호도를 분석하여 맞춤형 영화와 드라마를 추천합니다.<br>수천 개의 콘텐츠 중에서 지금 당신에게 꼭 맞는 작품을 발견하세요.</p>
         <div class="about-tags">
           <span class="about-tag">AI 기반 추천</span>
           <span class="about-tag">맞춤형 큐레이션</span>
@@ -221,51 +254,24 @@
         </div>
       </div>
       <div class="about-features">
-        <div class="about-feature">
-          <div class="about-feature-icon">🎯</div>
-          <h3>정확한 추천</h3>
-          <p>AI가 분석한 취향 데이터로 정확도 높은 콘텐츠를 추천합니다.</p>
-        </div>
-        <div class="about-feature">
-          <div class="about-feature-icon">⚡</div>
-          <h3>실시간 업데이트</h3>
-          <p>매일 새로운 콘텐츠와 인기 순위가 실시간으로 반영됩니다.</p>
-        </div>
-        <div class="about-feature">
-          <div class="about-feature-icon">🔒</div>
-          <h3>개인정보 보호</h3>
-          <p>사용자 데이터는 안전하게 암호화되어 보호됩니다.</p>
-        </div>
+        <div class="about-feature"><div class="about-feature-icon">🎯</div><div><h3>정확한 추천</h3><p>AI가 분석한 취향 데이터로 정확도 높은 콘텐츠를 추천합니다.</p></div></div>
+        <div class="about-feature"><div class="about-feature-icon">⚡</div><div><h3>실시간 업데이트</h3><p>매일 새로운 콘텐츠와 인기 순위가 실시간으로 반영됩니다.</p></div></div>
+        <div class="about-feature"><div class="about-feature-icon">🔒</div><div><h3>개인정보 보호</h3><p>사용자 데이터는 안전하게 암호화되어 보호됩니다.</p></div></div>
       </div>
     </div>
   </section>
 
-  <!-- ⑩ FOOTER -->
+  <!-- ⑫ FOOTER -->
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
           <div class="footer-logo">MOVION</div>
-          <p class="footer-tagline">AI 기반 프리미엄 OTT 콘텐츠 플랫폼.<br>취향에 맞는 콘텐츠를 발견하세요.</p>
+          <p class="footer-tagline">AI 기반 프리미엄 OTT 추천 플랫폼.<br>취향에 맞는 콘텐츠를 발견하세요.</p>
           <div class="footer-sns">
-            <a href="#" class="sns-btn" aria-label="Instagram">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-              </svg>
-            </a>
-            <a href="#" class="sns-btn" aria-label="Twitter / X">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </a>
-            <a href="#" class="sns-btn" aria-label="YouTube">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.41 19c1.71.46 8.59.46 8.59.46s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/>
-                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#0A0A0A"/>
-              </svg>
-            </a>
+            <a href="#" class="sns-btn" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="#" class="sns-btn" aria-label="X"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a href="#" class="sns-btn" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.41 19c1.71.46 8.59.46 8.59.46s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#121212"/></svg></a>
           </div>
         </div>
         <div class="footer-links-grid">
@@ -285,7 +291,6 @@
               <li><a href="#">고객센터</a></li>
               <li><a href="#">자주 묻는 질문</a></li>
               <li><a href="#">공지사항</a></li>
-              <li><a href="#">서비스 소개</a></li>
             </ul>
           </div>
           <div class="footer-col">
@@ -293,7 +298,6 @@
             <ul class="footer-links">
               <li><a href="#">이용약관</a></li>
               <li><a href="#">개인정보처리방침</a></li>
-              <li><a href="#">저작권 안내</a></li>
               <li><a href="#">쿠키 정책</a></li>
             </ul>
           </div>
@@ -314,8 +318,7 @@
   <div id="trailer-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.95);align-items:center;justify-content:center">
     <div style="position:relative;width:90%;max-width:900px">
       <button id="modal-close" style="position:absolute;top:-44px;right:0;background:none;border:none;color:#aaa;font-size:0.875rem;cursor:pointer;padding:8px;display:flex;align-items:center;gap:6px">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        닫기
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>닫기
       </button>
       <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden">
         <iframe id="trailer-iframe" style="position:absolute;inset:0;width:100%;height:100%" frameborder="0" allowfullscreen></iframe>
@@ -324,13 +327,9 @@
   </div>
 
   <div class="toast" id="toast"></div>
-
   <button class="top-btn" id="top-btn" aria-label="맨 위로">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-      <polyline points="18 15 12 9 6 15"/>
-    </svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
-
   <script type="module" src="./js/nav.js"></script>
   <script type="module" src="./js/home.js"></script>
 </body>
