@@ -1,0 +1,78 @@
+포트폴리오의 Projects 탭을 완전히 구현해줘! supabase mcp를 사용해서 데이터베이스를 구현해서 연결하고, 최종적으로 구현한 후에는 빌드하고 GitHub Pages로 배포까지 todo 계획을 세워서 순차적으로 모두 진행해줘.
+
+중요 구현 사항:
+1. projects 테이블의 detail_url 필드에는 배포된 프로젝트 사이트 URL 저장
+2. thumbnail_url은 image.thum.io API를 사용하여 자동 생성: https://image.thum.io/get/{detail_url}
+3. 별도의 이미지 스토리지는 사용하지 않고 API로 실시간 썸네일 제공
+
+GitHub Actions 워크플로우를 사용해서 자동 배포되도록 설정하고, 배포 완료 후 접속 가능한 URL을 안내해줘.
+
+
+Projects 탭 UI/UX 기획서
+
+레이아웃
+* 카드 그리드 레이아웃 (반응형)
+
+카드 구성
+이미지
+* 프로젝트 스크린샷
+* 비율: 16:9
+
+정보 표시
+* 프로젝트 이름
+* 한 줄 설명
+* 기술 스택 (뱃지형)
+
+버튼
+* Live Demo
+* View Details
+
+인터랙션
+* 카드 확대 효과 (Hover)
+* 그림자 강조
+* 버튼 Hover 애니메이션
+
+반응형
+* Desktop: 3열
+* Tablet: 2열
+* Mobile: 1열
+
+사용자 경험 목표
+1. 프로젝트 핵심 정보 빠른 확인
+2. 프로젝트 상세 페이지 이동
+3. 모바일·데스크톱 최적화
+
+Projects 테이블 DB 구조
+projects
+* id
+* title
+* description
+* tech_stack
+* detail_url https://a01040940336-creator.github.io/my-portfolio
+* thumbnail_url
+* is_published
+* sort_order
+
+## 프로젝트 데이터
+
+1. POP SPOT
+프로젝트1 
+* title: "POP SPOT"
+* description: "팝업스토어 및 전시 정보 큐레이션 플랫폼"
+* tech_stack: ["React", "JavaScript", "CSS3"]
+* detail_url: "https://a01040940336-creator.github.io/my_ai_web/"
+* thumbnail_url: "https://image.thum.io/get/https://github.com/a01040940336-creator/my_ai_web/tree/main/lecture1/mini_sns"
+* is_published: true
+* sort_order: 1
+
+2. 집담
+프로젝트2 (my-community 폴더 참고)
+* title: "집담"
+* description: "1인 가구를 위한 커뮤니티 플랫폼"
+* tech_stack: ["(my-community 폴더 참고)"]
+* detail_url: "https://a01040940336-creator.github.io/my_ai_web/lecture1/my-community/"
+* thumbnail_url: "https://image.thum.io/get/https://github.com/a01040940336-creator/my_ai_web/tree/main/lecture1/my-community"
+* is_published: true
+* sort_order: 2
+
+== 기획 완료 ==

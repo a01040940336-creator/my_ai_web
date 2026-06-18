@@ -17,6 +17,7 @@ import MenuSection from './components/sections/MenuSection'
 import SidebarSection from './components/sections/SidebarSection'
 import HoverSection from './components/sections/HoverSection'
 import SwipeSection from './components/sections/SwipeSection'
+import FlexNavSection from './components/sections/FlexNavSection'
 import './styles/global.css'
 
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
       <SidebarSection />
       <HoverSection />
       <SwipeSection />
+      <FlexNavSection />
 
     </Container>
   )

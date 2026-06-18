@@ -1,0 +1,373 @@
+# About Me - Skills 섹션
+
+## 스킬 구성
+
+### Design
+
+* Figma : 70%
+* Photoshop : 60%
+* Illustrator : 55%
+
+### Frontend
+
+* HTML5 : 50%
+* CSS3 : 50%
+* JavaScript : 40%
+
+### Framework & Tools
+
+* React : 35%
+* GitHub : 40%
+* Supabase : 30%
+
+---
+
+## 스킬 표시 구조
+
+* 아이콘 + 기술명
+* 숙련도 프로그래스 바
+* 카테고리별 그룹 표시
+* Hover 시 기술 활용 경험 표시
+
+예시:
+
+Figma
+
+* 와이어프레임 제작
+* UI 디자인 작업
+* 프로젝트 프로토타이핑
+
+HTML5
+
+* 시맨틱 마크업
+* 반응형 웹 구현 경험
+
+React
+
+* 개인 프로젝트 제작 경험
+* 컴포넌트 기반 개발 학습
+
+---
+
+## 데이터 구조
+
+```javascript
+const skillsData = [
+  {
+    id: 1,
+    icon: "figma",
+    name: "Figma",
+    level: 70,
+    category: "Design",
+    isMainSkill: true
+  },
+
+  {
+    id: 2,
+    icon: "image",
+    name: "Photoshop",
+    level: 60,
+    category: "Design",
+    isMainSkill: true
+  },
+
+  {
+    id: 3,
+    icon: "pen-tool",
+    name: "Illustrator",
+    level: 55,
+    category: "Design",
+    isMainSkill: false
+  },
+
+  {
+    id: 4,
+    icon: "orange-diamond",
+    name: "HTML5",
+    level: 50,
+    category: "Frontend",
+    isMainSkill: true
+  },
+
+  {
+    id: 5,
+    icon: "palette",
+    name: "CSS3",
+    level: 50,
+    category: "Frontend",
+    isMainSkill: true
+  },
+
+  {
+    id: 6,
+    icon: "zap",
+    name: "JavaScript",
+    level: 40,
+    category: "Frontend",
+    isMainSkill: false
+  },
+
+  {
+    id: 7,
+    icon: "atom",
+    name: "React",
+    level: 35,
+    category: "Framework",
+    isMainSkill: false
+  },
+
+  {
+    id: 8,
+    icon: "github",
+    name: "GitHub",
+    level: 40,
+    category: "Tools",
+    isMainSkill: false
+  },
+
+  {
+    id: 9,
+    icon: "database",
+    name: "Supabase",
+    level: 30,
+    category: "Tools",
+    isMainSkill: false
+  }
+];
+```
+
+---
+
+## UI 요구사항
+
+* 프로그래스 바 애니메이션
+* 카테고리별 색상 구분
+
+### Design
+
+* Beige / Brown 계열
+
+### Frontend
+
+* Blue 계열
+
+### Framework & Tools
+
+* Gray 계열
+
+### 반응형
+
+* Mobile : 1열
+* Tablet : 2열
+* Desktop : 3열
+
+---
+
+## 홈 탭 연동
+
+상위 메인 스킬 표시
+
+1. Figma
+2. Photoshop
+3. HTML5
+4. CSS3
+
+정렬 기준
+
+* level 내림차순
+* isMainSkill 우선 표시
+
+== Skills 섹션 기획 완료 ==
+
+# About Me ↔ Home 연동 시스템 기획
+
+## 1. 전체 구조
+
+포트폴리오 전체 데이터를 중앙에서 관리하고
+Home 탭과 About Me 탭이 동일한 데이터를 공유하는 구조
+
+👉 목적:
+
+* About Me 수정 시 Home 자동 반영
+* 중복 데이터 제거
+* 일관된 콘텐츠 유지
+
+---
+
+## 2. 데이터 구조 (Portfolio Context)
+
+```javascript
+const PortfolioContext = createContext();
+
+export const PortfolioProvider = ({ children }) => {
+  const [aboutMeData, setAboutMeData] = useState({
+    basicInfo: {
+      name: "안수은",
+      education: "계명대학교",
+      major: "국제통상학",
+      experience: "신입 웹디자이너",
+      photo: ""
+    },
+
+    sections: [
+      {
+        id: "story",
+        title: "나의 디자인 스토리",
+        content: "",
+        showInHome: true
+      },
+      {
+        id: "philosophy",
+        title: "디자인 철학",
+        content: "",
+        showInHome: true
+      },
+      {
+        id: "interest",
+        title: "디자인 관심사",
+        content: "",
+        showInHome: false
+      }
+    ],
+
+    skills: [
+      { id: 1, icon: "figma", name: "Figma", level: 70, category: "Design" },
+      { id: 2, icon: "photoshop", name: "Photoshop", level: 60, category: "Design" },
+      { id: 3, icon: "html", name: "HTML", level: 50, category: "Frontend" },
+      { id: 4, icon: "css", name: "CSS", level: 50, category: "Frontend" },
+      { id: 5, icon: "javascript", name: "JavaScript", level: 40, category: "Frontend" }
+    ]
+  });
+
+  // Home 탭용 자동 생성 데이터
+  const getHomeData = () => {
+    const storyPreview = aboutMeData.sections
+      .filter(section => section.showInHome)
+      .map(section => ({
+        title: section.title,
+        summary: section.content?.slice(0, 120) + "..."
+      }));
+
+    const topSkills = [...aboutMeData.skills]
+      .sort((a, b) => b.level - a.level)
+      .slice(0, 4);
+
+    return {
+      basicInfo: aboutMeData.basicInfo,
+      story: storyPreview,
+      skills: topSkills
+    };
+  };
+
+  return (
+    <PortfolioContext.Provider value={{
+      aboutMeData,
+      setAboutMeData,
+      getHomeData
+    }}>
+      {children}
+    </PortfolioContext.Provider>
+  );
+};
+```
+
+---
+
+## 3. Home 탭 연동 구조
+
+### 1) About Me 요약 섹션 (Home)
+
+Home에서는 About Me 일부만 보여줌
+
+* 메인: “나의 디자인 스토리” 2~3줄 요약
+* 서브: 기본 정보 카드 (이름 / 전공 / 경력)
+* 버튼: “More About Me → About 탭 이동”
+
+---
+
+### 2) Skills 미리보기 섹션 (Home)
+
+* 상위 4개 스킬 자동 표시
+* 아이콘 + 이름만 노출
+* Hover 시 간단 설명
+
+버튼:
+→ “전체 스킬 보기”
+
+---
+
+## 4. 실시간 연동 구조
+
+### 핵심 동작
+
+* About Me 수정 → Context 업데이트
+* Home 자동 리렌더링
+* 별도 API 없이 즉시 반영
+
+### 동작 흐름
+
+1. About Me 탭에서 내용 수정
+2. setAboutMeData 실행
+3. Context 업데이트
+4. Home 탭 자동 반영
+
+---
+
+## 5. UX 구조 설계
+
+### Home 탭 목적
+
+→ “전체 내용을 요약해서 보여주는 공간”
+
+* 핵심 스토리 미리보기
+* 주요 스킬만 노출
+* 전체 구조는 About Me에서 확인
+
+---
+
+### About Me 탭 목적
+
+→ “전체 정보 상세 페이지”
+
+* 전체 스토리
+* 철학
+* 관심사
+* 전체 스킬
+
+---
+
+## 6. 사용자 경험 목표
+
+1. Home에서 빠르게 나를 이해할 수 있음
+2. About Me로 자연스럽게 이동 유도
+3. 정보가 중복되지 않고 자동 연결됨
+4. 수정 시 전체 포트폴리오 일관성 유지
+
+== 연동 시스템 기획 완료 ==
+
+About Me 탭과 홈 탭 연동을 최종 점검하고 개선해줘:
+
+기능 테스트:
+1. About Me 탭에서 "나의 개발 스토리" 내용 수정
+2. 홈 탭으로 이동해서 변경사항이 반영되었는지 확인
+3. 스킬 레벨을 변경하고 홈 탭의 주요 스킬 표시 확인
+4. 모바일 화면에서 모든 레이아웃이 올바른지 확인
+
+UI/UX 개선:
+- 로딩 상태 표시 (데이터 변경 시)
+- 부드러운 전환 애니메이션
+- 에러 상태 처리
+- 접근성 개선 (키보드 네비게이션, 스크린 리더)
+
+성능 최적화:
+- React.memo로 불필요한 리렌더링 방지
+- useMemo로 계산 결과 캐싱
+- useCallback으로 함수 최적화
+- 이미지 lazy loading
+
+최종 확인 사항:
+- 모든 기능이 정상 작동하는가?
+- 홈 탭과 About Me 탭의 데이터 일관성
+- 반응형 디자인 완성도
+- 사용자 경험의 자연스러움
+

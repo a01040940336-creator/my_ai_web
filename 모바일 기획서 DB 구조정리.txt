@@ -1,0 +1,77 @@
+== POP SPOT DB 구조 정리 (아이디 기반) ==
+
+사용자 정보 (users 테이블)
+- SNS 로그인/프로필 화면에서 필요한 정보들:
+
+  * user_id: (PK, 자동 증가)
+  * username: (@처럼 사용하는 고유 아이디)
+  * email: (로그인 및 계정 식별)
+  * password: (일반 로그인 시, 소셜 로그인은 NULL 가능)
+  * display_name: (프로필에 표시되는 이름 - 선택값)
+  * bio: (자기소개)
+  * profile_image: (프로필 이미지 URL)
+  * created_at: (가입일)
+
+--------------------------------------------------
+
+팝업/전시 정보 (posts 테이블)
+- 서비스 핵심 콘텐츠
+
+  * post_id: (PK)
+  * title: (팝업/전시 이름)
+  * description: (에디토리얼 소개)
+  * category: (아이돌 / 뷰티 / 패션 / 전시 / 라이프스타일)
+  * region: (지역)
+  * address: (상세 주소)
+  * latitude / longitude: (위치 기반 기능)
+  * start_date: (시작일)
+  * end_date: (종료일 - D-day 기준)
+  * images: (이미지 URL 최대 3개)
+  * created_at: (등록일)
+
+--------------------------------------------------
+
+좋아요 정보 (likes 테이블)
+
+  * like_id: (PK)
+  * user_id: (users 연결)
+  * post_id: (posts 연결)
+  * created_at: (생성일)
+
+--------------------------------------------------
+
+저장 정보 (saves 테이블)
+
+  * save_id: (PK)
+  * user_id: (users 연결)
+  * post_id: (posts 연결)
+  * created_at: (저장일)
+
+--------------------------------------------------
+
+리뷰 정보 (reviews 테이블)
+
+  * review_id: (PK)
+  * user_id: (users 연결)
+  * post_id: (posts 연결)
+  * rating: (아주좋음 / 좋음 / 보통 / 나쁨 / 아주나쁨)
+  * content: (텍스트 후기)
+  * images: (최대 3장)
+  * created_at: (작성일)
+
+--------------------------------------------------
+
+테이블 관계 구조
+
+- users 1 : N posts
+- users 1 : N likes
+- users 1 : N saves
+- users 1 : N reviews
+
+- posts 1 : N likes
+- posts 1 : N saves
+- posts 1 : N reviews
+
+--------------------------------------------------
+
+== POP SPOT DB 구조 정리 완료 ==
