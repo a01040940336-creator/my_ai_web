@@ -67,16 +67,16 @@ jobs:
 
       # ── artifact 폴더 구조 생성 ───────────────────────────────────
       # GitHub Pages 루트 = https://a01040940336-creator.github.io/my_ai_web/
-      # artifact 루트가 곧 사이트 루트이므로 /my_ai_web/ 폴더를 만들지 않음
       #
-      # POP SPOT → pages-root/                          (URL: /my_ai_web/)
+      # POP SPOT → pages-root/lecture1/mini_sns/        (URL: /my_ai_web/lecture1/mini_sns/)
       # 집담     → pages-root/lecture1/my-community/    (URL: /my_ai_web/lecture1/my-community/)
       # MOVION   → pages-root/lecture1/new_project/     (URL: /my_ai_web/lecture1/new_project/)
       - name: Prepare artifact directory structure
         run: |
+          mkdir -p pages-root/lecture1/mini_sns
           mkdir -p pages-root/lecture1/my-community
           mkdir -p pages-root/lecture1/new_project
-          cp -r lecture1/mini_sns/dist/. pages-root/
+          cp -r lecture1/mini_sns/dist/. pages-root/lecture1/mini_sns/
           cp -r lecture1/my-community/dist/. pages-root/lecture1/my-community/
           cp -r lecture1/new_project/dist/. pages-root/lecture1/new_project/
 
