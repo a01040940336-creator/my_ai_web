@@ -481,6 +481,7 @@
   display: flex;
   align-items: flex-end;
   overflow: hidden;
+  transition: opacity 0.3s ease;
 }
 
 .hero-backdrop {

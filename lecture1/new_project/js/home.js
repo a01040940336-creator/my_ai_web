@@ -43,13 +43,14 @@ let currentMood  = null
    데이터 초기화
 ═══════════════════════════════════════════════════════ */
 function enrichItem(item, idx) {
-  const seed = POSTER_SEEDS[item.id] || `content${idx}`
+  /* Supabase thumbnail_url을 쓰지 않음 — 동일 이미지 방지 */
+  const seed = POSTER_SEEDS[item.id] || `c${idx + 1}${(item.type || 'x').charAt(0)}`
   return {
     ...item,
     year: item.year || item.release_date?.substring(0,4) || item.created_at?.substring(0,4) || '',
-    _poster:   item.thumbnail_url || `https://picsum.photos/seed/${seed}p/300/450`,
-    _backdrop: item.backdrop_url  || `https://picsum.photos/seed/${seed}bg/1280/720`,
-    recommendation: item.recommendation || (75 + (idx * 7 % 22)),
+    _poster:   `https://picsum.photos/seed/${seed}p/300/450`,
+    _backdrop: `https://picsum.photos/seed/${seed}bg/1280/720`,
+    recommendation: item.recommendation || (75 + (idx * 13 % 22)),
   }
 }
 
@@ -210,8 +211,11 @@ function setHero(item) {
   const descEl = document.getElementById('hero-desc')
   if (descEl) descEl.textContent = item.description || ''
 
-  document.getElementById('hero-play-btn')?.addEventListener('click', () => openTrailer(item.trailer_url))
-  document.getElementById('hero-save-btn')?.addEventListener('click', () => addToWatchlist(item.id))
+  /* onclick으로 덮어쓰기 — addEventListener 중복 방지 */
+  const playBtn = document.getElementById('hero-play-btn')
+  const saveBtn = document.getElementById('hero-save-btn')
+  if (playBtn) playBtn.onclick = () => openTrailer(item.trailer_url)
+  if (saveBtn) saveBtn.onclick = () => addToWatchlist(item.id)
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -325,7 +329,29 @@ function setBanner(item) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   카테고리 탭 필터 (DOM 기반)
+   Hero 카테고리별 전환 (fade 애니메이션)
+═══════════════════════════════════════════════════════ */
+function updateHeroForCategory(type) {
+  const pool = type === 'all'
+    ? allContents
+    : allContents.filter(c => c.type === type)
+  const item = pool.find(c => c.is_featured) || pool[0]
+  if (!item) return
+
+  const heroEl = document.getElementById('hero')
+  if (!heroEl) { setHero(item); return }
+
+  /* fade out → 콘텐츠 교체 → fade in */
+  heroEl.style.transition = 'opacity 0.3s ease'
+  heroEl.style.opacity = '0'
+  setTimeout(() => {
+    setHero(item)
+    heroEl.style.opacity = '1'
+  }, 300)
+}
+
+/* ═══════════════════════════════════════════════════════
+   카테고리 탭 필터 (추천 그리드 + Hero 변경)
 ═══════════════════════════════════════════════════════ */
 window.movionCategory = function(cat) {
   document.querySelectorAll('.cat-tab').forEach(t => {
@@ -335,16 +361,32 @@ window.movionCategory = function(cat) {
   filterGrid(document.getElementById('recommend-grid'), cat)
 }
 
-/* 드로어 필터 → 주요 콘텐츠 그리드 필터링 */
+/* ═══════════════════════════════════════════════════════
+   드로어 카테고리 필터
+   → Hero 변경 + main-grid + recommend-grid 동시 필터
+   → 상단으로 smooth scroll
+═══════════════════════════════════════════════════════ */
 window.movionFilter = function(type) {
+  /* 드로어 active 상태 업데이트 */
   document.querySelectorAll('.drawer-filter-item').forEach(el => {
     el.classList.toggle('active', el.dataset.type === type)
   })
+
+  /* 드로어 닫기 */
   document.getElementById('drawer')?.classList.remove('open')
   document.getElementById('drawer-overlay')?.classList.remove('show')
   document.getElementById('hamburger-btn')?.classList.remove('open')
   document.body.style.overflow = ''
+
+  /* Hero 카테고리에 맞게 교체 */
+  updateHeroForCategory(type)
+
+  /* 두 그리드 모두 필터링 */
   filterGrid(document.getElementById('main-grid'), type)
+  filterGrid(document.getElementById('recommend-grid'), type)
+
+  /* 상단으로 스크롤 (Hero 변경 확인) */
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 /* ═══════════════════════════════════════════════════════
