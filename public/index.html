@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sueun An — Works</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #F7F4EF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 48px 56px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .name {
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    .portfolio-link {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #888;
+      text-decoration: none;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .portfolio-link:hover { color: #1A1A1A; border-color: #1A1A1A; }
+
+    main {
+      flex: 1;
+      padding: 64px 56px 48px;
+    }
+
+    .section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 40px;
+    }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2px;
+    }
+
+    .project-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: #EDEAE4;
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s;
+    }
+    .project-card:hover { background: #1A1A1A; color: #F7F4EF; }
+    .project-card:hover .num,
+    .project-card:hover .tags { color: #888; }
+    .project-card:hover .arrow { opacity: 1; }
+
+    .num {
+      font-size: 0.55rem;
+      letter-spacing: 0.35em;
+      color: #bbb;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      display: block;
+      transition: color 0.25s;
+    }
+
+    .project-title {
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .project-sub {
+      font-size: 0.75rem;
+      color: #888;
+      letter-spacing: 0.08em;
+      margin-bottom: 28px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: #aaa;
+      transition: color 0.25s;
+    }
+
+    .tag {
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      border: 1px solid currentColor;
+      padding: 3px 8px;
+    }
+
+    .arrow {
+      position: absolute;
+      bottom: 28px;
+      right: 28px;
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    footer {
+      padding: 24px 56px;
+      border-top: 1px solid #DDD;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-text {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #bbb;
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 32px 24px 0; }
+      main { padding: 48px 24px 32px; }
+      footer { padding: 20px 24px; flex-direction: column; gap: 8px; }
+      .projects { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="name">Sueun An</span>
+  <a href="https://a01040940336-creator.github.io/my-portfolio/" class="portfolio-link">Portfolio ↗</a>
+</header>
+
+<main>
+  <p class="section-label">— Selected Works</p>
+
+  <div class="projects">
+
+    <a class="project-card" href="https://a01040940336-creator.github.io/my_ai_web/lecture1/mini_sns/">
+      <span class="num">01</span>
+      <h2 class="project-title">POP SPOT</h2>
+      <p class="project-sub">팝업·전시 큐레이션 앱</p>
+      <div class="tags">
+        <span class="tag">React</span>
+        <span class="tag">MUI</span>
+        <span class="tag">Vite</span>
+      </div>
+      <span class="arrow">↗</span>
+    </a>
+
+    <a class="project-card" href="https://a01040940336-creator.github.io/my_ai_web/lecture1/my-community/">
+      <span class="num">02</span>
+      <h2 class="project-title">집담</h2>
+      <p class="project-sub">커뮤니티 플랫폼</p>
+      <div class="tags">
+        <span class="tag">React</span>
+        <span class="tag">MUI</span>
+        <span class="tag">Supabase</span>
+      </div>
+      <span class="arrow">↗</span>
+    </a>
+
+    <a class="project-card" href="https://a01040940336-creator.github.io/my_ai_web/lecture1/new_project/">
+      <span class="num">03</span>
+      <h2 class="project-title">MOVION</h2>
+      <p class="project-sub">OTT 랜딩페이지</p>
+      <div class="tags">
+        <span class="tag">Vanilla JS</span>
+        <span class="tag">Vite</span>
+        <span class="tag">Supabase</span>
+      </div>
+      <span class="arrow">↗</span>
+    </a>
+
+    <a class="project-card" href="https://a01040940336-creator.github.io/coordi-archive/">
+      <span class="num">04</span>
+      <h2 class="project-title">Coordi Archive</h2>
+      <p class="project-sub">Fashion Editorial Archive</p>
+      <div class="tags">
+        <span class="tag">React</span>
+        <span class="tag">Tailwind</span>
+        <span class="tag">TypeScript</span>
+      </div>
+      <span class="arrow">↗</span>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  <span class="footer-text">Portfolio 2025</span>
+  <span class="footer-text">Sueun An — UI/UX Designer</span>
+</footer>
+
+</body>
+</html>

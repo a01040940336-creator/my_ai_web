@@ -79,6 +79,7 @@ jobs:
           cp -r lecture1/mini_sns/dist/. pages-root/lecture1/mini_sns/
           cp -r lecture1/my-community/dist/. pages-root/lecture1/my-community/
           cp -r lecture1/new_project/dist/. pages-root/lecture1/new_project/
+          cp public/index.html pages-root/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
